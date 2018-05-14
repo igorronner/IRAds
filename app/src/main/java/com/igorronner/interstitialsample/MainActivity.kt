@@ -10,8 +10,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val test:IntArray = IntArray(3)
-        test.sortedArray()
         IRAds.openSplashScreen(this)
 
     }

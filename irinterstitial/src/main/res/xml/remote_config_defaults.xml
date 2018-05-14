@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>    <!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>days_before_interstitial</key>
+        <value>5</value>
+    </entry>
+</defaultsMap>    <!-- END xml_defaults -->

@@ -1,16 +1,22 @@
 package com.igorronner.irinterstitial.init;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 
+import com.igorronner.irinterstitial.preferences.MainPreference;
 import com.igorronner.irinterstitial.services.IRInterstitialService;
+import com.igorronner.irinterstitial.services.RemoteConfigService;
 import com.igorronner.irinterstitial.views.SplashActivity;
+
+import java.util.Calendar;
 
 
 public class IRAds {
 
-    public static IRAds.Builder startInit(String googleClientId) {
+    public static IRAds.Builder startInit(Context context, String googleClientId) {
+        MainPreference.setFirstLaunchDate(context, Calendar.getInstance().getTimeInMillis());
         return new IRAds.Builder(googleClientId);
     }
 
@@ -50,17 +56,29 @@ public class IRAds {
 
         public IRAds build() {
             this.IRAds = new IRAds(this);
+
             return this.IRAds;
         }
 
     }
 
-    public static void showInterstitial(Activity activity){
-        new IRInterstitialService(activity).showInterstitial();
+    public static void showInterstitial(final Activity activity){
+        canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result)
+                    new IRInterstitialService(activity).showInterstitial();
+            }
+        });
+
     }
 
     public static void openSplashScreen(Activity activity){
         activity.startActivity(new Intent(activity, SplashActivity.class));
+    }
+
+    public static void canShowInterstitial(Activity activity, RemoteConfigService.ServiceListener<Boolean> serviceListener){
+        RemoteConfigService.getInstance(activity).canShowInterstitial(serviceListener);
     }
 
 }

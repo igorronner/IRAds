@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
@@ -14,6 +15,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
         if (ConfigUtil.LOGO > 0)
             logo.setImageResource(ConfigUtil.LOGO)
         else

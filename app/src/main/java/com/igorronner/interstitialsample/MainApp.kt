@@ -8,8 +8,10 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        IRAds.startInit("PLACE_YOUR_GOOGLE_CLIENTE_ID", "PLACE_YOUR_ADD_UNIT_ID")
-                .setLogo(R.mipmap.ic_launcher_round)
+        IRAds.startInit(this, "PLACE_YOUR_GOOGLE_CLIENTE_ID")
+                .setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
+                .setLogo(R.mipmap.ic_launcher)
+                .setNativeAdId("PLACE_YOUR_NATIVE_AD_ID")
                 .build()
 
     }
