@@ -16,7 +16,8 @@ import java.util.Calendar;
 public class IRAds {
 
     public static IRAds.Builder startInit(Context context, String googleClientId) {
-        MainPreference.setFirstLaunchDate(context, Calendar.getInstance().getTimeInMillis());
+        if (MainPreference.getFirstLaunchDate(context) == 0)
+            MainPreference.setFirstLaunchDate(context, Calendar.getInstance().getTimeInMillis());
         return new IRAds.Builder(googleClientId);
     }
 
