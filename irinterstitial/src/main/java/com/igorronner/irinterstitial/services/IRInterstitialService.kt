@@ -1,9 +1,10 @@
-package com.igorronner.irinterstitial.init
+package com.igorronner.irinterstitial.services
 
 import android.app.Activity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.views.SplashActivity
 
 open class IRInterstitialService(val activity: Activity) {
@@ -14,7 +15,7 @@ open class IRInterstitialService(val activity: Activity) {
 
     init {
         mInterstitialAd = InterstitialAd(activity)
-        mInterstitialAd!!.adUnitId = ConfigUtil.AD_UNIT_ID
+        mInterstitialAd!!.adUnitId = ConfigUtil.INTERSTITIAL_ID
         requestNewInterstitial()
     }
 

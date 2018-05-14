@@ -1,9 +1,8 @@
 package com.igorronner.interstitialsample
 
 import android.os.Bundle
-import android.support.annotation.IntegerRes
 import android.support.v7.app.AppCompatActivity
-import com.igorronner.irinterstitial.init.IRInterstitial
+import com.igorronner.irinterstitial.init.IRAds
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         val test:IntArray = IntArray(3)
         test.sortedArray()
-        IRInterstitial.openSplashScren(this)
+        IRAds.openSplashScreen(this)
 
     }
 }
