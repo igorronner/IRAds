@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.View
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
+import com.igorronner.irinterstitial.init.IRAds
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -17,6 +18,8 @@ class SplashActivity : AppCompatActivity() {
             logo.setImageResource(ConfigUtil.LOGO)
         else
             logo.visibility = View.GONE
+
+        IRAds.showInterstitial(this)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
