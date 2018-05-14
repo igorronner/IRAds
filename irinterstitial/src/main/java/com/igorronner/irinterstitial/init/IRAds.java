@@ -68,6 +68,8 @@ public class IRAds {
             public void onComplete(Boolean result) {
                 if (result)
                     new IRInterstitialService(activity).showInterstitial();
+                else if(activity instanceof SplashActivity)
+                    activity.finish();
             }
         });
 
