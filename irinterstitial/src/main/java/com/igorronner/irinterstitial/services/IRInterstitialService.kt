@@ -37,9 +37,7 @@ open class IRInterstitialService(val activity: Activity) {
 
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    requestNewInterstitial()
-                    if(activity is SplashActivity)
-                        mInterstitialAd.show()
+                    mInterstitialAd.show()
                 }
             }
         }
