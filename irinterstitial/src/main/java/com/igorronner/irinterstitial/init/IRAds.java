@@ -94,4 +94,10 @@ public class IRAds {
                 .loadAppInstallAdView((NativeAppInstallAdView) activity.findViewById(R.id.adViewNative));
     }
 
+    public static void loadNativeAd(Activity activity, boolean showProgress, NativeAppInstallAdView nativeAppInstallAdView){
+        ManagerNativeAd.getInstance(activity)
+                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
+                .setShowProgress(showProgress)
+                .loadAppInstallAdView(nativeAppInstallAdView);
+    }
 }
