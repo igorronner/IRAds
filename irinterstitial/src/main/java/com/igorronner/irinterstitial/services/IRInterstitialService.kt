@@ -50,6 +50,13 @@ open class IRInterstitialService(val activity: Activity) {
             mInterstitialAd.show()
 
             mInterstitialAd.adListener = object : AdListener() {
+
+
+                override fun onAdFailedToLoad(p0: Int) {
+                    if (finishAll)
+                        ActivityCompat.finishAffinity(activity)
+                    activity.startActivity(intent)
+                }
                 override fun onAdClosed() {
                     if (finishAll)
                         ActivityCompat.finishAffinity(activity)
