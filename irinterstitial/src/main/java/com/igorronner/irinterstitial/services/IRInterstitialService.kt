@@ -1,13 +1,12 @@
 package com.igorronner.irinterstitial.services
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
+import android.support.v4.app.ActivityCompat
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.igorronner.irinterstitial.init.ConfigUtil
-import com.igorronner.irinterstitial.views.SplashActivity
 
 open class IRInterstitialService(val activity: Activity) {
 
@@ -45,14 +44,16 @@ open class IRInterstitialService(val activity: Activity) {
         }
     }
 
-    fun showInterstitialBeforeActivity(context: Context, intent: Intent) {
+    fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, finishAll: Boolean) {
         mInterstitialAd?.let {mInterstitialAd ->
 
             mInterstitialAd.show()
 
             mInterstitialAd.adListener = object : AdListener() {
                 override fun onAdClosed() {
-                    context.startActivity(intent)
+                    if (finishAll)
+                        ActivityCompat.finishAffinity(activity)
+                    activity.startActivity(intent)
                 }
 
                 override fun onAdLoaded() {
@@ -62,4 +63,9 @@ open class IRInterstitialService(val activity: Activity) {
             }
         }
     }
+
+    fun showInterstitialBeforeIntent(activity: Activity, intent: Intent) {
+       showInterstitialBeforeIntent(activity, intent, false)
+    }
+
 }
