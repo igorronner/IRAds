@@ -79,6 +79,18 @@ public class IRAds {
 
     }
 
+    public static void showInterstitialBeforeActivity(final Activity activity, final Intent intent){
+        canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result)
+                    new IRInterstitialService(activity).showInterstitialBeforeActivity(activity, intent);
+                else if(activity instanceof SplashActivity)
+                    activity.finish();
+            }
+        });
+    }
+
     public static void openSplashScreen(Activity activity){
         activity.startActivity(new Intent(activity, SplashActivity.class));
     }
@@ -86,6 +98,7 @@ public class IRAds {
     public static void canShowInterstitial(Activity activity, RemoteConfigService.ServiceListener<Boolean> serviceListener){
         RemoteConfigService.getInstance(activity).canShowInterstitial(serviceListener);
     }
+
 
     public static void loadNativeAd(Activity activity, boolean showProgress){
         ManagerNativeAd.getInstance(activity)
