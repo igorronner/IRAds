@@ -1,6 +1,8 @@
 package com.igorronner.irinterstitial.services
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -33,6 +35,24 @@ open class IRInterstitialService(val activity: Activity) {
             mInterstitialAd.adListener = object : AdListener() {
                 override fun onAdClosed() {
                     activity.finish()
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    mInterstitialAd.show()
+                }
+            }
+        }
+    }
+
+    fun showInterstitialBeforeActivity(context: Context, intent: Intent) {
+        mInterstitialAd?.let {mInterstitialAd ->
+
+            mInterstitialAd.show()
+
+            mInterstitialAd.adListener = object : AdListener() {
+                override fun onAdClosed() {
+                    context.startActivity(intent)
                 }
 
                 override fun onAdLoaded() {
