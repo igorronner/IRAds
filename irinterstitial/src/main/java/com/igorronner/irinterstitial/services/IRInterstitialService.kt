@@ -27,10 +27,13 @@ open class IRInterstitialService(val activity: Activity) {
         mInterstitialAd?.loadAd(adRequest)
     }
 
-    fun showInterstitial(){
-        showInterstitial(null)
+    fun showInterstitial(finishAll: Boolean){
+        showInterstitial(null, finishAll)
     }
-    fun showInterstitial(titleDialog: String?) {
+    fun showInterstitial(){
+        showInterstitial(null, false)
+    }
+    fun showInterstitial(titleDialog: String?, finishAll: Boolean) {
         val dialog= ProgressDialog(activity)
         titleDialog?.let {
             dialog.setMessage(titleDialog)
@@ -50,12 +53,17 @@ open class IRInterstitialService(val activity: Activity) {
                         if (dialog.isShowing)
                             dialog.hide()
                     }
-
-                    activity.finish()
+                    if (finishAll)
+                        ActivityCompat.finishAffinity(activity)
+                    else
+                        activity.finish()
                 }
 
                 override fun onAdClosed() {
-                    activity.finish()
+                    if (finishAll)
+                        ActivityCompat.finishAffinity(activity)
+                    else
+                        activity.finish()
                 }
 
                 override fun onAdLoaded() {
