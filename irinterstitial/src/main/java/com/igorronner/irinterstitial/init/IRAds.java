@@ -66,12 +66,12 @@ public class IRAds {
 
     }
 
-    public static void showInterstitial(final Activity activity){
+    public static void showInterstitial(final Activity activity, final String titleDialog){
         canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
             @Override
             public void onComplete(Boolean result) {
                 if (result)
-                    new IRInterstitialService(activity).showInterstitial();
+                    new IRInterstitialService(activity).showInterstitial(titleDialog);
                 else if(activity instanceof SplashActivity)
                     activity.finish();
             }
