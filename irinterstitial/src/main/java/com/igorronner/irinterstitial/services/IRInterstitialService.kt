@@ -7,7 +7,6 @@ import android.support.v4.app.ActivityCompat
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 
 open class IRInterstitialService(val activity: Activity) {
@@ -28,13 +27,19 @@ open class IRInterstitialService(val activity: Activity) {
         mInterstitialAd?.loadAd(adRequest)
     }
 
-    fun showInterstitial(titleDialog:String) {
-
+    fun showInterstitial(){
+        showInterstitial(null)
+    }
+    fun showInterstitial(titleDialog: String?) {
         val dialog= ProgressDialog(activity)
-        dialog.setMessage(titleDialog)
-        dialog.setCancelable(false)
-        dialog.isIndeterminate=true
-        dialog.show()
+        titleDialog?.let {
+            dialog.setMessage(titleDialog)
+            dialog.setCancelable(false)
+            dialog.isIndeterminate=true
+            dialog.show()
+        }
+
+
 
         mInterstitialAd?.let {mInterstitialAd ->
 
@@ -43,8 +48,11 @@ open class IRInterstitialService(val activity: Activity) {
             mInterstitialAd.adListener = object : AdListener() {
 
                 override fun onAdFailedToLoad(p0: Int) {
-                    if (dialog.isShowing)
-                        dialog.hide()
+                    titleDialog?.let {
+                        if (dialog.isShowing)
+                            dialog.hide()
+                    }
+
                     activity.finish()
                 }
 
@@ -54,8 +62,11 @@ open class IRInterstitialService(val activity: Activity) {
 
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    if (dialog.isShowing)
-                        dialog.hide()
+                    titleDialog?.let {
+                        if (dialog.isShowing)
+                            dialog.hide()
+                    }
+
                     mInterstitialAd.show()
                 }
             }

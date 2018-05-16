@@ -78,6 +78,18 @@ public class IRAds {
         });
 
     }
+    public static void showInterstitial(final Activity activity){
+        canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result)
+                    new IRInterstitialService(activity).showInterstitial();
+                else if(activity instanceof SplashActivity)
+                    activity.finish();
+            }
+        });
+
+    }
 
     public static void showInterstitialBeforeIntent(final Activity activity, final Intent intent, boolean finishAll, final String titleDialog){
         canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
