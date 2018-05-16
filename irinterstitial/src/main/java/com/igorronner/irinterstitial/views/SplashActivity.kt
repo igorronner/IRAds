@@ -21,7 +21,6 @@ class SplashActivity : AppCompatActivity() {
         else
             logo.visibility = View.GONE
 
-        IRAds.showInterstitial(this)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
