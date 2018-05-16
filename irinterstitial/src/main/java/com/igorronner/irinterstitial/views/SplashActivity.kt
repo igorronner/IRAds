@@ -20,6 +20,7 @@ class SplashActivity : AppCompatActivity() {
             logo.setImageResource(ConfigUtil.LOGO)
         else
             logo.visibility = View.GONE
+        IRAds.showInterstitial(this)
 
     }
 
