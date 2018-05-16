@@ -72,7 +72,7 @@ public class IRAds {
             public void onComplete(Boolean result) {
                 if (result)
                     new IRInterstitialService(activity).showInterstitial(titleDialog);
-                else if(activity instanceof SplashActivity)
+                else
                     activity.finish();
             }
         });
@@ -85,7 +85,7 @@ public class IRAds {
             public void onComplete(Boolean result) {
                 if (result)
                     new IRInterstitialService(activity).showInterstitial();
-                else if(activity instanceof SplashActivity)
+                else
                     activity.finish();
             }
         });
@@ -98,7 +98,7 @@ public class IRAds {
             public void onComplete(Boolean result) {
                 if (result)
                     new IRInterstitialService(activity).showInterstitialBeforeIntent(activity, intent, titleDialog);
-                else if(activity instanceof SplashActivity)
+                else
                     activity.finish();
             }
         });

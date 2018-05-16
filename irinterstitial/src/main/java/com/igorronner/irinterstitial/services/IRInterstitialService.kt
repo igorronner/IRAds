@@ -39,8 +39,6 @@ open class IRInterstitialService(val activity: Activity) {
             dialog.show()
         }
 
-
-
         mInterstitialAd?.let {mInterstitialAd ->
 
             mInterstitialAd.show()
