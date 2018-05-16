@@ -51,9 +51,9 @@ open class IRInterstitialService(val activity: Activity) {
         }
     }
 
-    fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, finishAll: Boolean) {
+    fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, finishAll: Boolean, titleDialog:String) {
         val dialog= ProgressDialog(activity)
-        dialog.setMessage(activity.getString(R.string.loading))
+        dialog.setMessage(titleDialog)
         dialog.setCancelable(false)
         dialog.isIndeterminate=true
         dialog.show()
@@ -89,8 +89,8 @@ open class IRInterstitialService(val activity: Activity) {
         }
     }
 
-    fun showInterstitialBeforeIntent(activity: Activity, intent: Intent) {
-       showInterstitialBeforeIntent(activity, intent, false)
+    fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, titleDialog:String) {
+       showInterstitialBeforeIntent(activity, intent, false, titleDialog)
     }
 
 }
