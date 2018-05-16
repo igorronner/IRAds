@@ -78,6 +78,7 @@ public class IRAds {
         });
 
     }
+
     public static void showInterstitial(final Activity activity){
         canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
             @Override
