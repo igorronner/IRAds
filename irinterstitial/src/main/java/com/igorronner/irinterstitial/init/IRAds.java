@@ -19,15 +19,14 @@ import java.util.Calendar;
 
 public class IRAds {
 
-    public static IRAds.Builder startInit(Context context, String googleClientId) {
+    public static IRAds.Builder startInit(Context context) {
         if (MainPreference.getFirstLaunchDate(context) == 0)
             MainPreference.setFirstLaunchDate(context, Calendar.getInstance().getTimeInMillis());
-        return new IRAds.Builder(googleClientId);
+        return new IRAds.Builder();
     }
 
     private IRAds(final IRAds.Builder builder) {
         ConfigUtil.LOGO = builder.logo;
-        ConfigUtil.GOOGLE_CLIENT_ID = builder.googleClientId;
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
     }
@@ -35,13 +34,11 @@ public class IRAds {
     public static class Builder {
         @DrawableRes
         private int logo;
-        private String googleClientId;
         private IRAds IRAds;
         private String interstitialId;
         private String nativeAdId;
 
-        public Builder(String googleClientId) {
-            this.googleClientId = googleClientId;
+        public Builder() {
         }
 
         public Builder setLogo(@DrawableRes int logo) {
