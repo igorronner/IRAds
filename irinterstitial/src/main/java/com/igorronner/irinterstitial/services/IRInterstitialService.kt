@@ -104,6 +104,7 @@ open class IRInterstitialService(val activity: Activity) {
                     if (dialog.isShowing)
                         dialog.hide()
                     mInterstitialAd.show()
+                    requestNewInterstitial()
                 }
             }
         }
