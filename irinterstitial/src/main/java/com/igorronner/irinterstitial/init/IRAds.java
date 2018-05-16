@@ -65,11 +65,16 @@ public class IRAds {
     }
 
     public static void showInterstitial(final Activity activity, final String titleDialog){
+        showInterstitial(activity, titleDialog, false);
+
+    }
+
+    public static void showInterstitial(final Activity activity, final String titleDialog, final boolean finishAll){
         canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
             @Override
             public void onComplete(Boolean result) {
                 if (result)
-                    new IRInterstitialService(activity).showInterstitial(titleDialog);
+                    new IRInterstitialService(activity).showInterstitial(titleDialog, finishAll);
                 else
                     activity.finish();
             }
@@ -77,16 +82,9 @@ public class IRAds {
 
     }
 
+
     public static void showInterstitial(final Activity activity){
-        canShowInterstitial(activity, new RemoteConfigService.ServiceListener<Boolean>() {
-            @Override
-            public void onComplete(Boolean result) {
-                if (result)
-                    new IRInterstitialService(activity).showInterstitial();
-                else
-                    activity.finish();
-            }
-        });
+        showInterstitial(activity, null, false);
 
     }
 
