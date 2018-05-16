@@ -99,10 +99,13 @@ public class IRAds {
             public void onComplete(Boolean result) {
                 if (result)
                     new IRInterstitialService(activity).showInterstitialBeforeIntent(activity, intent, titleDialog);
-                else if (finishAll)
+                else if (finishAll) {
                     ActivityCompat.finishAffinity(activity);
-                else
+                    activity.startActivity(intent);
+                } else {
                     activity.finish();
+                    activity.startActivity(intent);
+                }
             }
         });
     }
