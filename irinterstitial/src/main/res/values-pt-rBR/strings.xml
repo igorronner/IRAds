@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">IRInterstitial</string>
     <string name="loading">Carregando</string>
+    <string name="going_out">Saindo</string>
 </resources>
