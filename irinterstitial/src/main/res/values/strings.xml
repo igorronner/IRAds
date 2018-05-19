@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">IRInterstitial</string>
     <string name="loading">Loading</string>
     <string name="going_out">Going out</string>
 </resources>

@@ -8,11 +8,11 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        IRAds.startInit(this)
-                .setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
-                .setLogo(R.mipmap.ic_launcher)
-                .setNativeAdId("PLACE_YOUR_NATIVE_AD_ID")
-                .build()
+//        IRAds.startInit(this)
+//                .setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
+//                .setLogo(R.mipmap.ic_launcher)
+//                .setNativeAdId("PLACE_YOUR_NATIVE_AD_ID")
+//                .build()
 
     }
 
