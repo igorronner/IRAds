@@ -3,6 +3,7 @@ package com.igorronner.irinterstitial.init;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 
@@ -20,7 +21,7 @@ import java.util.Calendar;
 public class IRAds {
 
     public static IRAds.Builder startInit(Context context) {
-        if (MainPreference.getFirstLaunchDate(context) == 0)
+        if (ConfigUtil.SHOW_AFTER_DAYS && MainPreference.getFirstLaunchDate(context) == 0)
             MainPreference.setFirstLaunchDate(context, Calendar.getInstance().getTimeInMillis());
         return new IRAds.Builder();
     }
@@ -29,6 +30,7 @@ public class IRAds {
         ConfigUtil.LOGO = builder.logo;
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
+        ConfigUtil.SHOW_AFTER_DAYS = builder.showAfterDays;
     }
 
     public static class Builder {
@@ -37,6 +39,7 @@ public class IRAds {
         private IRAds IRAds;
         private String interstitialId;
         private String nativeAdId;
+        private boolean showAfterDays;
 
         public Builder() {
         }
@@ -53,6 +56,11 @@ public class IRAds {
 
         public Builder setNativeAdId(String nativeAdId) {
             this.nativeAdId = nativeAdId;
+            return this;
+        }
+
+        public Builder setShowAfterDays(boolean showAfterDays){
+            this.showAfterDays = showAfterDays;
             return this;
         }
 

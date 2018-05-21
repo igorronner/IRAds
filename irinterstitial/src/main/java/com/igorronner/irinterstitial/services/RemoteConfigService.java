@@ -10,6 +10,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.igorronner.irinterstitial.BuildConfig;
 import com.igorronner.irinterstitial.R;
+import com.igorronner.irinterstitial.init.ConfigUtil;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 import com.igorronner.irinterstitial.utils.DateUtils;
 
@@ -57,7 +58,6 @@ public class RemoteConfigService {
             instance.mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
             FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings
                     .Builder()
-                    .setDeveloperModeEnabled(BuildConfig.DEBUG)
                     .build();
             instance.mFirebaseRemoteConfig.setConfigSettings(configSettings);
             instance.mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
@@ -70,6 +70,12 @@ public class RemoteConfigService {
     }
 
     public void canShowInterstitial(final ServiceListener<Boolean> serviceListener){
+
+        if (!ConfigUtil.SHOW_AFTER_DAYS){
+            serviceListener.onComplete(false);
+            return;
+        }
+
         long cacheExpiration = 3600; // 1 hour in seconds.
         if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
             cacheExpiration = 0;
