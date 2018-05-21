@@ -72,7 +72,7 @@ public class RemoteConfigService {
     public void canShowInterstitial(final ServiceListener<Boolean> serviceListener){
 
         if (!ConfigUtil.SHOW_AFTER_DAYS){
-            serviceListener.onComplete(false);
+            serviceListener.onComplete(true);
             return;
         }
 

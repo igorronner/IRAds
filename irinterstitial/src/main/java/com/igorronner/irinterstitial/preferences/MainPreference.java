@@ -14,6 +14,10 @@ public class MainPreference {
         editor.putLong(FIRST_LAUNCH_DATE, firstLaunchDate);
         editor.commit();
     }
+
+
+
+
     public static long getFirstLaunchDate(Context context){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPref.getLong(FIRST_LAUNCH_DATE, 0);
