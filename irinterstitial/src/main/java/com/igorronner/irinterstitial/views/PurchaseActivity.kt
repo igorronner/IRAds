@@ -25,7 +25,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         fun onProductPurchased()
     }
 
-    val purchasesUpdatedListener: ProductPurchasedListener? = null
+    var purchasesUpdatedListener: ProductPurchasedListener? = null
 
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)

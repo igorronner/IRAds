@@ -1,10 +1,9 @@
 package com.igorronner.interstitialsample
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.views.PurchaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : PurchaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -12,5 +11,8 @@ class MainActivity : AppCompatActivity() {
 
 //        IRAds.openSplashScreen(this)
 
+
     }
+
+
 }
