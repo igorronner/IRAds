@@ -166,7 +166,7 @@ public class IRAds {
         ManagerNativeAd.getInstance(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
                 .setShowProgress(false)
-                .loadAppInstallAdView(nativeAppInstallAdView);
+                .loadCardAdView(cardView, nativeAppInstallAdView);
     }
 
     public static void loadNativeAd(Activity activity, boolean showProgress){
