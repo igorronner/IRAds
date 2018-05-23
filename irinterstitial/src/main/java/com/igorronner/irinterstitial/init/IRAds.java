@@ -31,6 +31,7 @@ public class IRAds {
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.SHOW_AFTER_DAYS = builder.showAfterDays;
+        ConfigUtil.PRODUCT_SKU = builder.productSku;
     }
 
     public static class Builder {
@@ -39,6 +40,7 @@ public class IRAds {
         private IRAds IRAds;
         private String interstitialId;
         private String nativeAdId;
+        private String productSku;
         private boolean showAfterDays;
 
         public Builder() {
@@ -61,6 +63,11 @@ public class IRAds {
 
         public Builder setShowAfterDays(boolean showAfterDays){
             this.showAfterDays = showAfterDays;
+            return this;
+        }
+
+        public Builder enablePurchace(String productSku){
+            this.productSku = productSku;
             return this;
         }
 

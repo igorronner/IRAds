@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buy_premium">प्रीमियम खरीदें</string>
+    <string name="message_buy_premium">ऐप्‍लीेशन के सुधार और विज्ञा या विज्ञापन हटाने के लिए प्रीमियम खरीदें जो आप हमारे डिवेलपर्स के साथ सहयोग करोगे</string>
+    <string name="purchase">खरीदें</string>
+    <string name="cancel">रद्द करें</string>
+</resources>

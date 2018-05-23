@@ -23,6 +23,7 @@ import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.igorronner.irinterstitial.R;
+import com.igorronner.irinterstitial.preferences.MainPreference;
 
 import java.util.List;
 
@@ -65,6 +66,10 @@ public class ManagerNativeAd {
     }
 
     public void loadAppInstallAdView(final NativeAppInstallAdView adView){
+        if (MainPreference.isPremium(context)){
+            adView.getChildAt(0).setVisibility(View.INVISIBLE);
+            return;
+        }
 
         adView.getChildAt(0).setVisibility(View.INVISIBLE);
         if (showProgress) {
@@ -115,6 +120,12 @@ public class ManagerNativeAd {
 
 
     public void loadNativeAdContent(final NativeContentAdView adView){
+
+        if (MainPreference.isPremium(context)){
+            adView.getChildAt(0).setVisibility(View.INVISIBLE);
+            return;
+        }
+
         AdLoader.Builder builder = new AdLoader.Builder(context, admobAdUnitId);
 
         builder.forContentAd(new NativeContentAd.OnContentAdLoadedListener() {

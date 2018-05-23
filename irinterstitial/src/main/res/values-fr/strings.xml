@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buy_premium">Achat Premium</string>
+    <string name="message_buy_premium">En achetant la version premium, vous collaborez avec nos développeurs afin d\'améliorer l\'application et de supprimer les publicités.</string>
+    <string name="purchase">Acheter</string>
+    <string name="cancel">Annuler</string>
+</resources>

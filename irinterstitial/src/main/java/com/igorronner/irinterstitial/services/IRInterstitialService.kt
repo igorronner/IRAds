@@ -8,6 +8,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.igorronner.irinterstitial.init.ConfigUtil
+import com.igorronner.irinterstitial.preferences.MainPreference
 
 open class IRInterstitialService(val activity: Activity) {
 
@@ -34,6 +35,11 @@ open class IRInterstitialService(val activity: Activity) {
         showInterstitial(null, false)
     }
     fun showInterstitial(titleDialog: String?, finishAll: Boolean) {
+        if (MainPreference.isPremium(activity)){
+            finish(activity, finishAll)
+            return
+        }
+
         val dialog= ProgressDialog(activity)
         titleDialog?.let {
             dialog.setMessage(titleDialog)
@@ -53,17 +59,11 @@ open class IRInterstitialService(val activity: Activity) {
                         if (dialog.isShowing)
                             dialog.hide()
                     }
-                    if (finishAll)
-                        ActivityCompat.finishAffinity(activity)
-                    else
-                        activity.finish()
+                    finish(activity, finishAll)
                 }
 
                 override fun onAdClosed() {
-                    if (finishAll)
-                        ActivityCompat.finishAffinity(activity)
-                    else
-                        activity.finish()
+                    finish(activity, finishAll)
                 }
 
                 override fun onAdLoaded() {
@@ -79,7 +79,19 @@ open class IRInterstitialService(val activity: Activity) {
         }
     }
 
+    fun finish(activity: Activity, finishAll: Boolean){
+        if (finishAll)
+            ActivityCompat.finishAffinity(activity)
+        else
+            activity.finish()
+
+    }
     fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, finishAll: Boolean, titleDialog:String) {
+
+        if (MainPreference.isPremium(activity)){
+            finishWithIntent(activity, finishAll, intent)
+            return
+        }
         val dialog= ProgressDialog(activity)
         dialog.setMessage(titleDialog)
         dialog.setCancelable(false)
@@ -96,15 +108,10 @@ open class IRInterstitialService(val activity: Activity) {
                 override fun onAdFailedToLoad(p0: Int) {
                     if (dialog.isShowing)
                         dialog.hide()
-                    if (finishAll)
-                        ActivityCompat.finishAffinity(activity)
-
-                    activity.startActivity(intent)
+                    finishWithIntent(activity, finishAll, intent)
                 }
                 override fun onAdClosed() {
-                    if (finishAll)
-                        ActivityCompat.finishAffinity(activity)
-                    activity.startActivity(intent)
+                    finishWithIntent(activity, finishAll, intent)
                 }
 
                 override fun onAdLoaded() {
@@ -118,6 +125,13 @@ open class IRInterstitialService(val activity: Activity) {
         }
     }
 
+    fun finishWithIntent(activity: Activity, finishAll: Boolean, intent: Intent){
+        if (finishAll)
+            ActivityCompat.finishAffinity(activity)
+
+        activity.startActivity(intent)
+
+    }
     fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, titleDialog:String) {
        showInterstitialBeforeIntent(activity, intent, false, titleDialog)
     }

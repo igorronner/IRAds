@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buy_premium">Купить премиум</string>
+    <string name="message_buy_premium">Приобретая премиум-аккаунт, вы поддержите разработчиков и поможете нам дальше улучшать приложение. В благодарность мы полностью отключим для вас рекламу.</string>
+    <string name="purchase">Купить</string>
+    <string name="cancel">Отмена</string>
+</resources>

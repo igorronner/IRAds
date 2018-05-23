@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="buy_premium">Premium kaufen</string>
+    <string name="message_buy_premium">Mit der Premium-Version kannst du mit unseren Entwicklern zusammenarbeiten, um die App zu verbessern. Außerdem werden alle Werbeanzeigen entfernt.</string>
+    <string name="purchase">Kaufen</string>
+    <string name="cancel">Abbrechen</string>
+
+</resources>
