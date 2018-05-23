@@ -26,6 +26,8 @@ class SplashActivity : AppCompatActivity() {
         RemoteConfigService.getInstance(this).canShowSplash { result ->
             if (result!!)
                 IRAds.showInterstitial(this)
+            else
+                finish()
         }
 
 
