@@ -138,7 +138,7 @@ public class IRAds {
             @Override
             public void onComplete(Boolean result) {
                 if (result)
-                    showInterstitial(activity, activity.getString(R.string.going_out));
+                    activity.startActivity(new Intent(activity, SplashActivity.class));
             }
         });
 
@@ -149,7 +149,8 @@ public class IRAds {
             @Override
             public void onComplete(Boolean result) {
                 if (result)
-                    activity.startActivity(new Intent(activity, SplashActivity.class));
+                    showInterstitial(activity, activity.getString(R.string.going_out));
+
             }
         });
 
