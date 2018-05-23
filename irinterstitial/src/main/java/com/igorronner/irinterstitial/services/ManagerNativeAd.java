@@ -23,6 +23,7 @@ import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.igorronner.irinterstitial.R;
+import com.igorronner.irinterstitial.init.IRAds;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 
 import java.util.List;
@@ -63,6 +64,17 @@ public class ManagerNativeAd {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void loadCardAdView(final View adCard, final NativeAppInstallAdView adViewNative){
+
+        if(IRAds.isPremium(context))
+            adCard.setVisibility(View.GONE);
+        else {
+            adCard.setVisibility(View.VISIBLE);
+            loadAppInstallAdView(adViewNative);
+        }
+
     }
 
     public void loadAppInstallAdView(final NativeAppInstallAdView adView){

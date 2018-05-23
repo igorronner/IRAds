@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
+import android.view.View;
 
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.igorronner.irinterstitial.R;
@@ -161,6 +162,12 @@ public class IRAds {
         RemoteConfigService.getInstance(activity).canShowInterstitial(serviceListener);
     }
 
+    public static void loadCardAdView(Activity activity, View cardView,  NativeAppInstallAdView nativeAppInstallAdView){
+        ManagerNativeAd.getInstance(activity)
+                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
+                .setShowProgress(false)
+                .loadAppInstallAdView(nativeAppInstallAdView);
+    }
 
     public static void loadNativeAd(Activity activity, boolean showProgress){
         ManagerNativeAd.getInstance(activity)
