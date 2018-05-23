@@ -14,9 +14,23 @@ import com.igorronner.irinterstitial.preferences.MainPreference
 open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
 
+    interface ProductPurchasedListener {
+        /**
+         * Implement this method to get notifications for purchases updates. Both purchases initiated by
+         * your app and the ones initiated by Play Store will be reported here.
+         *
+         * @param responseCode Response code of the update.
+         * @param purchases List of updated purchases if present.
+         */
+        fun onProductPurchased()
+    }
+
+    val purchasesUpdatedListener: ProductPurchasedListener? = null
+
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)
     }
+
 
     private lateinit var billingClient: BillingClient
 
@@ -71,8 +85,10 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
         if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
             for (purchase in purchases) {
-                if(purchase.sku == ConfigUtil.PRODUCT_SKU)
+                if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(this)
+                    purchasesUpdatedListener?.onProductPurchased()
+                }
             }
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
             // Handle an error caused by a user cancelling the purchase flow.
