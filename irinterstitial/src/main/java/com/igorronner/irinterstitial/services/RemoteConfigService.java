@@ -109,12 +109,8 @@ public class RemoteConfigService {
             return;
         }
 
-        long cacheExpiration = 3600; // 1 hour in seconds.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0;
-        }
 
-        mFirebaseRemoteConfig.fetch(cacheExpiration)
+        mFirebaseRemoteConfig.fetch(cacheExpiration())
                 .addOnCompleteListener(context, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

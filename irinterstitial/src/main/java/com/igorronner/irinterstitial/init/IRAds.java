@@ -175,4 +175,8 @@ public class IRAds {
                 .setShowProgress(showProgress)
                 .loadAppInstallAdView(nativeAppInstallAdView);
     }
+
+    public static boolean isPremium(Context context){
+        return MainPreference.isPremium(context);
+    }
 }
