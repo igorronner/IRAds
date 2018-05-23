@@ -8,7 +8,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.igorronner.irinterstitial.BuildConfig;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.init.ConfigUtil;
 import com.igorronner.irinterstitial.preferences.MainPreference;
@@ -22,7 +21,9 @@ public class RemoteConfigService {
     private static RemoteConfigService instance;
     public FirebaseRemoteConfig mFirebaseRemoteConfig;
     private ServiceListener serviceListener;
-    private static final String DAYS_BEFORE_INSTERSTITIAL = "days_before_interstitial";
+    private static final String DAYS_BEFORE_INSTERSTITIAL = ConfigUtil.APP_PREFIX+"days_before_interstitial";
+    private static final String SHOW_SPLASH = ConfigUtil.APP_PREFIX+"_show_splash";
+    private static final String FINISH_WITH_INTERSTITIAL = ConfigUtil.APP_PREFIX+"_finish_with_interstitial";
     
     public Activity getContext() {
         return context;
@@ -69,6 +70,38 @@ public class RemoteConfigService {
         return instance;
     }
 
+    public void canShowSplash(final ServiceListener<Boolean> serviceListener){
+
+        mFirebaseRemoteConfig.fetch(cacheExpiration())
+                .addOnCompleteListener(context, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        boolean result = false;
+                        if (task.isSuccessful()) {
+                            mFirebaseRemoteConfig.activateFetched();
+                            result = mFirebaseRemoteConfig.getBoolean(SHOW_SPLASH) && !MainPreference.isPremium(context);
+                        }
+                        serviceListener.onComplete(result);
+                    }
+                });
+    }
+
+    public void canFinishWithInterstitial(final ServiceListener<Boolean> serviceListener){
+
+        mFirebaseRemoteConfig.fetch(cacheExpiration())
+                .addOnCompleteListener(context, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        boolean result = false;
+                        if (task.isSuccessful()) {
+                            mFirebaseRemoteConfig.activateFetched();
+                            result = mFirebaseRemoteConfig.getBoolean(FINISH_WITH_INTERSTITIAL);
+                        }
+                        serviceListener.onComplete(result);
+                    }
+                });
+    }
+
     public void canShowInterstitial(final ServiceListener<Boolean> serviceListener){
 
         if (!ConfigUtil.SHOW_AFTER_DAYS){
@@ -96,6 +129,16 @@ public class RemoteConfigService {
                         serviceListener.onComplete(result);
                     }
                 });
+    }
+
+    private long cacheExpiration(){
+        long cacheExpiration = 3600; // 1 hour in seconds.
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+
+        return cacheExpiration;
+
     }
 
 }

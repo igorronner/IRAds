@@ -3,7 +3,6 @@ package com.igorronner.irinterstitial.init;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 
@@ -32,6 +31,7 @@ public class IRAds {
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.SHOW_AFTER_DAYS = builder.showAfterDays;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
+        ConfigUtil.APP_PREFIX = builder.appPrefix;
     }
 
     public static class Builder {
@@ -40,8 +40,11 @@ public class IRAds {
         private IRAds IRAds;
         private String interstitialId;
         private String nativeAdId;
+
         private String productSku;
         private boolean showAfterDays;
+        // Prefix for concat keys on remote config...
+        private String appPrefix;
 
         public Builder() {
         }
@@ -68,6 +71,11 @@ public class IRAds {
 
         public Builder enablePurchace(String productSku){
             this.productSku = productSku;
+            return this;
+        }
+
+        public Builder setAppPrefix(String appPrefix){
+            this.appPrefix = appPrefix;
             return this;
         }
 
@@ -119,15 +127,34 @@ public class IRAds {
             }
         });
     }
-    public static void  showInterstitialBeforeIntent(final Activity activity, final Intent intent, final String titleDialog){
+    public static void showInterstitialBeforeIntent(final Activity activity, final Intent intent, final String titleDialog){
         showInterstitialBeforeIntent(activity, intent, false, titleDialog);
     }
 
 
 
-    public static void openSplashScreen(Activity activity){
-        activity.startActivity(new Intent(activity, SplashActivity.class));
+    public static void openSplashScreen(final Activity activity){
+        RemoteConfigService.getInstance(activity).canShowSplash(new RemoteConfigService.ServiceListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result)
+                    showInterstitial(activity, activity.getString(R.string.going_out));
+            }
+        });
+
     }
+
+    public static void showInterstitalOnFinish(final Activity activity){
+        RemoteConfigService.getInstance(activity).canFinishWithInterstitial(new RemoteConfigService.ServiceListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result)
+                    activity.startActivity(new Intent(activity, SplashActivity.class));
+            }
+        });
+
+    }
+
 
     public static void canShowInterstitial(Activity activity, RemoteConfigService.ServiceListener<Boolean> serviceListener){
         RemoteConfigService.getInstance(activity).canShowInterstitial(serviceListener);

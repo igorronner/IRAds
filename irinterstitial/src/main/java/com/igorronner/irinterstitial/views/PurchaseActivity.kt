@@ -7,12 +7,12 @@ import android.util.Log
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType
 import com.igorronner.irinterstitial.R
+import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
 
 
 open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
-    private val PRODUCT_ID = "premium"
 
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)
@@ -27,7 +27,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
             override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
                     val skuList = ArrayList<String>()
-                    skuList.add(PRODUCT_ID)
+                    skuList.add(ConfigUtil.PRODUCT_SKU)
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
                     billingClient.querySkuDetailsAsync(params.build(), { responseCode, skuDetailsList ->
@@ -71,7 +71,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
         if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
             for (purchase in purchases) {
-                if(purchase.sku == PRODUCT_ID)
+                if(purchase.sku == ConfigUtil.PRODUCT_SKU)
                     MainPreference.setPremium(this)
             }
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
@@ -83,7 +83,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
     fun purchase(){
         val flowParams = BillingFlowParams.newBuilder()
-                .setSku(PRODUCT_ID)
+                .setSku(ConfigUtil.PRODUCT_SKU)
                 .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
                 .build()
         billingClient.launchBillingFlow(this@PurchaseActivity, flowParams)

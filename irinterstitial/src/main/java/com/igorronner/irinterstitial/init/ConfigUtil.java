@@ -9,4 +9,5 @@ public class ConfigUtil {
     public static String NATIVE_AD_ID = null;
     public static boolean SHOW_AFTER_DAYS = false;
     public static String PRODUCT_SKU = null;
+    public static String APP_PREFIX = null;
 }
