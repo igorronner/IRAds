@@ -144,6 +144,8 @@ public class IRAds {
             public void onComplete(Boolean result) {
                 if (result)
                     showInterstitial(activity, activity.getString(R.string.going_out));
+                else
+                    ActivityCompat.finishAffinity(activity);
 
             }
         });
