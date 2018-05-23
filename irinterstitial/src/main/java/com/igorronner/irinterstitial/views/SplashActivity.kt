@@ -1,5 +1,6 @@
 package com.igorronner.irinterstitial.views
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
@@ -8,6 +9,7 @@ import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.services.RemoteConfigService
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -20,7 +22,12 @@ class SplashActivity : AppCompatActivity() {
             logo.setImageResource(ConfigUtil.LOGO)
         else
             logo.visibility = View.GONE
-        IRAds.showInterstitial(this)
+
+        RemoteConfigService.getInstance(this).canShowSplash { result ->
+            if (result!!)
+                IRAds.showInterstitial(this)
+        }
+
 
     }
 

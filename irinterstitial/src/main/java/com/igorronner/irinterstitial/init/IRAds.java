@@ -135,14 +135,7 @@ public class IRAds {
 
 
     public static void openSplashScreen(final Activity activity){
-        RemoteConfigService.getInstance(activity).canShowSplash(new RemoteConfigService.ServiceListener<Boolean>() {
-            @Override
-            public void onComplete(Boolean result) {
-                if (result)
-                    activity.startActivity(new Intent(activity, SplashActivity.class));
-            }
-        });
-
+        activity.startActivity(new Intent(activity, SplashActivity.class));
     }
 
     public static void showInterstitalOnFinish(final Activity activity){
