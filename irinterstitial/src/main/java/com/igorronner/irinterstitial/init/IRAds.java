@@ -135,7 +135,8 @@ public class IRAds {
 
 
     public static void openSplashScreen(final Activity activity){
-        activity.startActivity(new Intent(activity, SplashActivity.class));
+        if (!isPremium(activity))
+            activity.startActivity(new Intent(activity, SplashActivity.class));
     }
 
     public static void showInterstitalOnFinish(final Activity activity){
