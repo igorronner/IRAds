@@ -4,4 +4,12 @@
         <key>days_before_interstitial</key>
         <value>5</value>
     </entry>
+    <entry>
+        <key>controle_peso_show_splash</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>controle_peso_finish_with_interstitial</key>
+        <value>false</value>
+    </entry>
 </defaultsMap>    <!-- END xml_defaults -->
