@@ -83,7 +83,7 @@ public class ManagerNativeAd {
             return;
         }
 
-        adView.getChildAt(0).setVisibility(View.INVISIBLE);
+        adView.getChildAt(0).setVisibility(View.GONE);
         if (showProgress) {
             progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
             progressBar.setIndeterminate(true);
@@ -124,6 +124,7 @@ public class ManagerNativeAd {
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int errorCode) {
+                adView.getChildAt(0).setVisibility(View.GONE);
             }
         }).build();
 
