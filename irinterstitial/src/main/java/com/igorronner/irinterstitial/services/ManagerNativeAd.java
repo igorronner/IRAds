@@ -116,8 +116,7 @@ public class ManagerNativeAd {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adView.getChildAt(0).setVisibility(View.GONE);
-                if (adCard!=null)
-                    adCard.setVisibility(View.GONE);
+
             }
         }).build();
 
