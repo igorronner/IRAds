@@ -66,24 +66,15 @@ public class ManagerNativeAd {
         this.context = context;
     }
 
-    public void loadCardAdView(final View adCard, final NativeAppInstallAdView adViewNative){
-
-        if(IRAds.isPremium(context))
-            adCard.setVisibility(View.GONE);
-        else {
-            adCard.setVisibility(View.VISIBLE);
-            loadAppInstallAdView(adViewNative);
-        }
-
-    }
-
-    public void loadAppInstallAdView(final NativeAppInstallAdView adView){
+    public void loadAppInstallAdView(final View adCard, final NativeAppInstallAdView adView){
         if (MainPreference.isPremium(context)){
-            adView.getChildAt(0).setVisibility(View.INVISIBLE);
+            adView.getChildAt(0).setVisibility(View.GONE);
+            if (adCard!=null)
+                adCard.setVisibility(View.GONE);
             return;
         }
 
-        adView.getChildAt(0).setVisibility(View.GONE);
+        adView.getChildAt(0).setVisibility(View.INVISIBLE);
         if (showProgress) {
             progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
             progressBar.setIndeterminate(true);
@@ -125,10 +116,15 @@ public class ManagerNativeAd {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 adView.getChildAt(0).setVisibility(View.GONE);
+                if (adCard!=null)
+                    adCard.setVisibility(View.GONE);
             }
         }).build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
+    }
+    public void loadAppInstallAdView(final NativeAppInstallAdView adView){
+        loadAppInstallAdView(null, adView);
     }
 
 
