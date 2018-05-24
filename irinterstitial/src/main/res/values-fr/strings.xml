@@ -4,4 +4,5 @@
     <string name="message_buy_premium">En achetant la version premium, vous collaborez avec nos développeurs afin d\'améliorer l\'application et de supprimer les publicités.</string>
     <string name="purchase">Acheter</string>
     <string name="cancel">Annuler</string>
+    <string name="premium">Premium</string>
 </resources>

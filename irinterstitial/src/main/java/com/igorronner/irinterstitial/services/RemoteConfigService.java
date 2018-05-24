@@ -61,7 +61,6 @@ public class RemoteConfigService {
                     .Builder()
                     .build();
             instance.mFirebaseRemoteConfig.setConfigSettings(configSettings);
-            instance.mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
 
         }
 
