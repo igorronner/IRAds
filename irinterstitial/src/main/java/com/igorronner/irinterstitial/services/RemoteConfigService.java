@@ -22,8 +22,8 @@ public class RemoteConfigService {
     public FirebaseRemoteConfig mFirebaseRemoteConfig;
     private ServiceListener serviceListener;
     private static final String DAYS_BEFORE_INSTERSTITIAL = ConfigUtil.APP_PREFIX+"days_before_interstitial";
-    private static final String SHOW_SPLASH = ConfigUtil.APP_PREFIX+"_show_splash";
-    private static final String FINISH_WITH_INTERSTITIAL = ConfigUtil.APP_PREFIX+"_finish_with_interstitial";
+    private static final String SHOW_SPLASH = ConfigUtil.APP_PREFIX+"show_splash";
+    private static final String FINISH_WITH_INTERSTITIAL = ConfigUtil.APP_PREFIX+"finish_with_interstitial";
     
     public Activity getContext() {
         return context;
