@@ -82,7 +82,6 @@ public class IRAds {
 
         public IRAds build() {
             this.IRAds = new IRAds(this);
-
             return this.IRAds;
         }
 

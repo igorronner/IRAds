@@ -35,6 +35,7 @@ open class IRInterstitialService(val activity: Activity) {
         showInterstitial(null, false)
     }
     fun showInterstitial(titleDialog: String?, finishAll: Boolean) {
+
         if (MainPreference.isPremium(activity)){
             finish(activity, finishAll)
             return
@@ -50,7 +51,15 @@ open class IRInterstitialService(val activity: Activity) {
 
         mInterstitialAd?.let {mInterstitialAd ->
 
-            mInterstitialAd.show()
+            if(mInterstitialAd.isLoaded){
+                titleDialog?.let {
+                    if (dialog.isShowing)
+                        dialog.hide()
+                }
+
+                mInterstitialAd.show()
+                return
+            }
 
             mInterstitialAd.adListener = object : AdListener() {
 
@@ -64,17 +73,9 @@ open class IRInterstitialService(val activity: Activity) {
 
                 override fun onAdClosed() {
                     finish(activity, finishAll)
+                    requestNewInterstitial()
                 }
 
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    titleDialog?.let {
-                        if (dialog.isShowing)
-                            dialog.hide()
-                    }
-
-                    mInterstitialAd.show()
-                }
             }
         }
     }
