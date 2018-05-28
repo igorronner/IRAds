@@ -137,10 +137,8 @@ open class IRInterstitialService(val activity: Activity) {
         }
 
         mInterstitialAd?.let {mInterstitialAd ->
-            mInterstitialAd.show()
 
             mInterstitialAd.adListener = object : AdListener() {
-
 
                 override fun onAdFailedToLoad(p0: Int) {
                     callback.handle()
@@ -149,13 +147,9 @@ open class IRInterstitialService(val activity: Activity) {
                     callback.handle()
                     requestNewInterstitial()
                 }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    mInterstitialAd.show()
-                    requestNewInterstitial()
-                }
             }
+            if(mInterstitialAd.isLoaded)
+                mInterstitialAd.show()
         }
     }
 
