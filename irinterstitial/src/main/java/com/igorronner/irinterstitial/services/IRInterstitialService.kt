@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.support.v4.app.ActivityCompat
+import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -12,6 +13,7 @@ import com.igorronner.irinterstitial.preferences.MainPreference
 
 open class IRInterstitialService(val activity: Activity) {
 
+    public val tag = "IRInterstitialService"
     public interface Callback{
         abstract fun handle()
     }
@@ -133,6 +135,7 @@ open class IRInterstitialService(val activity: Activity) {
     fun showInterstitialBeforeFragment(callback: Callback){
         if (MainPreference.isPremium(activity)){
             callback.handle()
+            Log.d(tag, "premium")
             return
         }
 
@@ -141,15 +144,21 @@ open class IRInterstitialService(val activity: Activity) {
             mInterstitialAd.adListener = object : AdListener() {
 
                 override fun onAdFailedToLoad(p0: Int) {
+                    Log.d(tag, "onAdFailedToLoad")
                     callback.handle()
+
                 }
                 override fun onAdClosed() {
+                    Log.d(tag, "onAdClosed")
                     callback.handle()
                     requestNewInterstitial()
                 }
             }
+
+            Log.d(tag, "beforeShow")
             if(mInterstitialAd.isLoaded)
                 mInterstitialAd.show()
+            Log.d(tag, "afterShow")
         }
     }
 
