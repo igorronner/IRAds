@@ -115,7 +115,7 @@ public class ManagerNativeAd {
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                adView.getChildAt(0).setVisibility(View.INVISIBLE);
+                adView.getChildAt(0).setVisibility(View.GONE);
 
             }
         }).build();
