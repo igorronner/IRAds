@@ -11,26 +11,42 @@ import com.google.android.gms.ads.InterstitialAd
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
 
-open class IRInterstitialService(val activity: Activity) {
+open class IRInterstitialService(val activity: Activity) : AdListener() {
 
-    public val tag = "IRInterstitialService"
-    public interface Callback{
-        abstract fun handle()
+    val tag = "IRInterstitialService"
+
+    private lateinit var mInterstitialAd: InterstitialAd
+
+    interface Callback{
+        fun handle()
     }
 
-    var mInterstitialAd: InterstitialAd? = null
-
+    val callback:Callback? = null
 
     init {
-        mInterstitialAd = InterstitialAd(activity)
-        mInterstitialAd!!.adUnitId = ConfigUtil.INTERSTITIAL_ID
-        requestNewInterstitial()
+        mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
+        mInterstitialAd = InterstitialAd(activity).apply {
+            adUnitId =  ConfigUtil.INTERSTITIAL_ID
+            adListener = (object : AdListener() {
+                override fun onAdClosed() {
+                    callback?.handle()
+                    requestNewInterstitial()
+                }
+            })
+        }
     }
 
     private fun requestNewInterstitial() {
-        val adRequest = AdRequest.Builder()
-                .build()
-        mInterstitialAd?.loadAd(adRequest)
+        if (!mInterstitialAd.isLoading && !mInterstitialAd.isLoaded) {
+            // Create an ad request. If you're running this on a physical device, check your logcat
+            // to learn how to enable test ads for it. Look for a line like this one:
+            // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+            val adRequest = AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build()
+
+            mInterstitialAd.loadAd(adRequest)
+        }
     }
 
     fun showInterstitial(finishAll: Boolean){
@@ -139,26 +155,15 @@ open class IRInterstitialService(val activity: Activity) {
             return
         }
 
-        mInterstitialAd?.let {mInterstitialAd ->
+        if (mInterstitialAd.isLoaded) {
 
-            mInterstitialAd.adListener = object : AdListener() {
+            Log.d(tag, "loaded")
+            mInterstitialAd.show()
+        } else {
 
-                override fun onAdFailedToLoad(p0: Int) {
-                    Log.d(tag, "onAdFailedToLoad")
-                    callback.handle()
-
-                }
-                override fun onAdClosed() {
-                    Log.d(tag, "onAdClosed")
-                    callback.handle()
-                    requestNewInterstitial()
-                }
-            }
-
-            Log.d(tag, "beforeShow")
-            if(mInterstitialAd.isLoaded)
-                mInterstitialAd.show()
-            Log.d(tag, "afterShow")
+            Log.d(tag, "loaded")
+            callback.handle()
+            requestNewInterstitial()
         }
     }
 
@@ -173,5 +178,7 @@ open class IRInterstitialService(val activity: Activity) {
     fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, titleDialog:String) {
        showInterstitialBeforeIntent(activity, intent, false, titleDialog)
     }
+
+
 
 }
