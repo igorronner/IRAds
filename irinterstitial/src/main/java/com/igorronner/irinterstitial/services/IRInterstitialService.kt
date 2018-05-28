@@ -15,7 +15,7 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
 
     val tag = "IRInterstitialService"
 
-    private lateinit var mInterstitialAd: InterstitialAd
+    private var mInterstitialAd = InterstitialAd(activity)
 
     interface Callback{
         fun handle()
