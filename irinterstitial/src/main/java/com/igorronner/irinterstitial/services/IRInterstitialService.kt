@@ -29,13 +29,17 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
         mInterstitialAd = InterstitialAd(activity)
         mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
         mInterstitialAd.adListener = (object : AdListener() {
-                override fun onAdClosed() {
 
-                    Log.d(tag, "onAdClosed")
-                    callback?.handle()
-                    requestNewInterstitial()
-                }
-            })
+            override fun onAdFailedToLoad(p0: Int) {
+                callback?.handle()
+                Log.d(tag, "onAdFailedToLoad")
+            }
+            override fun onAdClosed() {
+                Log.d(tag, "onAdClosed")
+                callback?.handle()
+                requestNewInterstitial()
+            }
+        })
 
         requestNewInterstitial()
         Log.d(tag, "" + mInterstitialAd.adUnitId)
