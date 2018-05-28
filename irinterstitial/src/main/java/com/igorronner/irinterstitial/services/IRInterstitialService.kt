@@ -15,7 +15,7 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
 
     val tag = "IRInterstitialService"
 
-    private var mInterstitialAd = InterstitialAd(activity)
+    private val mInterstitialAd:InterstitialAd
 
     interface Callback{
         fun handle()
@@ -26,7 +26,6 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
     init {
 
         Log.d(tag, "init{}")
-        mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
         mInterstitialAd = InterstitialAd(activity).apply {
             adUnitId =  ConfigUtil.INTERSTITIAL_ID
             adListener = (object : AdListener() {
@@ -77,35 +76,33 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
             dialog.show()
         }
 
-        mInterstitialAd?.let {mInterstitialAd ->
+        mInterstitialAd.show()
 
-            mInterstitialAd.show()
+        mInterstitialAd.adListener = object : AdListener() {
 
-            mInterstitialAd.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(p0: Int) {
+                titleDialog?.let {
+                    if (dialog.isShowing)
+                        dialog.hide()
+                }
+                finish(activity, finishAll)
+            }
 
-                override fun onAdFailedToLoad(p0: Int) {
-                    titleDialog?.let {
-                        if (dialog.isShowing)
-                            dialog.hide()
-                    }
-                    finish(activity, finishAll)
+            override fun onAdClosed() {
+                finish(activity, finishAll)
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                titleDialog?.let {
+                    if (dialog.isShowing)
+                        dialog.hide()
                 }
 
-                override fun onAdClosed() {
-                    finish(activity, finishAll)
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    titleDialog?.let {
-                        if (dialog.isShowing)
-                            dialog.hide()
-                    }
-
-                    mInterstitialAd.show()
-                }
+                mInterstitialAd.show()
             }
         }
+
     }
 
     fun finish(activity: Activity, finishAll: Boolean){
