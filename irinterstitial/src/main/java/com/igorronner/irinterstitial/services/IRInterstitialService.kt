@@ -24,11 +24,15 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
     val callback:Callback? = null
 
     init {
+
+        Log.d(tag, "init{}")
         mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
         mInterstitialAd = InterstitialAd(activity).apply {
             adUnitId =  ConfigUtil.INTERSTITIAL_ID
             adListener = (object : AdListener() {
                 override fun onAdClosed() {
+
+                    Log.d(tag, "onAdClosed")
                     callback?.handle()
                     requestNewInterstitial()
                 }
@@ -37,6 +41,8 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
     }
 
     private fun requestNewInterstitial() {
+
+        Log.d(tag, "requestNewInterstitial")
         if (!mInterstitialAd.isLoading && !mInterstitialAd.isLoaded) {
             // Create an ad request. If you're running this on a physical device, check your logcat
             // to learn how to enable test ads for it. Look for a line like this one:
@@ -46,6 +52,8 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
                     .build()
 
             mInterstitialAd.loadAd(adRequest)
+
+            Log.d(tag, "loadAd")
         }
     }
 
@@ -156,11 +164,9 @@ open class IRInterstitialService(val activity: Activity) : AdListener() {
         }
 
         if (mInterstitialAd.isLoaded) {
-
             Log.d(tag, "loaded")
             mInterstitialAd.show()
         } else {
-
             Log.d(tag, "loaded")
             callback.handle()
             requestNewInterstitial()
