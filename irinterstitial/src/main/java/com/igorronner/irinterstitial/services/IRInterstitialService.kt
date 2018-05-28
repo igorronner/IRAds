@@ -123,6 +123,38 @@ open class IRInterstitialService(val activity: Activity) {
                 }
             }
         }
+
+        showInterstitalBeforeFragment {  }
+    }
+
+
+    fun showInterstitalBeforeFragment(callback: () -> Unit){
+        if (MainPreference.isPremium(activity)){
+            callback()
+            return
+        }
+
+        mInterstitialAd?.let {mInterstitialAd ->
+            mInterstitialAd.show()
+
+            mInterstitialAd.adListener = object : AdListener() {
+
+
+                override fun onAdFailedToLoad(p0: Int) {
+                    callback()
+                }
+                override fun onAdClosed() {
+                    callback()
+                    requestNewInterstitial()
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    mInterstitialAd.show()
+                    requestNewInterstitial()
+                }
+            }
+        }
     }
 
     fun finishWithIntent(activity: Activity, finishAll: Boolean, intent: Intent){
@@ -132,6 +164,7 @@ open class IRInterstitialService(val activity: Activity) {
         activity.startActivity(intent)
 
     }
+
     fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, titleDialog:String) {
        showInterstitialBeforeIntent(activity, intent, false, titleDialog)
     }
