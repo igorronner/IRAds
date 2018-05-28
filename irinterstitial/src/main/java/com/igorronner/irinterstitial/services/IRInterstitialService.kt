@@ -12,6 +12,9 @@ import com.igorronner.irinterstitial.preferences.MainPreference
 
 open class IRInterstitialService(val activity: Activity) {
 
+    public interface Callback{
+        abstract fun handle()
+    }
 
     var mInterstitialAd: InterstitialAd? = null
 
@@ -124,13 +127,12 @@ open class IRInterstitialService(val activity: Activity) {
             }
         }
 
-        showInterstitalBeforeFragment {  }
     }
 
 
-    fun showInterstitalBeforeFragment(callback: () -> Unit){
+    fun showInterstitialBeforeFragment(callback: Callback){
         if (MainPreference.isPremium(activity)){
-            callback()
+            callback.handle()
             return
         }
 
@@ -141,10 +143,10 @@ open class IRInterstitialService(val activity: Activity) {
 
 
                 override fun onAdFailedToLoad(p0: Int) {
-                    callback()
+                    callback.handle()
                 }
                 override fun onAdClosed() {
-                    callback()
+                    callback.handle()
                     requestNewInterstitial()
                 }
 

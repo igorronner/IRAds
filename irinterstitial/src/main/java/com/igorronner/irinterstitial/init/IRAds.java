@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
+import android.view.Window;
 
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.igorronner.irinterstitial.R;
@@ -107,6 +108,9 @@ public class IRAds {
     }
 
 
+    public static void showInterstitialBeforeFragment(final Activity activity, IRInterstitialService.Callback callback){
+        new IRInterstitialService(activity).showInterstitialBeforeFragment(callback);
+    }
     public static void showInterstitial(final Activity activity){
         showInterstitial(activity, null, false);
 
