@@ -1,8 +1,7 @@
-package com.igorronner.irinterstitial.views
+package com.igorronner.irinterstitial.services
 
-import android.os.Bundle
+import android.app.Activity
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType
@@ -11,7 +10,7 @@ import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
 
 
-open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
+class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
 
 
     interface ProductPurchasedListener {
@@ -27,9 +26,8 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
     private lateinit var billingClient: BillingClient
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        billingClient = BillingClient.newBuilder(this).setListener(this).build()
+    fun onCreate() {
+        billingClient = BillingClient.newBuilder(activity).setListener(this).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
@@ -51,8 +49,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun onResume() {
         if (!::billingClient.isInitialized)
             return
 
@@ -64,12 +61,12 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun showDialogPremium() {
-        val dialog = AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(activity)
 
         dialog.setTitle(R.string.buy_premium)
         dialog.setMessage(R.string.message_buy_premium)
 
-        dialog.setPositiveButton(R.string.purchase) { _, which -> purchase() }
+        dialog.setPositiveButton(R.string.purchase) { _, _ -> purchase() }
 
         dialog.setNegativeButton(R.string.cancel, null)
         dialog.show()
@@ -79,7 +76,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
-                    MainPreference.setPremium(this)
+                    MainPreference.setPremium(activity)
                     purchasesUpdatedListener?.onProductPurchased()
                 }
             }
@@ -95,6 +92,6 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
                 .setSku(ConfigUtil.PRODUCT_SKU)
                 .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
                 .build()
-        billingClient.launchBillingFlow(this@PurchaseActivity, flowParams)
+        billingClient.launchBillingFlow(activity, flowParams)
     }
 }
