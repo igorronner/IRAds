@@ -48,12 +48,6 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
-
-                            if(skuDetails?.sku == ConfigUtil.PRODUCT_SKU) {
-                                MainPreference.setPremium(this@PurchaseActivity)
-                                productPurchasedListener?.onProductPurchased()
-                                Log.d("billingClient", "onProductPurchased ")
-                            }
                         }
 
 
@@ -71,12 +65,19 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
     override fun onResume() {
         super.onResume()
+        Log.d("billingClient", "onResume() ")
         if (!::billingClient.isInitialized)
             return
 
+        Log.d("billingClient", "billingClient.isInitialized ")
         val purchasesResult = billingClient.queryPurchases(SkuType.INAPP)
         val responseCode = purchasesResult.responseCode
         val purchases = purchasesResult.purchasesList
+        purchases.forEach {
+            purchase: Purchase? ->
+            Log.d("billingClient", "purchase " + purchase?.sku)
+        }
+
         handlePurchasesResult(responseCode, purchases)
 
     }
@@ -95,6 +96,8 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
         if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
+
+            Log.d("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK")
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(this)
