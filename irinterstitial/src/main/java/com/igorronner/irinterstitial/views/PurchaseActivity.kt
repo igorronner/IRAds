@@ -50,7 +50,6 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
                         }
 
-
                     })
                 }
             }

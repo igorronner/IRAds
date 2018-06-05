@@ -23,20 +23,31 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
         handlePurchasesResult(responseCode, purchases)
     }
 
-
     private lateinit var billingClient: BillingClient
 
     fun onCreate() {
         billingClient = BillingClient.newBuilder(activity).setListener(this).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
+                Log.d("billingClient", "onBillingSetupFinished ")
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                    Log.d("billingClient", "BillingClient.BillingResponse.OK ")
                     val skuList = ArrayList<String>()
                     skuList.add(ConfigUtil.PRODUCT_SKU)
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                    billingClient.querySkuDetailsAsync(params.build(), { _, _ -> // Process the result.
-                                                                        })
+                    billingClient.querySkuDetailsAsync(params.build(), { responseCode, skuDetailsList ->
+                        Log.d("billingClient", "querySkuDetailsAsync ")
+                        Log.d("billingClient", "responseCode $responseCode")
+                        skuDetailsList.forEach {
+                            skuDetails: SkuDetails? ->
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
+                        }
+
+                    })
                 }
             }
             override fun onBillingServiceDisconnected() {
@@ -49,12 +60,19 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
     }
 
     fun onResume() {
+        Log.d("billingClient", "onResume() ")
         if (!::billingClient.isInitialized)
             return
 
+        Log.d("billingClient", "billingClient.isInitialized ")
         val purchasesResult = billingClient.queryPurchases(SkuType.INAPP)
         val responseCode = purchasesResult.responseCode
         val purchases = purchasesResult.purchasesList
+        purchases.forEach {
+            purchase: Purchase? ->
+            Log.d("billingClient", "purchase " + purchase?.sku)
+        }
+
         handlePurchasesResult(responseCode, purchases)
 
     }
@@ -73,16 +91,21 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
 
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
         if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
+
+            Log.d("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK")
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(activity)
                     productPurchasedListener?.onProductPurchased()
+                    Log.d("billingClient", "onProductPurchased ")
                 }
             }
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
             // Handle an error caused by a user cancelling the purchase flow.
+            Log.d("billingClient", "handlePurchasesResult USER_CANCELED")
         } else {
             // Handle any other error codes.
+            Log.d("billingClient", "handlePurchasesResult $responseCode")
         }
     }
 
