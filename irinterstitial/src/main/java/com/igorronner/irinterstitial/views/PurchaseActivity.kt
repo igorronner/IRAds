@@ -18,7 +18,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         fun onProductPurchased()
     }
 
-    var purchasesUpdatedListener: ProductPurchasedListener? = null
+    var productPurchasedListener: ProductPurchasedListener? = null
 
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)
@@ -32,13 +32,31 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         billingClient = BillingClient.newBuilder(this).setListener(this).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
+                Log.d("billingClient", "onBillingSetupFinished ")
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                    Log.d("billingClient", "BillingClient.BillingResponse.OK ")
                     val skuList = ArrayList<String>()
                     skuList.add(ConfigUtil.PRODUCT_SKU)
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
                     billingClient.querySkuDetailsAsync(params.build(), { responseCode, skuDetailsList ->
-                        // Process the result.
+                        Log.d("billingClient", "querySkuDetailsAsync ")
+                        Log.d("billingClient", "responseCode $responseCode")
+                        skuDetailsList.forEach {
+                            skuDetails: SkuDetails? ->
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
+                            Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
+
+                            if(skuDetails?.sku == ConfigUtil.PRODUCT_SKU) {
+                                MainPreference.setPremium(this@PurchaseActivity)
+                                productPurchasedListener?.onProductPurchased()
+                                Log.d("billingClient", "onProductPurchased ")
+                            }
+                        }
+
+
                     })
                 }
             }
@@ -80,13 +98,16 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(this)
-                    purchasesUpdatedListener?.onProductPurchased()
+                    productPurchasedListener?.onProductPurchased()
+                    Log.d("billingClient", "onProductPurchased ")
                 }
             }
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
             // Handle an error caused by a user cancelling the purchase flow.
+            Log.d("billingClient", "handlePurchasesResult USER_CANCELED")
         } else {
             // Handle any other error codes.
+            Log.d("billingClient", "handlePurchasesResult $responseCode")
         }
     }
 

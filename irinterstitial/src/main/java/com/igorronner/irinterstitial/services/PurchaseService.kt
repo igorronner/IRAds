@@ -17,7 +17,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
         fun onProductPurchased()
     }
 
-    var purchasesUpdatedListener: ProductPurchasedListener? = null
+    var productPurchasedListener: ProductPurchasedListener? = null
 
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)
@@ -35,9 +35,8 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
                     skuList.add(ConfigUtil.PRODUCT_SKU)
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                    billingClient.querySkuDetailsAsync(params.build(), { responseCode, skuDetailsList ->
-                        // Process the result.
-                    })
+                    billingClient.querySkuDetailsAsync(params.build(), { _, _ -> // Process the result.
+                                                                        })
                 }
             }
             override fun onBillingServiceDisconnected() {
@@ -77,7 +76,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(activity)
-                    purchasesUpdatedListener?.onProductPurchased()
+                    productPurchasedListener?.onProductPurchased()
                 }
             }
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
