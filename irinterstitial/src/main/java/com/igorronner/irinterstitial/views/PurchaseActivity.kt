@@ -71,8 +71,8 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         Log.d("billingClient", "billingClient.isInitialized ")
         val purchasesResult = billingClient.queryPurchases(SkuType.INAPP)
         val responseCode = purchasesResult.responseCode
-        val purchases = purchasesResult.purchasesList
-        purchases.forEach {
+        val purchases = purchasesResult?.purchasesList
+        purchases?.forEach {
             purchase: Purchase? ->
             Log.d("billingClient", "purchase " + purchase?.sku)
         }
