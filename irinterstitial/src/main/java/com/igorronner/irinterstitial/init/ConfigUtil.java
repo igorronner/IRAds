@@ -9,5 +9,5 @@ public class ConfigUtil {
     public static String PUBLISHER_INTERSTITIAL_ID = null;
     public static String NATIVE_AD_ID = null;
     public static String PRODUCT_SKU = null;
-    public static String APP_PREFIX = null;
+    public static String APP_PREFIX = "";
 }

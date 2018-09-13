@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.View
+import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
@@ -21,6 +22,7 @@ class SplashActivity : AppCompatActivity() {
         else
             logo.visibility = View.GONE
 
+        FirebaseApp.initializeApp(this)
         RemoteConfigService.getInstance(this).canShowSplash { result ->
             if (result!!)
                 IRAds.showInterstitial(this)

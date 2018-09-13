@@ -127,6 +127,7 @@ open class IRInterstitialService(val activity: Activity, val remoteConfigDTO: Re
             activity.finish()
 
     }
+
     fun showInterstitialBeforeIntent(activity: Activity, intent: Intent, finishAll: Boolean, titleDialog:String) {
 
         if (MainPreference.isPremium(activity)){

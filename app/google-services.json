@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "552436408539-0k65sgn4jd4k8s8qcjtkdtglqsr84io7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.igorronner.interstitialsample",
+            "certificate_hash": "8600b5b60f9408bfe57123840dfc6591e3a2835c"
+          }
+        },
+        {
           "client_id": "552436408539-6j6eakeqiumgjq6vaiuvjv1ncssral4h.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -64,6 +72,14 @@
           "android_info": {
             "package_name": "com.igorronner.loginbackupsample",
             "certificate_hash": "16a99065db7ed1004435e7a21a439adb8af52d44"
+          }
+        },
+        {
+          "client_id": "552436408539-9m7vqr1g5e9nu119sklbp1k7tgn127lo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.igorronner.loginbackupsample",
+            "certificate_hash": "8600b5b60f9408bfe57123840dfc6591e3a2835c"
           }
         },
         {
