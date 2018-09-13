@@ -1,6 +1,7 @@
 package com.igorronner.irinterstitial.services;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -8,6 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.igorronner.irinterstitial.BuildConfig;
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
 import com.igorronner.irinterstitial.init.ConfigUtil;
 import com.igorronner.irinterstitial.preferences.MainPreference;
@@ -58,6 +60,7 @@ public class RemoteConfigService {
             instance.mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
             FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings
                     .Builder()
+                    .setDeveloperModeEnabled(BuildConfig.DEBUG)
                     .build();
             instance.mFirebaseRemoteConfig.setConfigSettings(configSettings);
         }

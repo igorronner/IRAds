@@ -84,6 +84,8 @@ open class IRInterstitialService(val activity: Activity, val remoteConfigDTO: Re
                         }
 
                         mInterstitialAd.show()
+
+                        AnalyticsService(activity).logEvent("SHOWN_AD_VERSION1")
                     }
                 }
             }
@@ -111,6 +113,8 @@ open class IRInterstitialService(val activity: Activity, val remoteConfigDTO: Re
                         }
 
                         mPublisherInterstitialAd.show()
+
+                        AnalyticsService(activity).logEvent("SHOWN_AD_VERSION2")
                     }
                 }
             }
@@ -161,6 +165,7 @@ open class IRInterstitialService(val activity: Activity, val remoteConfigDTO: Re
                             dialog.hide()
                         mInterstitialAd.show()
                         requestNewInterstitial()
+                        AnalyticsService(activity).logEvent("SHOWN_AD_VERSION1")
                     }
                 }
 
@@ -184,6 +189,7 @@ open class IRInterstitialService(val activity: Activity, val remoteConfigDTO: Re
                             dialog.hide()
                         mPublisherInterstitialAd.show()
                         requestNewInterstitial()
+                        AnalyticsService(activity).logEvent("SHOWN_AD_VERSION2")
                     }
                 }
             }
