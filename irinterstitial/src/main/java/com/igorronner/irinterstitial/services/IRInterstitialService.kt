@@ -7,25 +7,36 @@ import android.support.v4.app.ActivityCompat
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest
+import com.igorronner.irinterstitial.dto.RemoteConfigDTO
 
-open class IRInterstitialService(val activity: Activity) {
 
+open class IRInterstitialService(val activity: Activity, val remoteConfigDTO: RemoteConfigDTO) {
 
-    var mInterstitialAd: InterstitialAd? = null
+    var mPublisherInterstitialAd: PublisherInterstitialAd = PublisherInterstitialAd(activity)
+    var mInterstitialAd: InterstitialAd = InterstitialAd(activity)
 
 
     init {
-        mInterstitialAd = InterstitialAd(activity)
-        mInterstitialAd!!.adUnitId = ConfigUtil.INTERSTITIAL_ID
+        mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
+        mPublisherInterstitialAd.adUnitId = ConfigUtil.PUBLISHER_INTERSTITIAL_ID
         requestNewInterstitial()
     }
 
     private fun requestNewInterstitial() {
-        val adRequest = AdRequest.Builder()
-                .build()
-        mInterstitialAd?.loadAd(adRequest)
+        when (remoteConfigDTO.adVersion){
+            1.toLong() -> {
+                val adRequest = AdRequest.Builder()
+                        .build()
+                mInterstitialAd.loadAd(adRequest)
+            }
+            2.toLong() -> {
+                mPublisherInterstitialAd.loadAd(PublisherAdRequest.Builder().build())
+            }
+        }
     }
 
     fun showInterstitial(finishAll: Boolean){
@@ -48,36 +59,66 @@ open class IRInterstitialService(val activity: Activity) {
             dialog.show()
         }
 
-        mInterstitialAd?.let {mInterstitialAd ->
+        when (remoteConfigDTO.adVersion){
+            1.toLong() -> {
+                mInterstitialAd.show()
+                mInterstitialAd.adListener = object : AdListener() {
 
-            mInterstitialAd.show()
-
-            mInterstitialAd.adListener = object : AdListener() {
-
-                override fun onAdFailedToLoad(p0: Int) {
-                    titleDialog?.let {
-                        if (dialog.isShowing)
-                            dialog.hide()
-                    }
-                    finish(activity, finishAll)
-                }
-
-                override fun onAdClosed() {
-                    finish(activity, finishAll)
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    titleDialog?.let {
-                        if (dialog.isShowing)
-                            dialog.hide()
+                    override fun onAdFailedToLoad(p0: Int) {
+                        titleDialog?.let {
+                            if (dialog.isShowing)
+                                dialog.hide()
+                        }
+                        finish(activity, finishAll)
                     }
 
-                    mInterstitialAd.show()
+                    override fun onAdClosed() {
+                        finish(activity, finishAll)
+                    }
+
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        titleDialog?.let {
+                            if (dialog.isShowing)
+                                dialog.hide()
+                        }
+
+                        mInterstitialAd.show()
+                    }
+                }
+            }
+            2.toLong() -> {
+                mPublisherInterstitialAd.show()
+                mPublisherInterstitialAd.adListener = object : AdListener() {
+
+                    override fun onAdFailedToLoad(p0: Int) {
+                        titleDialog?.let {
+                            if (dialog.isShowing)
+                                dialog.hide()
+                        }
+                        finish(activity, finishAll)
+                    }
+
+                    override fun onAdClosed() {
+                        finish(activity, finishAll)
+                    }
+
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        titleDialog?.let {
+                            if (dialog.isShowing)
+                                dialog.hide()
+                        }
+
+                        mPublisherInterstitialAd.show()
+                    }
                 }
             }
         }
+
+
     }
+
 
     fun finish(activity: Activity, finishAll: Boolean){
         if (finishAll)
@@ -98,31 +139,55 @@ open class IRInterstitialService(val activity: Activity) {
         dialog.isIndeterminate=true
         dialog.show()
 
-        mInterstitialAd?.let {mInterstitialAd ->
+        when (remoteConfigDTO.adVersion){
+            1.toLong() -> {
+                mInterstitialAd.show()
+                mInterstitialAd.adListener = object : AdListener() {
 
-            mInterstitialAd.show()
 
-            mInterstitialAd.adListener = object : AdListener() {
+                    override fun onAdFailedToLoad(p0: Int) {
+                        if (dialog.isShowing)
+                            dialog.hide()
+                        finishWithIntent(activity, finishAll, intent)
+                    }
+                    override fun onAdClosed() {
+                        finishWithIntent(activity, finishAll, intent)
+                    }
 
-
-                override fun onAdFailedToLoad(p0: Int) {
-                    if (dialog.isShowing)
-                        dialog.hide()
-                    finishWithIntent(activity, finishAll, intent)
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        if (dialog.isShowing)
+                            dialog.hide()
+                        mInterstitialAd.show()
+                        requestNewInterstitial()
+                    }
                 }
-                override fun onAdClosed() {
-                    finishWithIntent(activity, finishAll, intent)
-                }
 
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    if (dialog.isShowing)
-                        dialog.hide()
-                    mInterstitialAd.show()
-                    requestNewInterstitial()
+            }
+            2.toLong() -> {
+                mPublisherInterstitialAd.show()
+
+                mPublisherInterstitialAd.adListener = object : AdListener() {
+                    override fun onAdFailedToLoad(p0: Int) {
+                        if (dialog.isShowing)
+                            dialog.hide()
+                        finishWithIntent(activity, finishAll, intent)
+                    }
+                    override fun onAdClosed() {
+                        finishWithIntent(activity, finishAll, intent)
+                    }
+
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        if (dialog.isShowing)
+                            dialog.hide()
+                        mPublisherInterstitialAd.show()
+                        requestNewInterstitial()
+                    }
                 }
             }
         }
+
     }
 
     fun finishWithIntent(activity: Activity, finishAll: Boolean, intent: Intent){

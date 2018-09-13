@@ -39,18 +39,17 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
                     skuList.add(ConfigUtil.PRODUCT_SKU)
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                    billingClient.querySkuDetailsAsync(params.build(), { responseCode, skuDetailsList ->
+                    billingClient.querySkuDetailsAsync(params.build()) { responseCode, skuDetailsList ->
                         Log.d("billingClient", "querySkuDetailsAsync ")
                         Log.d("billingClient", "responseCode $responseCode")
-                        skuDetailsList.forEach {
-                            skuDetails: SkuDetails? ->
+                        skuDetailsList.forEach { skuDetails: SkuDetails? ->
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
                         }
 
-                    })
+                    }
                 }
             }
             override fun onBillingServiceDisconnected() {

@@ -1,11 +1,9 @@
 package com.igorronner.irinterstitial.views
 
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.View
-import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
@@ -29,8 +27,6 @@ class SplashActivity : AppCompatActivity() {
             else
                 finish()
         }
-
-
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
