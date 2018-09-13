@@ -27,7 +27,7 @@ public class IRAds {
         ConfigUtil.LOGO = builder.logo;
         ConfigUtil.INTERSTITIAL_ID = builder.addUnitId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
-        ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.nativeAdIdV2;
+        ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.APP_PREFIX = builder.appPrefix;
     }
@@ -38,7 +38,7 @@ public class IRAds {
         private IRAds IRAds;
         private String addUnitId;
         private String nativeAdId;
-        private String nativeAdIdV2;
+        private String publisherInterstitialId;
         private String productSku;
         // Prefix for concat keys on remote config...
         private String appPrefix;
@@ -61,8 +61,8 @@ public class IRAds {
             return this;
         }
 
-        public Builder setNativeAdIdV2(String nativeAdIdV2) {
-            this.nativeAdIdV2 = nativeAdIdV2;
+        public Builder setPublisherInterstitialId(String publisherInterstitialId) {
+            this.publisherInterstitialId = publisherInterstitialId;
             return this;
         }
 
