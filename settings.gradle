@@ -1,1 +1,1 @@
-include  ':irinterstitial'
+include ':app', ':irinterstitial'

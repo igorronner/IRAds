@@ -25,7 +25,7 @@ public class IRAds {
 
     private IRAds(final IRAds.Builder builder) {
         ConfigUtil.LOGO = builder.logo;
-        ConfigUtil.INTERSTITIAL_ID = builder.addUnitId;
+        ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
@@ -36,7 +36,7 @@ public class IRAds {
         @DrawableRes
         private int logo;
         private IRAds IRAds;
-        private String addUnitId;
+        private String interstitialId;
         private String nativeAdId;
         private String publisherInterstitialId;
         private String productSku;
@@ -51,8 +51,8 @@ public class IRAds {
             return this;
         }
 
-        public Builder setAddUnitId(String addUnitId) {
-            this.addUnitId = addUnitId;
+        public Builder setInterstitialId(String interstitialId) {
+            this.interstitialId = interstitialId;
             return this;
         }
 
@@ -84,21 +84,21 @@ public class IRAds {
 
     }
 
-    public static void showInterstitial(final Activity activity, final RemoteConfigDTO remoteConfigDTO, final String titleDialog){
-        showInterstitial(activity, remoteConfigDTO, titleDialog, false);
+    public static void showInterstitial(final Activity activity,  final String titleDialog){
+        showInterstitial(activity, titleDialog, false);
     }
 
-    public static void showInterstitial(final Activity activity, final RemoteConfigDTO remoteConfigDTO, final String titleDialog, final boolean finishAll){
+    public static void showInterstitial(final Activity activity, final String titleDialog, final boolean finishAll){
         loadRemoteConfig(activity, new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
-                new IRInterstitialService(activity, remoteConfigDTO).showInterstitial(titleDialog, finishAll);
+                new IRInterstitialService(activity, result).showInterstitial(titleDialog, finishAll);
             }
         });
     }
 
-    public static void showInterstitial(final Activity activity, final RemoteConfigDTO remoteConfigDTO){
-        showInterstitial(activity,remoteConfigDTO, null, false);
+    public static void showInterstitial(final Activity activity){
+        showInterstitial(activity, null, false);
     }
 
     public static void showInterstitialBeforeIntent(final Activity activity, final RemoteConfigDTO remoteConfigDTO, final Intent intent, final boolean finishAll, final String titleDialog){
@@ -123,6 +123,10 @@ public class IRAds {
                     ActivityCompat.finishAffinity(activity);
             }
         });
+    }
+
+    private static void showInterstitial(Activity activity, RemoteConfigDTO result, String string) {
+        new IRInterstitialService(activity, result).showInterstitial();
     }
 
     public static void loadRemoteConfig(Activity activity, RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener ){
