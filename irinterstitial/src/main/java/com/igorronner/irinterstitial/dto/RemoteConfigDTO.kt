@@ -1,8 +1,10 @@
 package com.igorronner.irinterstitial.dto
 
-class RemoteConfigDTO(var showSplash:Boolean = false,
+data class RemoteConfigDTO(var showSplash:Boolean = false,
                            var finishWithInterstitial:Boolean = false,
-                           var adVersion:Long = 1)
+                           var adVersion:Long = 1,
+                           var interstitialId:String? = null,
+                           var publisherInterstitialId:String? =null)
 
 
 

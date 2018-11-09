@@ -28,6 +28,8 @@ public class RemoteConfigService {
     private static final String SHOW_SPLASH = ConfigUtil.APP_PREFIX+"show_splash";
     private static final String FINISH_WITH_INTERSTITIAL = ConfigUtil.APP_PREFIX+"finish_with_interstitial";
     private static final String AD_VERSION = ConfigUtil.APP_PREFIX+"ad_version";
+    private static final String PUBLISHER_INTERSTITIAL_ID  = ConfigUtil.APP_PREFIX+"publisher_interstitial_id";
+    private static final String INTERSTITIAL_ID  = ConfigUtil.APP_PREFIX+"interstitial_id";
     
     public Activity getContext() {
         return context;
@@ -81,6 +83,8 @@ public class RemoteConfigService {
                             remoteConfigDTO.setShowSplash( mFirebaseRemoteConfig.getBoolean(SHOW_SPLASH) && !MainPreference.isPremium(context));
                             remoteConfigDTO.setAdVersion(mFirebaseRemoteConfig.getLong(AD_VERSION));
                             remoteConfigDTO.setFinishWithInterstitial(mFirebaseRemoteConfig.getBoolean(FINISH_WITH_INTERSTITIAL));
+                            remoteConfigDTO.setPublisherInterstitialId(mFirebaseRemoteConfig.getString(PUBLISHER_INTERSTITIAL_ID));
+                            remoteConfigDTO.setInterstitialId(mFirebaseRemoteConfig.getString(INTERSTITIAL_ID));
                         }
                         serviceListener.onComplete(remoteConfigDTO);
                     }
