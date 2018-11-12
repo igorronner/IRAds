@@ -3,8 +3,10 @@ package com.igorronner.irinterstitial.init;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
@@ -16,124 +18,110 @@ import com.igorronner.irinterstitial.services.ManagerNativeAd;
 import com.igorronner.irinterstitial.services.RemoteConfigService;
 import com.igorronner.irinterstitial.views.SplashActivity;
 
-
 public class IRAds {
 
-    public static IRAds.Builder startInit(Context context) {
-        return new IRAds.Builder();
+    public int state = 0;
+    private static final int STOPPED = 910;
+    private static final int RESUMED = 967;
+    private Activity activity;
+
+
+    public Activity getActivity() {
+        return activity;
     }
 
-    private IRAds(final IRAds.Builder builder) {
-        ConfigUtil.LOGO = builder.logo;
-        ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
-        ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
-        ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
-        ConfigUtil.PRODUCT_SKU = builder.productSku;
-        ConfigUtil.APP_PREFIX = builder.appPrefix;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
-    public static class Builder {
-        @DrawableRes
-        private int logo;
-        private IRAds IRAds;
-        private String interstitialId;
-        private String nativeAdId;
-        private String publisherInterstitialId;
-        private String productSku;
-        // Prefix for concat keys on remote config...
-        private String appPrefix;
-
-        public Builder() {
-        }
-
-        public Builder setLogo(@DrawableRes int logo) {
-            this.logo = logo;
-            return this;
-        }
-
-        public Builder setInterstitialId(String interstitialId) {
-            this.interstitialId = interstitialId;
-            return this;
-        }
-
-        public Builder setNativeAdId(String nativeAdId) {
-            this.nativeAdId = nativeAdId;
-            return this;
-        }
-
-        public Builder setPublisherInterstitialId(String publisherInterstitialId) {
-            this.publisherInterstitialId = publisherInterstitialId;
-            return this;
-        }
-
-        public Builder enablePurchace(String productSku){
-            this.productSku = productSku;
-            return this;
-        }
-
-        public Builder setAppPrefix(String appPrefix){
-            this.appPrefix = appPrefix;
-            return this;
-        }
-
-        public IRAds build() {
-            this.IRAds = new IRAds(this);
-
-            return this.IRAds;
-        }
-
+    public static IRAds newInstance(Activity activity){
+        IRAds instance = new IRAds();
+        instance.activity = activity;
+        return instance;
     }
 
-    public static void showInterstitial(final Activity activity,  final String titleDialog){
-        showInterstitial(activity, titleDialog, false);
+
+    public void showInterstitial(final String titleDialog){
+        showInterstitial(titleDialog, false);
     }
 
-    public static void showInterstitial(final Activity activity, final String titleDialog, final boolean finishAll){
-        loadRemoteConfig(activity, new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
+    public void showInterstitial(final String titleDialog, final boolean finishAll){
+        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
-                new IRInterstitialService(activity, result).showInterstitial(titleDialog, finishAll);
+                new IRInterstitialService(IRAds.this, result).showInterstitial(titleDialog, finishAll);
             }
         });
     }
 
-    public static void showInterstitial(final Activity activity){
-        showInterstitial(activity, null, false);
+    public void showInterstitial(){
+        showInterstitial( null, false);
     }
 
-    public static void showInterstitialBeforeIntent(final Activity activity, final RemoteConfigDTO remoteConfigDTO, final Intent intent, final boolean finishAll, final String titleDialog){
-        new IRInterstitialService(activity, remoteConfigDTO).showInterstitialBeforeIntent(activity, intent, titleDialog);
+    public void showInterstitialBeforeIntent(final Intent intent, final boolean finishAll, final String titleDialog){
+        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
+            @Override
+            public void onComplete(RemoteConfigDTO result) {
+                new IRInterstitialService(IRAds.this, result).showInterstitialBeforeIntent(intent, finishAll, titleDialog);
+            }
+        });
+
+
     }
-    public static void showInterstitialBeforeIntent(final Activity activity, final RemoteConfigDTO remoteConfigDTO, final Intent intent, final String titleDialog){
-        showInterstitialBeforeIntent(activity, remoteConfigDTO, intent, false, titleDialog);
+    public void showInterstitialBeforeIntent(final Intent intent, final String titleDialog){
+        showInterstitialBeforeIntent(intent, false, titleDialog);
     }
 
-    public static void openSplashScreen(final Activity activity){
+    public void showInterstitialBeforeIntent(final Intent intent){
+        showInterstitialBeforeIntent(intent, false, activity.getString(R.string.loading));
+    }
+
+    public void showInterstitialBeforeFragment(final Fragment fragment, final @IdRes int containerViewId,
+                                               final FragmentActivity fragmentActivity, final String titleDialog){
+        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
+            @Override
+            public void onComplete(RemoteConfigDTO result) {
+                new IRInterstitialService(IRAds.this, result).showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity, titleDialog);
+            }
+        });
+    }
+
+    public void showInterstitialBeforeFragment(final Fragment fragment, final @IdRes int containerViewId,
+                                               final FragmentActivity fragmentActivity){
+        showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, null);
+    }
+
+    public void openSplashScreen(){
         if (!isPremium(activity))
             activity.startActivity(new Intent(activity, SplashActivity.class));
+
     }
 
-    public static void showInterstitalOnFinish(final Activity activity){
-        loadRemoteConfig(activity, new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
+    public void showInterstitialOnFinish(){
+        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
                 if (result.getFinishWithInterstitial())
-                    showInterstitial(activity, result, activity.getString(R.string.going_out));
+                    showInterstitial(result, activity.getString(R.string.going_out));
                 else
                     ActivityCompat.finishAffinity(activity);
             }
         });
     }
 
-    private static void showInterstitial(Activity activity, RemoteConfigDTO result, String string) {
-        new IRInterstitialService(activity, result).showInterstitial();
+    public void showInterstitial(RemoteConfigDTO result) {
+        new IRInterstitialService(this, result).showInterstitial( false);
     }
 
-    public static void loadRemoteConfig(Activity activity, RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener ){
+    public void showInterstitial( RemoteConfigDTO result, String string) {
+        new IRInterstitialService(this, result).showInterstitial(string, false);
+    }
+
+    public void loadRemoteConfig(RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener ){
         RemoteConfigService.getInstance(activity).loadRemoteConfig(serviceListener);
     }
 
-    public static void loadCardAdView(Activity activity, View cardView,  NativeAppInstallAdView nativeAppInstallAdView){
+    public static void loadCardAdView(Activity activity, View cardView, NativeAppInstallAdView nativeAppInstallAdView){
         ManagerNativeAd.getInstance(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
                 .setShowProgress(false)
@@ -156,5 +144,22 @@ public class IRAds {
 
     public static boolean isPremium(Context context){
         return MainPreference.isPremium(context);
+    }
+
+    public void onStop(){
+        state = STOPPED;
+    }
+
+    public void onResume(){
+        state = RESUMED;
+
+    }
+
+    public boolean isStopped(){
+        return state == STOPPED;
+    }
+
+    public boolean isResumed(){
+        return state == RESUMED;
     }
 }

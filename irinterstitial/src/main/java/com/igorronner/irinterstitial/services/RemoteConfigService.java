@@ -5,6 +5,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -74,21 +76,27 @@ public class RemoteConfigService {
 
     public void loadRemoteConfig(final ServiceListener<RemoteConfigDTO> serviceListener){
         mFirebaseRemoteConfig.fetch(cacheExpiration())
-                .addOnCompleteListener(context, new OnCompleteListener<Void>() {
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        serviceListener.onComplete(new RemoteConfigDTO());
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
                         RemoteConfigDTO remoteConfigDTO = new RemoteConfigDTO();
-                        if (task.isSuccessful()) {
-                            mFirebaseRemoteConfig.activateFetched();
-                            remoteConfigDTO.setShowSplash( mFirebaseRemoteConfig.getBoolean(SHOW_SPLASH) && !MainPreference.isPremium(context));
-                            remoteConfigDTO.setAdVersion(mFirebaseRemoteConfig.getLong(AD_VERSION));
-                            remoteConfigDTO.setFinishWithInterstitial(mFirebaseRemoteConfig.getBoolean(FINISH_WITH_INTERSTITIAL));
-                            remoteConfigDTO.setPublisherInterstitialId(mFirebaseRemoteConfig.getString(PUBLISHER_INTERSTITIAL_ID));
-                            remoteConfigDTO.setInterstitialId(mFirebaseRemoteConfig.getString(INTERSTITIAL_ID));
-                        }
+                        mFirebaseRemoteConfig.activateFetched();
+                        remoteConfigDTO.setShowSplash( mFirebaseRemoteConfig.getBoolean(SHOW_SPLASH) && !MainPreference.isPremium(context));
+                        remoteConfigDTO.setAdVersion(mFirebaseRemoteConfig.getLong(AD_VERSION));
+                        remoteConfigDTO.setFinishWithInterstitial(mFirebaseRemoteConfig.getBoolean(FINISH_WITH_INTERSTITIAL));
+                        remoteConfigDTO.setPublisherInterstitialId(mFirebaseRemoteConfig.getString(PUBLISHER_INTERSTITIAL_ID));
+                        remoteConfigDTO.setInterstitialId(mFirebaseRemoteConfig.getString(INTERSTITIAL_ID));
                         serviceListener.onComplete(remoteConfigDTO);
                     }
                 });
+
     }
 
     public void canShowSplash(final ServiceListener<Boolean> serviceListener){

@@ -1,15 +1,16 @@
 package com.igorronner.irinterstitial.services
 
-import android.app.Activity
+import android.os.Build
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO
 import com.igorronner.irinterstitial.init.ConfigUtil
+import com.igorronner.irinterstitial.init.IRAds
 
-class IRInterstitialAd(val activity: Activity,  remoteConfigDTO: RemoteConfigDTO) : IRInterstitial{
+class IRInterstitialAd(val adsInstance: IRAds, remoteConfigDTO: RemoteConfigDTO) : IRInterstitial{
 
-    var mInterstitialAd: InterstitialAd = InterstitialAd(activity)
+    var mInterstitialAd: InterstitialAd = InterstitialAd(adsInstance.activity)
 
     init {
         mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
@@ -32,10 +33,16 @@ class IRInterstitialAd(val activity: Activity,  remoteConfigDTO: RemoteConfigDTO
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
-
-                mInterstitialAd.show()
-
-                AnalyticsService(activity).logEvent("SHOWN_AD_VERSION 1")
+//                val show=   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+//                    !adsInstance.isFinishing && !adsInstance.isDestroyed
+//                else
+//                    !adsInstance.isFinishing
+//
+//
+//                if (show) {
+//                    AnalyticsService(adsInstance).logEvent("SHOWN_AD_VERSION 1")
+//                    mInterstitialAd.show()
+//                }
             }
         }
     }

@@ -23,7 +23,6 @@ import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.igorronner.irinterstitial.R;
-import com.igorronner.irinterstitial.init.IRAds;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 
 import java.util.List;

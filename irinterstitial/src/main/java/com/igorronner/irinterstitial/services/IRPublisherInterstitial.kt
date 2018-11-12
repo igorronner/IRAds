@@ -1,16 +1,17 @@
 package com.igorronner.irinterstitial.services
 
-import android.app.Activity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum
 import com.igorronner.irinterstitial.init.ConfigUtil
+import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.init.IRAdsInit
 
-class IRPublisherInterstitial(val activity: Activity, val remoteConfigDTO: RemoteConfigDTO) : IRInterstitial {
+class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: RemoteConfigDTO) : IRInterstitial {
 
-    var mPublisherInterstitialAd: PublisherInterstitialAd = PublisherInterstitialAd(activity)
+    var mPublisherInterstitialAd: PublisherInterstitialAd = PublisherInterstitialAd(adsInstance.activity)
 
     init {
         remoteConfigDTO.publisherInterstitialId?.let {
@@ -26,7 +27,7 @@ class IRPublisherInterstitial(val activity: Activity, val remoteConfigDTO: Remot
 
             override fun onAdFailedToLoad(code: Int) {
                 if (code == PublisherAdRequest.ERROR_CODE_NO_FILL){
-                    IRInterstitialFactory(activity, remoteConfigDTO)
+                    IRInterstitialFactory(adsInstance, remoteConfigDTO)
                             .create(IRInterstitialVersionEnum.INTERSTITIAL_AD)
                             .load(adListener)
                     return
@@ -43,8 +44,10 @@ class IRPublisherInterstitial(val activity: Activity, val remoteConfigDTO: Remot
                 super.onAdLoaded()
                 adListener.onAdLoaded()
 
-                mPublisherInterstitialAd.show()
-                AnalyticsService(activity).logEvent("SHOWN_AD_VERSION 2")
+                if (!adsInstance.isStopped) {
+                    AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 2")
+                    mPublisherInterstitialAd.show()
+                }
             }
         }
     }

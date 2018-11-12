@@ -8,10 +8,15 @@ import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.init.IRAdsInit
+import com.igorronner.irinterstitial.services.IRInterstitialService
 import com.igorronner.irinterstitial.services.RemoteConfigService
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
+
+
+    private lateinit var adsInstance:IRAds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +28,9 @@ class SplashActivity : AppCompatActivity() {
             logo.visibility = View.GONE
 
         FirebaseApp.initializeApp(this)
-        RemoteConfigService.getInstance(this).canShowSplash { result ->
-            if (result!!)
-                IRAds.showInterstitial(this)
-            else
-                finish()
-        }
+        adsInstance = IRAds.newInstance(this)
+
+
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -37,5 +39,30 @@ class SplashActivity : AppCompatActivity() {
             true
         } else super.onKeyDown(keyCode, event)
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adsInstance.onStop()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adsInstance.onResume()
+        RemoteConfigService.getInstance(this).loadRemoteConfig { result ->
+            if (result.showSplash)
+                adsInstance.showInterstitial()
+            else
+                finish()
+        }
     }
 }
