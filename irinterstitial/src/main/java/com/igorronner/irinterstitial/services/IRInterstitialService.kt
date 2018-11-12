@@ -15,8 +15,10 @@ import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
 
 
-open class IRInterstitialService(private val adsInstance: IRAds, private val remoteConfigDTO: RemoteConfigDTO) {
+open class IRInterstitialService {
 
+    lateinit var adsInstance: IRAds
+    lateinit var remoteConfigDTO: RemoteConfigDTO
 
     private val irInterstitial = IRInterstitialFactory(adsInstance, remoteConfigDTO)
             .create(IRInterstitialVersionEnum.values().first { it.version == remoteConfigDTO.adVersion })
