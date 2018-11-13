@@ -1,7 +1,9 @@
 package com.igorronner.irinterstitial.init;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.DrawableRes;
+
+import com.google.android.gms.ads.MobileAds;
 
 
 public class IRAdsInit {
@@ -14,6 +16,7 @@ public class IRAdsInit {
 
     private IRAdsInit(final IRAdsInit.Builder builder) {
         ConfigUtil.LOGO = builder.logo;
+        ConfigUtil.APP_ID = builder.appId;
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
@@ -25,6 +28,7 @@ public class IRAdsInit {
         @DrawableRes
         private int logo;
         private IRAdsInit IRAdsInit;
+        private String appId;
         private String interstitialId;
         private String nativeAdId;
         private String publisherInterstitialId;
@@ -65,8 +69,16 @@ public class IRAdsInit {
             return this;
         }
 
-        public IRAdsInit build() {
+        public Builder setAppId(String appId){
+            this.appId = appId;
+            return this;
+        }
+
+        public IRAdsInit build(Context context) {
             this.IRAdsInit = new IRAdsInit(this);
+
+            if (ConfigUtil.APP_ID !=null && context !=null)
+                MobileAds.initialize(context, ConfigUtil.APP_ID);
 
             return this.IRAdsInit;
         }

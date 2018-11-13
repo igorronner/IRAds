@@ -49,7 +49,6 @@ class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: Remot
             }
 
             override fun onAdLoaded() {
-                super.onAdLoaded()
                 adListener.onAdLoaded()
 
                 if (!adsInstance.isStopped) {

@@ -12,10 +12,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
         adsInstance = IRAds.newInstance(this)
         adsInstance.openSplashScreen()
+
+
+        setContentView(R.layout.activity_main)
+
 
         button1.setOnClickListener {
             adsInstance.showInterstitialBeforeIntent(Intent(this, AnotherActivity::class.java))
@@ -34,14 +36,6 @@ class MainActivity : AppCompatActivity() {
         adsInstance.onStop()
         super.onStop()
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onResume() {

@@ -18,7 +18,6 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
     init {
         if (mInterstitialAd.adUnitId.isNullOrBlank()) {
             mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
-            requestNewInterstitial()
         }
     }
 
@@ -38,7 +37,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
             }
 
             override fun onAdLoaded() {
-                super.onAdLoaded()
+                adListener.onAdLoaded()
                 if (!adsInstance.isStopped) {
                     AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 1")
                     mInterstitialAd.show()

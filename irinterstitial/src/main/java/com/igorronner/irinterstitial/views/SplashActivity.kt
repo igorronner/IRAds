@@ -8,9 +8,6 @@ import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
-import com.igorronner.irinterstitial.init.IRAdsInit
-import com.igorronner.irinterstitial.services.IRInterstitialService
-import com.igorronner.irinterstitial.services.IRPublisherInterstitial
 import com.igorronner.irinterstitial.services.RemoteConfigService
 import kotlinx.android.synthetic.main.activity_splash.*
 
@@ -22,7 +19,6 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
         if (ConfigUtil.LOGO > 0)
             logo.setImageResource(ConfigUtil.LOGO)
         else
