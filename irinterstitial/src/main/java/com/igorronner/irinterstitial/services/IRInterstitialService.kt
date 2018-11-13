@@ -110,6 +110,7 @@ open class IRInterstitialService(val adsInstance: IRAds,
             }
             override fun onAdClosed() {
                 finishWithIntent(finishAll, intent)
+                irInterstitial.requestNewInterstitial()
             }
 
             override fun onAdLoaded() {
@@ -118,6 +119,8 @@ open class IRInterstitialService(val adsInstance: IRAds,
                     if (dialog.isShowing)
                         dialog.hide()
                 }
+
+                irInterstitial.requestNewInterstitial()
 
             }
         })

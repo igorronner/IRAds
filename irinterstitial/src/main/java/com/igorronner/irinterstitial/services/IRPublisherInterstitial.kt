@@ -1,5 +1,6 @@
 package com.igorronner.irinterstitial.services
 
+import android.content.Context
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd
@@ -7,21 +8,42 @@ import com.igorronner.irinterstitial.dto.RemoteConfigDTO
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.utils.SingletonHolder
+
 
 class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: RemoteConfigDTO) : IRInterstitial {
 
-    var mPublisherInterstitialAd: PublisherInterstitialAd = PublisherInterstitialAd(adsInstance.activity)
+    val mPublisherInterstitialAd = getInstance(adsInstance.activity.applicationContext)
+
+    companion object : SingletonHolder<PublisherInterstitialAd, Context>(::PublisherInterstitialAd)
+
+//
+//    companion object {
+//        private lateinit var instance: PublisherInterstitialAd
+//        fun getInstance(context: Context):PublisherInterstitialAd{
+//            if (!::instance.isInitialized) {
+//                instance = PublisherInterstitialAd(context)
+//            }
+//
+//            return instance
+//        }
+//    }
+//
 
     init {
-        remoteConfigDTO.publisherInterstitialId?.let {
-            mPublisherInterstitialAd.adUnitId = it
-        } ?: kotlin.run {
-            mPublisherInterstitialAd.adUnitId = ConfigUtil.PUBLISHER_INTERSTITIAL_ID
+        if (mPublisherInterstitialAd.adUnitId.isNullOrBlank()) {
+            remoteConfigDTO.publisherInterstitialId?.let {
+                mPublisherInterstitialAd.adUnitId = it
+            } ?: kotlin.run {
+                mPublisherInterstitialAd.adUnitId = ConfigUtil.PUBLISHER_INTERSTITIAL_ID
+            }
         }
     }
 
     override fun load(adListener: AdListener) {
-        mPublisherInterstitialAd.show()
+        if (mPublisherInterstitialAd.isLoaded && !adsInstance.isStopped)
+            mPublisherInterstitialAd.show()
+
         mPublisherInterstitialAd.adListener = object : AdListener() {
 
             override fun onAdFailedToLoad(code: Int) {

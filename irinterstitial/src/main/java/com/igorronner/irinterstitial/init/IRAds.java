@@ -1,6 +1,7 @@
 package com.igorronner.irinterstitial.init;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.IdRes;
@@ -32,6 +33,9 @@ public class IRAds {
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
+
+
+
 
     public static IRAds newInstance(Activity activity){
         IRAds irAds = new IRAds();

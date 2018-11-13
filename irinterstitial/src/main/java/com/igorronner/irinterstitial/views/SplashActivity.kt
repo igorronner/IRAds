@@ -10,6 +10,7 @@ import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.init.IRAdsInit
 import com.igorronner.irinterstitial.services.IRInterstitialService
+import com.igorronner.irinterstitial.services.IRPublisherInterstitial
 import com.igorronner.irinterstitial.services.RemoteConfigService
 import kotlinx.android.synthetic.main.activity_splash.*
 

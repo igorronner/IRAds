@@ -7,6 +7,8 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+
         IRAdsInit.start()
                     .setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
                     .setLogo(R.mipmap.ic_launcher)
