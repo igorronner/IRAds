@@ -32,7 +32,7 @@ Firebase Remote Config
 
 **Parameters**:
 
-> Put this parameter on remote config before start application
+> Put this parameters on remote config before start application
 
 ***publisher_interstitial_id***
 
