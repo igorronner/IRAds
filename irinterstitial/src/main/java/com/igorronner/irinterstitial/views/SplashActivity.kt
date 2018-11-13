@@ -42,8 +42,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
+
         adsInstance.onStop()
+        super.onStop()
 
     }
 

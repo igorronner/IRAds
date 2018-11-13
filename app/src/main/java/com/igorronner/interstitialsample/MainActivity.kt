@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
         adsInstance.onStop()
+        super.onStop()
 
     }
 
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
         adsInstance.onResume()
+        super.onResume()
     }
 }

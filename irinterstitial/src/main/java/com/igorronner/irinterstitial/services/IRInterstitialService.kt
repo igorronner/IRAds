@@ -15,10 +15,10 @@ import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
 
 
-open class IRInterstitialService {
+open class IRInterstitialService(val adsInstance: IRAds,
+                                 private val remoteConfigDTO: RemoteConfigDTO) {
 
-    lateinit var adsInstance: IRAds
-    lateinit var remoteConfigDTO: RemoteConfigDTO
+
 
     private val irInterstitial = IRInterstitialFactory(adsInstance, remoteConfigDTO)
             .create(IRInterstitialVersionEnum.values().first { it.version == remoteConfigDTO.adVersion })
@@ -163,7 +163,7 @@ open class IRInterstitialService {
             override fun onAdFailedToLoad(p0: Int) {
                 titleDialog?.let {
                     if (dialog.isShowing)
-                        dialog.hide()
+                        dialog.dismiss()
                 }
 
                 replaceFragment(fragment,  containerViewId, fragmentActivity)
@@ -172,7 +172,7 @@ open class IRInterstitialService {
             override fun onAdClosed() {
                 titleDialog?.let {
                     if (dialog.isShowing)
-                        dialog.hide()
+                        dialog.dismiss()
                 }
                 replaceFragment(fragment,  containerViewId, fragmentActivity)
             }
@@ -181,7 +181,7 @@ open class IRInterstitialService {
                 super.onAdLoaded()
                 titleDialog?.let {
                     if (dialog.isShowing)
-                        dialog.hide()
+                        dialog.dismiss()
                 }
 
             }
