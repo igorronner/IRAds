@@ -119,10 +119,8 @@ class MainActivity : AppCompatActivity() {
 
 **Full example Show interstitial before Activity:**
 
-> Remember use methods adsInstance.onStop() and  adsInstance.onResume() in the Lifecycle Activity
-
 ```java
-  
+ 
 class SampleActivity : AppCompatActivity() {
 
     private lateinit var adsInstance:IRAds
@@ -160,7 +158,6 @@ class SampleActivity : AppCompatActivity() {
 ```java
   
 class FragmentSampleActivity : AppCompatActivity() {
-
 
     private lateinit var adsInstance: IRAds
 
