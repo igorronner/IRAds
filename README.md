@@ -23,7 +23,7 @@ Step 2 - Add the dependency
 
 ```groovy
 dependencies {
-  implementation 'com.github.igorronner:IRAds:1.1.0'
+  implementation 'com.github.igorronner:IRAds:1.1.2'
 }
 ```
 
@@ -32,7 +32,7 @@ Firebase Remote Config
 
 **Parameters**:
 
-> You hate put this parameter on remote config before start application
+> Put this parameter on remote config before start application
 
 ***publisher_interstitial_id***
 
@@ -55,13 +55,22 @@ Getting Started
 
 ```java
 IRAdsInit.start()
-            .setInterstitialId("PLACE_YOUR_AD_UNIT_ID")
+            //For test
+            .setAppId("ca-app-pub-3940256099942544~3347511713")
+            //.setAppId("YOUR_ADMOB_APP_ID")
+
+            //For test
+            .setInterstitialId("ca-app-pub-3940256099942544/1033173712")
+            //.setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
+
             .setLogo(R.mipmap.ic_launcher)
             .setNativeAdId("PLACE_YOUR_NATIVE_AD_ID")
-            //Optional
             .setAppPrefix("lib_")
-            .setPublisherInterstitialId("PLACE_YOUR_PUBLISHER_AD_UNIT_ID")
-            .build()
+            //For test
+            //.setPublisherInterstitialId("/6499/example/interstitial")
+            .setPublisherInterstitialId("PLACE_YOUR_PUBLISHER_AD_ID")
+
+            .build(this)
 
 ```
 
