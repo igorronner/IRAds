@@ -17,19 +17,6 @@ class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: Remot
 
     companion object : SingletonHolder<PublisherInterstitialAd, Context>(::PublisherInterstitialAd)
 
-//
-//    companion object {
-//        private lateinit var instance: PublisherInterstitialAd
-//        fun getInstance(context: Context):PublisherInterstitialAd{
-//            if (!::instance.isInitialized) {
-//                instance = PublisherInterstitialAd(context)
-//            }
-//
-//            return instance
-//        }
-//    }
-//
-
     init {
         if (mPublisherInterstitialAd.adUnitId.isNullOrBlank()) {
             remoteConfigDTO.publisherInterstitialId?.let {

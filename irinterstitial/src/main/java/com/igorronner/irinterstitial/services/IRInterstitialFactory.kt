@@ -11,6 +11,6 @@ class IRInterstitialFactory(private val adsInstance: IRAds, private val remoteCo
         return if (interstitialVersionEnum == IRInterstitialVersionEnum.PUBLISHER_INTERSTITIAL)
             IRPublisherInterstitial(adsInstance, remoteConfigDTO)
         else
-            IRInterstitialAd(adsInstance, remoteConfigDTO)
+            IRInterstitialAd(adsInstance)
     }
 }
