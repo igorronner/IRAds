@@ -2,7 +2,7 @@
 <resources>
 
     <string name="loading">Cargando</string>
-    <string name="going_out">Salindo</string>
+    <string name="going_out">Cerrando</string>
     <string name="buy_premium">Adquirir premium</string>
     <string name="message_buy_premium">Al adquirir el premium usted estará colaborando con nuestros desarrolladores a mejorar la aplicación y así podrá remover anuncios o propagandas</string>
     <string name="purchase">Adquirir</string>
