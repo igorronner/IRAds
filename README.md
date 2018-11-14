@@ -32,7 +32,7 @@ Firebase Remote Config
 
 **Parameters**:
 
-> Put this parameter on remote config before start application
+> Put this parameters on remote config before start application
 
 ***publisher_interstitial_id***
 
@@ -123,6 +123,9 @@ class MainActivity : AppCompatActivity() {
 
 ```java
   adsInstance.showInterstitialBeforeFragment(Sample1Fragment(), R.id.frameLayout, this)
+  
+  ** With Loading **
+  adsInstance.showInterstitialBeforeFragment(Sample1Fragment(), R.id.frameLayout, this, R.string.loading)
  
 ```
 
@@ -175,11 +178,13 @@ class FragmentSampleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_fragment_sample)
 
         adsInstance = IRAds.newInstance(this)
-
+        
+        // No Progress Loading 
         fragment1.setOnClickListener {
             adsInstance.showInterstitialBeforeFragment(Sample1Fragment(), R.id.frameLayout, this)
         }
 
+        // With Progress Loading 
         fragment2.setOnClickListener {
             adsInstance.showInterstitialBeforeFragment(Sample2Fragment(), R.id.frameLayout, this, getString(R.string.loading))
         }
