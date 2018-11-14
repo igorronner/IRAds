@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="loading">Carregando</string>
     <string name="going_out">Saindo</string>
     <string name="buy_premium">Adquirir premium</string>
     <string name="message_buy_premium">Ao adquirir o premium você estará colaborando com nossos desenvolvedores a melhorar o aplicativo e assim poderá remover ads ou propagandas</string>
