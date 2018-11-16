@@ -24,7 +24,6 @@ public class RemoteConfigService {
     private Activity context;
     private static RemoteConfigService instance;
     public FirebaseRemoteConfig mFirebaseRemoteConfig;
-    private ServiceListener serviceListener;
 
 
     private static final String SHOW_SPLASH = ConfigUtil.APP_PREFIX+"show_splash";
@@ -46,14 +45,6 @@ public class RemoteConfigService {
         void onComplete(T result);
     }
 
-    public RemoteConfigService.ServiceListener getServiceListener() {
-        return serviceListener;
-    }
-
-    public RemoteConfigService setServiceListener(RemoteConfigService.ServiceListener serviceListener) {
-        this.serviceListener = serviceListener;
-        return this;
-    }
 
     public RemoteConfigService() { }
 

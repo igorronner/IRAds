@@ -1,7 +1,6 @@
 package com.igorronner.irinterstitial.init;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.IdRes;
@@ -19,12 +18,14 @@ import com.igorronner.irinterstitial.services.ManagerNativeAd;
 import com.igorronner.irinterstitial.services.RemoteConfigService;
 import com.igorronner.irinterstitial.views.SplashActivity;
 
-public class IRAds {
+public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDTO>{
 
     public int state = 0;
     private static final int STOPPED = 910;
     private static final int RESUMED = 967;
     private Activity activity;
+    private RemoteConfigDTO remoteConfigDTO;
+
 
     public Activity getActivity() {
         return activity;
@@ -34,24 +35,32 @@ public class IRAds {
         this.activity = activity;
     }
 
-
-
-
     public static IRAds newInstance(Activity activity){
         IRAds irAds = new IRAds();
         irAds.setActivity(activity);
+        irAds.loadRemoteConfig(irAds);
         return irAds;
     }
 
+    @Override
+    public void onComplete(RemoteConfigDTO result) {
+        remoteConfigDTO = result;
+    }
 
     public void showInterstitial(final String titleDialog){
         showInterstitial(titleDialog, false);
     }
 
-    public void showInterstitial(final String titleDialog, final boolean finishAll){
+    public void showInterstitial(final String titleDialog, final boolean finishAll) {
+        if (remoteConfigDTO != null){
+            new IRInterstitialService(IRAds.this, remoteConfigDTO).showInterstitial(titleDialog, finishAll);
+            return;
+        }
+
         loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
+                remoteConfigDTO = result;
                 new IRInterstitialService(IRAds.this, result).showInterstitial(titleDialog, finishAll);
             }
         });
@@ -62,9 +71,14 @@ public class IRAds {
     }
 
     public void showInterstitialBeforeIntent(final Intent intent, final boolean finishAll, final String titleDialog){
+        if (remoteConfigDTO != null){
+            new IRInterstitialService(IRAds.this, remoteConfigDTO).showInterstitialBeforeIntent(intent, finishAll, titleDialog);
+            return;
+        }
         loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
+                remoteConfigDTO = result;
                 new IRInterstitialService(IRAds.this, result).showInterstitialBeforeIntent(intent, finishAll, titleDialog);
             }
         });
@@ -81,9 +95,16 @@ public class IRAds {
 
     public void showInterstitialBeforeFragment(final Fragment fragment, final @IdRes int containerViewId,
                                                final FragmentActivity fragmentActivity, final String titleDialog){
+
+        if (remoteConfigDTO != null){
+            new IRInterstitialService(IRAds.this, remoteConfigDTO).showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity, titleDialog);
+            return;
+        }
+
         loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
+                remoteConfigDTO = result;
                 new IRInterstitialService(IRAds.this, result).showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity, titleDialog);
             }
         });
@@ -101,9 +122,17 @@ public class IRAds {
     }
 
     public void showInterstitialOnFinish(){
+        if (remoteConfigDTO != null){
+            if (remoteConfigDTO.getFinishWithInterstitial())
+                showInterstitial(remoteConfigDTO, activity.getString(R.string.going_out));
+            else
+                ActivityCompat.finishAffinity(activity);
+            return;
+        }
         loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
             @Override
             public void onComplete(RemoteConfigDTO result) {
+                remoteConfigDTO = result;
                 if (result.getFinishWithInterstitial())
                     showInterstitial(result, activity.getString(R.string.going_out));
                 else
