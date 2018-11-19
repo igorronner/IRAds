@@ -94,16 +94,6 @@ class MainActivity : AppCompatActivity() {
         adsInstance.showInterstitialOnFinish()
     }
 
-    override fun onStop() {
-        adsInstance.onStop()
-        super.onStop()
-
-    }
-
-    override fun onResume() {
-        adsInstance.onResume()
-        super.onResume()
-    }
 }
 
 ```
@@ -111,7 +101,6 @@ class MainActivity : AppCompatActivity() {
 
 **Show interstitial before Activity:**
 
-> Remember use methods adsInstance.onStop() and  adsInstance.onResume() in the Lifecycle Activity
 
 ```java
   adsInstance.showInterstitialBeforeIntent(Intent(this, AnotherActivity::class.java))
@@ -119,14 +108,9 @@ class MainActivity : AppCompatActivity() {
 
 **Show interstitial before Fragment:**
 
-> Remember use methods adsInstance.onStop() and  adsInstance.onResume() in the Lifecycle Activity
-
 ```java
   adsInstance.showInterstitialBeforeFragment(Sample1Fragment(), R.id.frameLayout, this)
   
-  ** With Loading **
-  adsInstance.showInterstitialBeforeFragment(Sample1Fragment(), R.id.frameLayout, this, R.string.loading)
- 
 ```
 
 **Full example Show interstitial before Activity:**
@@ -149,17 +133,6 @@ class SampleActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         adsInstance.showInterstitialOnFinish()
-    }
-
-    override fun onStop() {
-        adsInstance.onStop()
-        super.onStop()
-
-    }
-
-    override fun onResume() {
-        adsInstance.onResume()
-        super.onResume()
     }
 }
 ```
@@ -189,16 +162,6 @@ class FragmentSampleActivity : AppCompatActivity() {
             adsInstance.showInterstitialBeforeFragment(Sample2Fragment(), R.id.frameLayout, this, getString(R.string.loading))
         }
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        adsInstance.onStop()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        adsInstance.onResume()
     }
 
 }
