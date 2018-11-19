@@ -106,6 +106,16 @@ class MainActivity : AppCompatActivity() {
   adsInstance.showInterstitialBeforeIntent(Intent(this, AnotherActivity::class.java))
 ```
 
+**Show onBackPressed():**
+
+
+```java
+  override fun onBackPressed() {
+        super.onBackPressed()
+        adsInstance.showInterstitial()
+    }
+```
+
 **Show interstitial before Fragment:**
 
 ```java
