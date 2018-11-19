@@ -162,16 +162,9 @@ class FragmentSampleActivity : AppCompatActivity() {
 
         adsInstance = IRAds.newInstance(this)
         
-        // No Progress Loading 
         fragment1.setOnClickListener {
             adsInstance.showInterstitialBeforeFragment(Sample1Fragment(), R.id.frameLayout, this)
         }
-
-        // With Progress Loading 
-        fragment2.setOnClickListener {
-            adsInstance.showInterstitialBeforeFragment(Sample2Fragment(), R.id.frameLayout, this, getString(R.string.loading))
-        }
-
     }
 
 }
