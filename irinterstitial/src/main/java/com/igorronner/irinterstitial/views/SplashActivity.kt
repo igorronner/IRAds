@@ -38,29 +38,10 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
-    override fun onStop() {
 
-        adsInstance.onStop()
-        super.onStop()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
     override fun onResume() {
         super.onResume()
-        adsInstance.onResume()
-        RemoteConfigService.getInstance(this).loadRemoteConfig { result ->
-            if (result.showSplash)
-                adsInstance.showInterstitial()
-            else
-                finish()
-        }
+        adsInstance.showInterstitial()
     }
 }

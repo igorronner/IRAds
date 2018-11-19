@@ -1,7 +1,6 @@
 package com.igorronner.irinterstitial.services
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.support.annotation.IdRes
 import android.support.v4.app.ActivityCompat
@@ -27,34 +26,20 @@ open class IRInterstitialService(val adsInstance: IRAds,
         irInterstitial.requestNewInterstitial()
     }
 
-    fun showInterstitial(finishAll: Boolean){
-        showInterstitial(null, finishAll)
-    }
     fun showInterstitial(){
-        showInterstitial(null, false)
+        showInterstitial(false)
     }
 
 
-    fun showInterstitial(titleDialog: String?, finishAll: Boolean) {
+    fun showInterstitial(finishAll: Boolean) {
         if (MainPreference.isPremium(adsInstance.activity)){
             finish(adsInstance.activity, finishAll)
             return
         }
 
-        val dialog= ProgressDialog(adsInstance.activity)
-        titleDialog?.let {
-            dialog.setMessage(titleDialog)
-            dialog.setCancelable(false)
-            dialog.isIndeterminate=true
-            dialog.show()
-        }
         irInterstitial.load(object : AdListener() {
 
             override fun onAdFailedToLoad(p0: Int) {
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.hide()
-                }
                 finish(adsInstance.activity, finishAll)
             }
 
@@ -64,10 +49,6 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.hide()
-                }
             }
           })
 
@@ -82,30 +63,15 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
     }
 
-    fun showInterstitialBeforeIntent(intent: Intent, finishAll: Boolean, titleDialog:String?) {
+    fun showInterstitialBeforeIntent(intent: Intent, finishAll: Boolean) {
         val activity = adsInstance.activity
         if (MainPreference.isPremium(activity)){
             finishWithIntent(finishAll, intent)
             return
         }
 
-
-        val dialog= ProgressDialog(activity)
-        titleDialog?.let {
-            dialog.setMessage(titleDialog)
-            dialog.setCancelable(false)
-            dialog.isIndeterminate=true
-            dialog.show()
-        }
-
-
         irInterstitial.load(object : AdListener() {
             override fun onAdFailedToLoad(p0: Int) {
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.hide()
-                }
-
                 finishWithIntent(finishAll, intent)
             }
             override fun onAdClosed() {
@@ -115,11 +81,6 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.hide()
-                }
-
                 irInterstitial.requestNewInterstitial()
 
             }
@@ -128,13 +89,10 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
     }
 
-    fun showInterstitialBeforeIntent(intent: Intent, titleDialog:String) {
-        showInterstitialBeforeIntent(intent, false, titleDialog)
+    fun showInterstitialBeforeIntent(intent: Intent) {
+        showInterstitialBeforeIntent(intent, false)
     }
 
-    fun showInterstitialBeforeIntent(intent: Intent) {
-        showInterstitialBeforeIntent(intent, false, null)
-    }
 
     fun finishWithIntent(finishAll: Boolean, intent: Intent){
         if (finishAll)
@@ -145,56 +103,28 @@ open class IRInterstitialService(val adsInstance: IRAds,
     }
 
 
-    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity, titleDialog:String?) {
+    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity) {
         val activity = adsInstance.activity
         if (MainPreference.isPremium(activity)){
             replaceFragment(fragment,  containerViewId, fragmentActivity)
             return
         }
 
-
-        val dialog= ProgressDialog(activity)
-        titleDialog?.let {
-            dialog.setMessage(titleDialog)
-            dialog.setCancelable(false)
-            dialog.isIndeterminate=true
-            dialog.show()
-        }
-
-
         irInterstitial.load(object : AdListener() {
             override fun onAdFailedToLoad(p0: Int) {
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.dismiss()
-                }
-
                 replaceFragment(fragment,  containerViewId, fragmentActivity)
 
             }
             override fun onAdClosed() {
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.dismiss()
-                }
                 replaceFragment(fragment,  containerViewId, fragmentActivity)
             }
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                titleDialog?.let {
-                    if (dialog.isShowing)
-                        dialog.dismiss()
-                }
-
             }
         })
 
 
-    }
-
-    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity){
-        showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity, null)
     }
 
     fun replaceFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity){

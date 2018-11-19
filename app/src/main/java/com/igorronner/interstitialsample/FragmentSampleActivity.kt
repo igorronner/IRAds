@@ -21,19 +21,16 @@ class FragmentSampleActivity : AppCompatActivity() {
         }
 
         fragment2.setOnClickListener {
-            adsInstance.showInterstitialBeforeFragment(Sample2Fragment(), R.id.frameLayout, this, getString(R.string.loading))
+            adsInstance.showInterstitialBeforeFragment(Sample2Fragment(), R.id.frameLayout, this)
         }
 
     }
 
-    override fun onStop() {
-        super.onStop()
-        adsInstance.onStop()
+    override fun onBackPressed() {
+        super.onBackPressed()
+        adsInstance.showInterstitial()
     }
 
-    override fun onResume() {
-        super.onResume()
-        adsInstance.onResume()
-    }
+
 
 }

@@ -15,9 +15,7 @@ class MainActivity : AppCompatActivity() {
         adsInstance = IRAds.newInstance(this)
         adsInstance.openSplashScreen()
 
-
         setContentView(R.layout.activity_main)
-
 
         button1.setOnClickListener {
             adsInstance.showInterstitialBeforeIntent(Intent(this, AnotherActivity::class.java))
@@ -32,14 +30,4 @@ class MainActivity : AppCompatActivity() {
         adsInstance.showInterstitialOnFinish()
     }
 
-    override fun onStop() {
-        adsInstance.onStop()
-        super.onStop()
-
-    }
-
-    override fun onResume() {
-        adsInstance.onResume()
-        super.onResume()
-    }
 }
