@@ -27,24 +27,35 @@ open class IRInterstitialService(val adsInstance: IRAds,
     }
 
     fun showInterstitial(){
-        showInterstitial(false)
+        showInterstitial(true, false)
     }
 
+    fun showInterstitial(finish: Boolean){
+        showInterstitial(finish, false)
+    }
 
-    fun showInterstitial(finishAll: Boolean) {
+    fun forceShowInterstitial(finish: Boolean){
+        showInterstitial(finish, true)
+    }
+
+    fun forceShowInterstitial(){
+        showInterstitial(true, true)
+    }
+
+    fun showInterstitial(finish: Boolean, force: Boolean) {
         if (MainPreference.isPremium(adsInstance.activity)){
-            finish(adsInstance.activity, finishAll)
+            finish(adsInstance.activity, finish)
             return
         }
 
-        irInterstitial.load(object : AdListener() {
+        irInterstitial.load(force, object : AdListener() {
 
             override fun onAdFailedToLoad(p0: Int) {
-                finish(adsInstance.activity, finishAll)
+                finish(adsInstance.activity, finish)
             }
 
             override fun onAdClosed() {
-                finish(adsInstance.activity, finishAll)
+                finish(adsInstance.activity, finish)
             }
 
             override fun onAdLoaded() {
@@ -55,33 +66,38 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
     }
 
-    fun finish(activity: Activity, finishAll: Boolean){
-        if (finishAll)
-            ActivityCompat.finishAffinity(activity)
-        else
+    fun finish(activity: Activity, finish: Boolean){
+        if (finish)
             activity.finish()
 
     }
 
-    fun showInterstitialBeforeIntent(intent: Intent, finishAll: Boolean) {
+    fun forceShowInterstitialBeforeIntent(intent: Intent, finish: Boolean){
+        showInterstitialBeforeIntent(intent, finish, true)
+    }
+
+    fun forceShowInterstitialBeforeIntent(intent: Intent){
+        showInterstitialBeforeIntent(intent,true, true)
+    }
+
+
+    fun showInterstitialBeforeIntent(intent: Intent, finishAll: Boolean, force: Boolean) {
         val activity = adsInstance.activity
         if (MainPreference.isPremium(activity)){
             finishWithIntent(finishAll, intent)
             return
         }
 
-        irInterstitial.load(object : AdListener() {
+        irInterstitial.load(force, object : AdListener() {
             override fun onAdFailedToLoad(p0: Int) {
                 finishWithIntent(finishAll, intent)
             }
             override fun onAdClosed() {
                 finishWithIntent(finishAll, intent)
-                irInterstitial.requestNewInterstitial()
             }
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                irInterstitial.requestNewInterstitial()
 
             }
         })
@@ -89,8 +105,12 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
     }
 
+    fun showInterstitialBeforeIntent(intent: Intent, finishAll: Boolean){
+        showInterstitialBeforeIntent(intent, finishAll, false)
+    }
+
     fun showInterstitialBeforeIntent(intent: Intent) {
-        showInterstitialBeforeIntent(intent, false)
+        showInterstitialBeforeIntent(intent, false, false)
     }
 
 
@@ -102,15 +122,23 @@ open class IRInterstitialService(val adsInstance: IRAds,
 
     }
 
+    fun forceShowInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity){
+        showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, true)
+    }
 
-    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity) {
+    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity)
+    {
+        showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, false)
+    }
+
+    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity, force: Boolean) {
         val activity = adsInstance.activity
         if (MainPreference.isPremium(activity)){
             replaceFragment(fragment,  containerViewId, fragmentActivity)
             return
         }
 
-        irInterstitial.load(object : AdListener() {
+        irInterstitial.load(force, object : AdListener() {
             override fun onAdFailedToLoad(p0: Int) {
                 replaceFragment(fragment,  containerViewId, fragmentActivity)
 

@@ -24,6 +24,22 @@ class MainActivity : AppCompatActivity() {
         button2.setOnClickListener {
             adsInstance.showInterstitialBeforeIntent(Intent(this, FragmentSampleActivity::class.java))
         }
+
+        button3.setOnClickListener {
+            adsInstance.showInterstitial(false)
+        }
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adsInstance.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adsInstance.onResume()
     }
 
     override fun onBackPressed() {

@@ -27,13 +27,14 @@ class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: Remot
         }
     }
 
-    override fun load(adListener: AdListener) {
+    override fun load(force:Boolean, adListener: AdListener) {
         if (mPublisherInterstitialAd.isLoaded) {
             mPublisherInterstitialAd.show()
             AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 2")
 
-        } else
+        } else if (!force)
             adListener.onAdFailedToLoad(0)
+
         mPublisherInterstitialAd.adListener = object : AdListener() {
 
             override fun onAdFailedToLoad(code: Int) {
@@ -41,11 +42,15 @@ class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: Remot
             }
 
             override fun onAdClosed() {
+                requestNewInterstitial()
                 adListener.onAdClosed()
             }
 
             override fun onAdLoaded() {
                 adListener.onAdLoaded()
+                if (force && !adsInstance.isStopped)
+                    mPublisherInterstitialAd.show()
+
             }
         }
     }

@@ -21,26 +21,30 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
         }
     }
 
-    override fun load(adListener: AdListener) {
+    override fun load(force:Boolean, adListener: AdListener) {
 
         if (mInterstitialAd.isLoaded) {
             mInterstitialAd.show()
             AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 1")
-
-        } else
+        } else if (!force)
             adListener.onAdFailedToLoad(0)
 
         mInterstitialAd.adListener = object : AdListener() {
 
             override fun onAdFailedToLoad(p0: Int) {
+                if (force && !adsInstance.isStopped)
+                    adListener.onAdFailedToLoad(p0)
             }
 
             override fun onAdClosed() {
-               adListener.onAdClosed()
+                adListener.onAdClosed()
+                requestNewInterstitial()
             }
 
             override fun onAdLoaded() {
                 adListener.onAdLoaded()
+                if (force && !adsInstance.isStopped)
+                    mInterstitialAd.show()
             }
         }
     }

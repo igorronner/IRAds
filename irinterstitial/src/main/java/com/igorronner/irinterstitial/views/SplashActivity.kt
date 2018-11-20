@@ -8,7 +8,6 @@ import com.google.firebase.FirebaseApp
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
-import com.igorronner.irinterstitial.services.RemoteConfigService
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -26,6 +25,7 @@ class SplashActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
         adsInstance = IRAds.newInstance(this)
+        adsInstance.forceShowInterstitial()
 
 
     }
@@ -39,9 +39,14 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
+    override fun onStop() {
+        super.onStop()
+        adsInstance.onStop()
+    }
+
 
     override fun onResume() {
         super.onResume()
-        adsInstance.showInterstitial()
+        adsInstance.onResume()
     }
 }
