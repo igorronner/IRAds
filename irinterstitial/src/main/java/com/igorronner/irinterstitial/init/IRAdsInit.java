@@ -21,6 +21,7 @@ public class IRAdsInit {
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
+        ConfigUtil.TESTER = builder.tester;
         if (builder.appPrefix!=null)
             ConfigUtil.APP_PREFIX = builder.appPrefix;
     }
