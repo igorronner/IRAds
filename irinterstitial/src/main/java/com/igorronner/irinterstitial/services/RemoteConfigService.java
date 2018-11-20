@@ -12,6 +12,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.igorronner.irinterstitial.BuildConfig;
+import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
 import com.igorronner.irinterstitial.init.ConfigUtil;
 import com.igorronner.irinterstitial.preferences.MainPreference;
@@ -58,6 +59,7 @@ public class RemoteConfigService {
                     .setDeveloperModeEnabled(BuildConfig.DEBUG)
                     .build();
             instance.mFirebaseRemoteConfig.setConfigSettings(configSettings);
+            instance.mFirebaseRemoteConfig.setDefaults(R.xml.default_values);
         }
 
         instance.setContext(activity);
@@ -84,6 +86,7 @@ public class RemoteConfigService {
                         remoteConfigDTO.setFinishWithInterstitial(mFirebaseRemoteConfig.getBoolean(FINISH_WITH_INTERSTITIAL));
                         remoteConfigDTO.setPublisherInterstitialId(mFirebaseRemoteConfig.getString(PUBLISHER_INTERSTITIAL_ID));
                         remoteConfigDTO.setInterstitialId(mFirebaseRemoteConfig.getString(INTERSTITIAL_ID));
+
                         serviceListener.onComplete(remoteConfigDTO);
                     }
                 });

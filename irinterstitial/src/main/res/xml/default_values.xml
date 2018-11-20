@@ -1,0 +1,14 @@
+<defaultsMap>
+    <entry>
+        <key>ad_version</key>
+        <value>1</value>
+    </entry>
+    <entry>
+        <key>finish_with_interstitial</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_splash</key>
+        <value>true</value>
+    </entry>
+</defaultsMap>
