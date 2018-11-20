@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.igorronner.irinterstitial.init.ConfigUtil;
+
 public class MainPreference {
 
     private static final String FIRST_LAUNCH_DATE = "first_launch_date";
@@ -30,6 +32,9 @@ public class MainPreference {
     }
 
     public static boolean isPremium(Context context){
+        if (ConfigUtil.TESTER)
+            return false;
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPref.getBoolean(PREFS_PREMIUM, false);
     }

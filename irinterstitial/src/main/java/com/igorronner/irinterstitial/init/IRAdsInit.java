@@ -36,6 +36,7 @@ public class IRAdsInit {
         private String productSku;
         // Prefix for concat keys on remote config...
         private String appPrefix;
+        private boolean tester;
 
         public Builder() {
         }
@@ -72,6 +73,11 @@ public class IRAdsInit {
 
         public Builder setAppId(String appId){
             this.appId = appId;
+            return this;
+        }
+
+        public Builder setTester(boolean tester) {
+            this.tester = tester;
             return this;
         }
 
