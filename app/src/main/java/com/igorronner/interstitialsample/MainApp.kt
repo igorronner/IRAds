@@ -22,8 +22,8 @@ class MainApp : Application() {
                     .setNativeAdId("PLACE_YOUR_NATIVE_AD_ID")
                     .setAppPrefix("lib_")
                     //For test
-                    //.setPublisherInterstitialId("/6499/example/interstitial")
-                    .setPublisherInterstitialId("PLACE_YOUR_PUBLISHER_AD_ID")
+                    .setPublisherInterstitialId("/6499/example/interstitial")
+                    //.setPublisherInterstitialId("PLACE_YOUR_PUBLISHER_AD_ID")
                     .setTester(BuildConfig.DEBUG)
 
                     .build(this)

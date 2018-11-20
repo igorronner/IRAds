@@ -87,6 +87,9 @@ public class RemoteConfigService {
                         remoteConfigDTO.setPublisherInterstitialId(mFirebaseRemoteConfig.getString(PUBLISHER_INTERSTITIAL_ID));
                         remoteConfigDTO.setInterstitialId(mFirebaseRemoteConfig.getString(INTERSTITIAL_ID));
 
+                        if (remoteConfigDTO.getAdVersion() == 0)
+                            remoteConfigDTO.setAdVersion(1);
+
                         serviceListener.onComplete(remoteConfigDTO);
                     }
                 });

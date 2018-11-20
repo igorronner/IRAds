@@ -19,11 +19,10 @@ class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: Remot
 
     init {
         if (mPublisherInterstitialAd.adUnitId.isNullOrBlank()) {
-            remoteConfigDTO.publisherInterstitialId?.let {
-                mPublisherInterstitialAd.adUnitId = it
-            } ?: kotlin.run {
+            if(!remoteConfigDTO.publisherInterstitialId.isNullOrBlank())
+                mPublisherInterstitialAd.adUnitId = remoteConfigDTO.publisherInterstitialId
+            else
                 mPublisherInterstitialAd.adUnitId = ConfigUtil.PUBLISHER_INTERSTITIAL_ID
-            }
         }
     }
 
@@ -38,7 +37,8 @@ class IRPublisherInterstitial(val adsInstance: IRAds, val remoteConfigDTO: Remot
         mPublisherInterstitialAd.adListener = object : AdListener() {
 
             override fun onAdFailedToLoad(code: Int) {
-                adListener.onAdFailedToLoad(code)
+                if (force && !adsInstance.isStopped)
+                    adListener.onAdFailedToLoad(code)
             }
 
             override fun onAdClosed() {
