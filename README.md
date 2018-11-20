@@ -23,9 +23,11 @@ Step 2 - Add the dependency
 
 ```groovy
 dependencies {
-  implementation 'com.github.igorronner:IRAds:1.1.2'
+  implementation 'com.github.igorronner:IRAds:Tag'
 }
 ```
+
+![](https://jitpack.io/v/igorronner/IRAds.svg)](https://jitpack.io/#igorronner/IRAds)
 
 Firebase Remote Config
 --------
