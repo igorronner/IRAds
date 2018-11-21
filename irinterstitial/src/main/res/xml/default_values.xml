@@ -11,4 +11,8 @@
         <key>show_splash</key>
         <value>true</value>
     </entry>
+    <entry>
+        <key>publisher_interstitial_id</key>
+        <value></value>
+    </entry>
 </defaultsMap>
