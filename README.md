@@ -174,3 +174,53 @@ class FragmentSampleActivity : AppCompatActivity() {
  
 ```
 
+
+**Purchase:**
+
+```java
+  IRAdsInit.start()
+                .setLogo(R.drawable.ic_logo_white)
+                .enablePurchace("put_your_product_sku")
+                .setTester(BuildConfig.DEBUG)
+                .build(this)
+
+```
+
+
+```java
+class MainActivity : AppCompatActivity(), PurchaseService.ProductPurchasedListener {
+
+    private lateinit var purchaseService:PurchaseService
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        purchaseService = PurchaseService(this)
+        purchaseService.onCreate()
+    }
+
+    override fun onBackPressed() {
+        adsInstance.showInterstitialOnFinish()
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        purchaseService.onResume()
+    }
+    
+    override fun onProductPurchased() {
+        //Reload views when product purchased
+    }
+}
+
+```
+
+**Checck is premium:**
+
+
+```java
+IRAds.isPremium(this)
+
+```
+
+
