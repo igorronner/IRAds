@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity(), PurchaseService.ProductPurchasedListen
 
 ```
 
-**Checck is premium:**
+**Check is premium:**
 
 
 ```java
