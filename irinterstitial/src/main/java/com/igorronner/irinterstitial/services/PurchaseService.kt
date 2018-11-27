@@ -68,7 +68,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
         val purchasesResult = billingClient.queryPurchases(SkuType.INAPP)
         val responseCode = purchasesResult.responseCode
         val purchases = purchasesResult.purchasesList
-        purchases.forEach {
+        purchases?.forEach {
             purchase: Purchase? ->
             Log.d("billingClient", "purchase " + purchase?.sku)
         }

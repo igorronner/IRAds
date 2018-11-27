@@ -15,6 +15,7 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
+
 import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.ads.formats.NativeAdOptions;
@@ -179,14 +180,19 @@ public class ManagerNativeAd {
         }
 
 
-        // Some aren't guaranteed, however, and should be checked.
-        NativeAd.Image logoImage = nativeContentAd.getLogo();
+        try {
+            // Some aren't guaranteed, however, and should be checked.
+            NativeAd.Image logoImage = nativeContentAd.getLogo();
 
-        if (logoImage == null) {
-            adView.getLogoView().setVisibility(View.INVISIBLE);
-        } else {
-            ((ImageView) adView.getLogoView()).setImageDrawable(logoImage.getDrawable());
-            adView.getLogoView().setVisibility(View.VISIBLE);
+            if (logoImage == null || logoImage.getDrawable() == null) {
+                adView.getLogoView().setVisibility(View.INVISIBLE);
+            } else {
+                ((ImageView) adView.getLogoView()).setImageDrawable(logoImage.getDrawable());
+                adView.getLogoView().setVisibility(View.VISIBLE);
+            }
+
+        } catch (Exception exception){
+
         }
 
         // Assign native ad object to the native view.
