@@ -90,15 +90,17 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
     }
 
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
-        if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
+        if ((responseCode == BillingClient.BillingResponse.OK || responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) && purchases!=null) {
 
             Log.d("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK")
-            for (purchase in purchases) {
+            purchases.forEach {
+                purchase->
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(activity)
                     productPurchasedListener?.onProductPurchased()
                     Log.d("billingClient", "onProductPurchased ")
                 }
+
             }
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
             // Handle an error caused by a user cancelling the purchase flow.

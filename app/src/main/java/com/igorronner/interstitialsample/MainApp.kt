@@ -24,7 +24,7 @@ class MainApp : Application() {
                     //For test
                     .setPublisherInterstitialId("/6499/example/interstitial")
                     //.setPublisherInterstitialId("PLACE_YOUR_PUBLISHER_AD_ID")
-                    .setTester(BuildConfig.DEBUG)
+                    //.setTester(BuildConfig.DEBUG)
 
                     .build(this)
 
