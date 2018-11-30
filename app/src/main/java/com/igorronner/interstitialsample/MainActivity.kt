@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        adsInstance.loadNativeAd(true)
     }
 
     override fun onStop() {

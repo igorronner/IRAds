@@ -5,11 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".Sample1Fragment">
 
-    <TextView
+    <LinearLayout
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:text="Hi, I'm Fragment 1 " />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="Medium Ad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <include
+            android:id="@+id/adViewNative"
+            layout="@layout/ad_medium_unified">
+
+        </include>
+
+    </LinearLayout>
 
 </FrameLayout>

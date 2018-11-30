@@ -19,7 +19,7 @@ class MainApp : Application() {
                     //.setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
 
                     .setLogo(R.mipmap.ic_launcher)
-                    .setNativeAdId("PLACE_YOUR_NATIVE_AD_ID")
+                    .setNativeAdId("ca-app-pub-3940256099942544/2247696110")
                     .setAppPrefix("lib_")
                     //For test
                     .setPublisherInterstitialId("/6499/example/interstitial")

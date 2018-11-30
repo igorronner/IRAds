@@ -43,7 +43,7 @@ open class IRInterstitialService(val adsInstance: IRAds,
     }
 
     fun showInterstitial(finish: Boolean, force: Boolean) {
-        if (MainPreference.isPremium(adsInstance.activity)){
+        if (MainPreference.isPremium(adsInstance.activity.applicationContext)){
             finish(adsInstance.activity, finish)
             return
         }

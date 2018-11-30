@@ -86,7 +86,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         dialog.setTitle(R.string.buy_premium)
         dialog.setMessage(R.string.message_buy_premium)
 
-        dialog.setPositiveButton(R.string.purchase) { _, which -> purchase() }
+        dialog.setPositiveButton(R.string.purchase) { _, _ -> purchase() }
 
         dialog.setNegativeButton(R.string.cancel, null)
         dialog.show()

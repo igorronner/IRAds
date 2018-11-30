@@ -8,7 +8,6 @@ import com.google.android.gms.ads.MobileAds;
 
 public class IRAdsInit {
 
-
     // Builder
     public static IRAdsInit.Builder start() {
         return new IRAdsInit.Builder();

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
+import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
 import com.igorronner.irinterstitial.preferences.MainPreference;
@@ -25,6 +26,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     private static final int RESUMED = 967;
     private Activity activity;
     private RemoteConfigDTO remoteConfigDTO;
+    private ManagerNativeAd managerNativeAd;
 
 
     public Activity getActivity() {
@@ -39,6 +41,8 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         IRAds irAds = new IRAds();
         irAds.setActivity(activity);
         irAds.loadRemoteConfig(irAds);
+        irAds.setManagerNativeAd(ManagerNativeAd.getInstance(activity)
+                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID));
         return irAds;
     }
 
@@ -47,6 +51,10 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         remoteConfigDTO = result;
     }
 
+
+    public void setManagerNativeAd(ManagerNativeAd managerNativeAd) {
+        this.managerNativeAd = managerNativeAd;
+    }
 
     public void forceShowInterstitial(){
         forceShowInterstitial(true);
@@ -124,7 +132,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     }
 
 
-
     public void forceShowInterstitialBeforeIntent(final Fragment fragment, final @IdRes int containerViewId,
                                                   final FragmentActivity fragmentActivity){
         if (remoteConfigDTO != null){
@@ -192,6 +199,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         RemoteConfigService.getInstance(activity).loadRemoteConfig(serviceListener);
     }
 
+    @Deprecated
     public static void loadCardAdView(Activity activity, View cardView, NativeAppInstallAdView nativeAppInstallAdView){
         ManagerNativeAd.getInstance(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
@@ -199,6 +207,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
                 .loadAppInstallAdView(cardView, nativeAppInstallAdView);
     }
 
+    @Deprecated
     public static void loadNativeAd(Activity activity, boolean showProgress){
         ManagerNativeAd.getInstance(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
@@ -206,11 +215,25 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
                 .loadAppInstallAdView((NativeAppInstallAdView) activity.findViewById(R.id.adViewNative));
     }
 
+    @Deprecated
     public static void loadNativeAd(Activity activity, boolean showProgress, NativeAppInstallAdView nativeAppInstallAdView){
         ManagerNativeAd.getInstance(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
                 .setShowProgress(showProgress)
                 .loadAppInstallAdView(nativeAppInstallAdView);
+    }
+
+    public void loadNativeAd(boolean showProgress, UnifiedNativeAdView unifiedNativeAdView){
+        managerNativeAd.setShowProgress(showProgress)
+                .loadNativeAd(null, unifiedNativeAdView);
+    }
+
+    public void loadNativeAd(){
+        loadNativeAd(false, (UnifiedNativeAdView) activity.findViewById(R.id.adViewNative));
+    }
+
+    public void loadNativeAd(boolean showProgress){
+        loadNativeAd(showProgress, (UnifiedNativeAdView) activity.findViewById(R.id.adViewNative));
     }
 
     public static boolean isPremium(Context context){
