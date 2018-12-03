@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
@@ -226,6 +227,16 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     public void loadNativeAd(boolean showProgress, UnifiedNativeAdView unifiedNativeAdView){
         managerNativeAd.setShowProgress(showProgress)
                 .loadNativeAd(null, unifiedNativeAdView);
+    }
+
+    public void loadNativeAd(ViewGroup cardView, boolean showProgress, UnifiedNativeAdView unifiedNativeAdView){
+        managerNativeAd.setShowProgress(showProgress)
+                .loadNativeAd(cardView, unifiedNativeAdView);
+    }
+
+    public void loadNativeAd(ViewGroup cardView, UnifiedNativeAdView unifiedNativeAdView){
+        managerNativeAd.setShowProgress(false)
+                .loadNativeAd(cardView, unifiedNativeAdView);
     }
 
     public void loadNativeAd(){
