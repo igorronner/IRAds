@@ -80,7 +80,9 @@ public class ManagerNativeAd {
         }
 
 
-        adView.setVisibility(View.INVISIBLE);
+
+        adView.getChildAt(0).setVisibility(View.INVISIBLE);
+
         if (showProgress) {
             progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
             progressBar.setIndeterminate(true);
@@ -104,16 +106,13 @@ public class ManagerNativeAd {
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
 
+                adView.getChildAt(0).setVisibility(View.VISIBLE);
                 adView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 setAdmobAdUnitId(null);
 
 
                 populateUnifiedNativeAdView(unifiedNativeAd, adView);
-                if (adCard!=null) {
-                    adCard.removeAllViews();
-                    adCard.addView(adView);
-                }
             }
 
 
@@ -152,6 +151,7 @@ public class ManagerNativeAd {
         }
 
         adView.getChildAt(0).setVisibility(View.INVISIBLE);
+
         if (showProgress) {
             progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
             progressBar.setIndeterminate(true);
