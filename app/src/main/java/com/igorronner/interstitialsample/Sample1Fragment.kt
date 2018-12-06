@@ -11,25 +11,24 @@ import kotlinx.android.synthetic.main.fragment_sample.*
 
 class Sample1Fragment : Fragment() {
 
-
     private lateinit var adsInstance: IRAds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         adsInstance = IRAds.newInstance(activity)
-
-        return inflater.inflate(R.layout.fragment_sample, container, false)
     }
+
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_sample, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adsInstance.loadNativeAd(true, adViewNative as UnifiedNativeAdView)
+        adsInstance.loadNativeAd(true, adSmallUnified as UnifiedNativeAdView)
+        adsInstance.loadNativeAd(true, adMediumUnified as UnifiedNativeAdView)
+        adsInstance.loadNativeAd(true, adLargeUnified as UnifiedNativeAdView)
     }
 
 }
