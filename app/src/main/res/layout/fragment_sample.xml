@@ -1,27 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Sample1Fragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
-
         android:layout_width="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_height="match_parent">
-        <TextView
-            android:text="Medium Ad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <include
-            android:id="@+id/adViewNative"
-            layout="@layout/ad_medium_unified">
+        android:gravity="center">
 
-        </include>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small Unified AD"
+            android:padding="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <include
+            android:id="@+id/adSmallUnified"
+            layout="@layout/ad_small_unified"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium Unified AD"
+            android:padding="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <include
+            android:id="@+id/adMediumUnified"
+            layout="@layout/ad_medium_unified"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Unified AD"
+            android:padding="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <include
+            android:id="@+id/adLargeUnified"
+            layout="@layout/ad_large_unified"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>

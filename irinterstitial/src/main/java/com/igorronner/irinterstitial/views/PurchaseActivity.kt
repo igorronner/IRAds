@@ -10,22 +10,15 @@ import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
 
-
 open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
-
-    interface ProductPurchasedListener {
-        fun onProductPurchased()
-    }
+    private lateinit var billingClient: BillingClient
 
     var productPurchasedListener: ProductPurchasedListener? = null
 
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)
     }
-
-
-    private lateinit var billingClient: BillingClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,28 +30,30 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
                     Log.d("billingClient", "BillingClient.BillingResponse.OK ")
                     val skuList = ArrayList<String>()
                     skuList.add(ConfigUtil.PRODUCT_SKU)
+
                     val params = SkuDetailsParams.newBuilder()
-                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+                            .setSkusList(skuList)
+                            .setType(BillingClient.SkuType.INAPP)
+
                     billingClient.querySkuDetailsAsync(params.build()) { responseCode, skuDetailsList ->
                         Log.d("billingClient", "querySkuDetailsAsync ")
                         Log.d("billingClient", "responseCode $responseCode")
-                        skuDetailsList.forEach { skuDetails: SkuDetails? ->
+                        skuDetailsList?.forEach { skuDetails: SkuDetails? ->
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
                             Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
                         }
-
                     }
                 }
             }
+
             override fun onBillingServiceDisconnected() {
-                Log.d("billingClient", "onBillingServiceDisconnected");
+                Log.d("billingClient", "onBillingServiceDisconnected")
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
             }
         })
-
     }
 
     override fun onResume() {
@@ -77,24 +72,22 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
         }
 
         handlePurchasesResult(responseCode, purchases)
-
     }
 
     fun showDialogPremium() {
         val dialog = AlertDialog.Builder(this)
+                .setTitle(R.string.buy_premium)
+                .setMessage(R.string.message_buy_premium)
+                .setPositiveButton(R.string.purchase) { _, _ -> purchase() }
+                .setNegativeButton(R.string.cancel, null)
 
-        dialog.setTitle(R.string.buy_premium)
-        dialog.setMessage(R.string.message_buy_premium)
-
-        dialog.setPositiveButton(R.string.purchase) { _, _ -> purchase() }
-
-        dialog.setNegativeButton(R.string.cancel, null)
-        dialog.show()
+        if (!isFinishing) {
+            dialog.show()
+        }
     }
 
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
         if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
-
             Log.d("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK")
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
@@ -119,4 +112,9 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
                 .build()
         billingClient.launchBillingFlow(this@PurchaseActivity, flowParams)
     }
+
+    interface ProductPurchasedListener {
+        fun onProductPurchased()
+    }
+
 }
