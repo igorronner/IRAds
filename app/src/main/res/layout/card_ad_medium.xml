@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/adCard"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:contentPaddingTop="16dp"
+        app:contentPaddingBottom="16dp">
+
+        <include
+            android:id="@+id/adViewNative"
+            layout="@layout/ad_medium_unified"/>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
