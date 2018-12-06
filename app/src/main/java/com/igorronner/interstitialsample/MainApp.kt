@@ -8,28 +8,14 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-
         IRAdsInit.start()
-                    //For test
-                    .setAppId("ca-app-pub-3940256099942544~3347511713")
-                    //.setAppId("YOUR_ADMOB_APP_ID")
-
-                    //For test
-                    .setInterstitialId("ca-app-pub-3940256099942544/1033173712")
-                    //.setInterstitialId("PLACE_YOUR_ADD_UNIT_ID")
-
-                    .setLogo(R.mipmap.ic_launcher)
-                    .setNativeAdId("ca-app-pub-3940256099942544/2247696110")
-                    .setAppPrefix("lib_")
-                    //For test
-                    .setPublisherInterstitialId("/6499/example/interstitial")
-                    //.setPublisherInterstitialId("PLACE_YOUR_PUBLISHER_AD_ID")
-                    //.setTester(BuildConfig.DEBUG)
-
-                    .build(this)
-
-
+                .setAppId("ca-app-pub-3940256099942544~3347511713")
+                .setInterstitialId("ca-app-pub-3940256099942544/1033173712")
+                .setLogo(R.mipmap.ic_launcher)
+                .setNativeAdId("ca-app-pub-3940256099942544/2247696110")
+                .setAppPrefix("lib_")
+                .setPublisherInterstitialId("/6499/example/interstitial")
+                .build(this)
     }
-
 
 }

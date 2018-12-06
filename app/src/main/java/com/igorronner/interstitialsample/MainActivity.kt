@@ -12,10 +12,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         adsInstance = IRAds.newInstance(this)
         adsInstance.openSplashScreen()
-
-        setContentView(R.layout.activity_main)
 
         button1.setOnClickListener {
             adsInstance.showInterstitialBeforeIntent(Intent(this, AnotherActivity::class.java))
@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         button3.setOnClickListener {
             adsInstance.showInterstitial(false)
         }
-
 
         adsInstance.loadNativeAd(true)
     }

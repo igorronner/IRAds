@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.card_ad_medium.*
 
 class AnotherActivity : AppCompatActivity() {
 
-
     private lateinit var adsInstance: IRAds
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,4 +23,5 @@ class AnotherActivity : AppCompatActivity() {
         super.onBackPressed()
         adsInstance.showInterstitial()
     }
+
 }
