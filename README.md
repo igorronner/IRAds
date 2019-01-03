@@ -181,14 +181,18 @@ class FragmentSampleActivity : AppCompatActivity() {
   IRAdsInit.start()
                 .setLogo(R.drawable.ic_logo_white)
                 .enablePurchace("put_your_product_sku")
+          
+                // Use esse método para testar o uso de usuário não premium
                 .setTester(BuildConfig.DEBUG)
+                // com esse método o usuário não verá mais ads caso o Mobills esteja instalado
+                .enableCheckMobills(true)
                 .build(this)
 
 ```
 
 
 ```java
-class MainActivity : AppCompatActivity(), PurchaseService.ProductPurchasedListener {
+class MainActivity : AppCompatActivity(), ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
 
     private lateinit var purchaseService:PurchaseService
 
@@ -196,7 +200,18 @@ class MainActivity : AppCompatActivity(), PurchaseService.ProductPurchasedListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         purchaseService = PurchaseService(this)
-        purchaseService.onCreate()
+
+        // Listener for load products 
+        purchaseService.productsListListener = this
+        
+        // Listener for purchased or restore purchased
+        purchaseService.productPurchasedListener = this
+        
+        // Listener for error on purchase
+        purchaseService.purchaseErrorListener = this
+        
+        // Listener called when user dismissed dialog of purchase
+        purchaseService.purchaseCanceledListener = this
     }
 
     override fun onBackPressed() {
@@ -209,7 +224,19 @@ class MainActivity : AppCompatActivity(), PurchaseService.ProductPurchasedListen
     }
     
     override fun onProductPurchased() {
+        // It's called on Purchased or Restore Purchase
         //Reload views when product purchased
+    }
+
+    override fun onProductList(list: MutableList<SkuDetails>) {
+       
+    }
+
+    override fun onError(responseCode: Int) {
+
+    }
+
+    override fun onCanceled() {
     }
 }
 
