@@ -15,6 +15,8 @@ class MainApp : Application() {
                 .setNativeAdId("ca-app-pub-3940256099942544/2247696110")
                 .setAppPrefix("lib_")
                 .setPublisherInterstitialId("/6499/example/interstitial")
+                .enablePurchace("premium")
+                //.setTester(BuildConfig.DEBUG)
                 .build(this)
     }
 

@@ -23,7 +23,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
 
     override fun load(force:Boolean, adListener: AdListener) {
 
-        if (mInterstitialAd.isLoaded) {
+        if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
             mInterstitialAd.show()
             AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 1")
         } else if (!force)
@@ -38,12 +38,13 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
 
             override fun onAdClosed() {
                 adListener.onAdClosed()
+                adsInstance.onStop()
                 requestNewInterstitial()
             }
 
             override fun onAdLoaded() {
                 adListener.onAdLoaded()
-                if (force && !adsInstance.isStopped)
+                if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity))
                     mInterstitialAd.show()
             }
         }
