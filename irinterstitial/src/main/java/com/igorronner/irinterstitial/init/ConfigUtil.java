@@ -12,4 +12,5 @@ public class ConfigUtil {
     public static String PRODUCT_SKU = null;
     public static String APP_PREFIX = "";
     public static boolean TESTER = false;
+    public static boolean ENABLE_CHECK_MOBILLS = false;
 }

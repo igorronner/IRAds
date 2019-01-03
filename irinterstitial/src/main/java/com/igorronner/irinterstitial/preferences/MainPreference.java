@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.igorronner.irinterstitial.init.ConfigUtil;
+import com.igorronner.irinterstitial.utils.ContextKt;
 
 public class MainPreference {
 
@@ -36,6 +37,9 @@ public class MainPreference {
             return false;
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPref.getBoolean(PREFS_PREMIUM, false);
+        if (sharedPref.getBoolean(PREFS_PREMIUM, false))
+            return true;
+
+         return ConfigUtil.ENABLE_CHECK_MOBILLS && ContextKt.appIsInstalled(context,"br.com.gerenciadorfinanceiro.controller" );
     }
 }

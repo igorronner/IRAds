@@ -21,6 +21,7 @@ public class IRAdsInit {
         ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.TESTER = builder.tester;
+        ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
         if (builder.appPrefix!=null)
             ConfigUtil.APP_PREFIX = builder.appPrefix;
     }
@@ -36,7 +37,9 @@ public class IRAdsInit {
         private String productSku;
         // Prefix for concat keys on remote config...
         private String appPrefix;
+
         private boolean tester;
+        private boolean enableCheckMobills;
 
         public Builder() {
         }
@@ -78,6 +81,11 @@ public class IRAdsInit {
 
         public Builder setTester(boolean tester) {
             this.tester = tester;
+            return this;
+        }
+
+        public Builder enableCheckMobills(boolean enableCheckMobills){
+            this.enableCheckMobills = enableCheckMobills;
             return this;
         }
 
