@@ -1,4 +1,4 @@
-package com.igorronner.interstitialsample
+package com.igorronner.interstitialsample.views
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 import kotlinx.android.synthetic.main.fragment_sample2.*
 

@@ -1,10 +1,11 @@
-package com.igorronner.interstitialsample
+package com.igorronner.interstitialsample.views
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.android.billingclient.api.SkuDetails
+import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.services.*
 import kotlinx.android.synthetic.main.activity_main.*

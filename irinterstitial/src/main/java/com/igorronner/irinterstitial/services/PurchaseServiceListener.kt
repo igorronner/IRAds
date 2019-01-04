@@ -7,6 +7,10 @@ interface ProductPurchasedListener{
     fun onProductsPurchased()
 }
 
+interface ProductPurchasedListListener{
+    fun onProductsPurchasedList(list: MutableList<Purchase>)
+}
+
 interface ProductsListListener{
     fun onProductList(list: MutableList<SkuDetails>)
 }

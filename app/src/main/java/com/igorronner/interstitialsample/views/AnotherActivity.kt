@@ -1,9 +1,10 @@
-package com.igorronner.interstitialsample
+package com.igorronner.interstitialsample.views
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 import kotlinx.android.synthetic.main.activity_another.*
 import kotlinx.android.synthetic.main.card_ad_medium.*

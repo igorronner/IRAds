@@ -1,9 +1,10 @@
-package com.igorronner.interstitialsample
+package com.igorronner.interstitialsample.views
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 
 class FragmentSampleActivity : AppCompatActivity() {
