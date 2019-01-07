@@ -34,6 +34,10 @@ class MainActivity : AppCompatActivity(), ProductsListListener, ProductPurchased
             adsInstance.showInterstitial(false)
         }
 
+        button4.setOnClickListener {
+            startActivity(Intent(this, SubscribesActivity::class.java))
+        }
+
         purchaseService = PurchaseService(this)
         purchaseService.productsListListener = this
         purchaseService.productPurchasedListener = this
