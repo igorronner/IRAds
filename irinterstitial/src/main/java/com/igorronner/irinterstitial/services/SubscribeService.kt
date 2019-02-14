@@ -3,18 +3,19 @@ package com.igorronner.irinterstitial.services
 import android.app.Activity
 import android.util.Log
 import com.android.billingclient.api.*
+import com.igorronner.irinterstitial.init.IRAds
 
 
 class SubscribeService(private var activity: Activity) : PurchasesUpdatedListener {
 
     val skuList = ArrayList<String>()
     init {
-        skuList.add("assinatura_anual_br_2017")
-        skuList.add("nova_assinatura_mensal")
+        skuList.add("assinatura_anual_br_20172")
+        skuList.add("nova_assinatura_mensal2")
         skuList.add("premium_desconto_50")
         skuList.add("premium_desconto_30")
         skuList.add("nova_assinatura_anual")
-        skuList.add("premium_trial_anual")
+        skuList.add("premium_trial_anual2")
         startBilling()
     }
 
@@ -56,7 +57,7 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
     }
 
     fun onResume() {
-        if (!::billingClient.isInitialized)
+        if (!::billingClient.isInitialized || IRAds.isPremium(activity))
             return
 
         val purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.SUBS)

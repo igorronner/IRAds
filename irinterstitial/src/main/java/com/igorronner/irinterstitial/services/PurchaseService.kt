@@ -7,6 +7,7 @@ import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
+import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
 
 
@@ -69,7 +70,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
 
     fun onResume() {
         Log.d("billingClient", "onResume() ")
-        if (!::billingClient.isInitialized)
+        if (!::billingClient.isInitialized || IRAds.isPremium(activity))
             return
 
         Log.d("billingClient", "billingClient.isInitialized ")
