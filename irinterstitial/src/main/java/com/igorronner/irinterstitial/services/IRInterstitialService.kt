@@ -14,20 +14,29 @@ import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
 
 
-open class IRInterstitialService(val adsInstance: IRAds,
-                                 private val remoteConfigDTO: RemoteConfigDTO) {
+open class IRInterstitialService {
 
+    private var irInterstitial:IRInterstitial
+    var adsInstance:IRAds
 
-
-    private val irInterstitial = IRInterstitialFactory(adsInstance, remoteConfigDTO)
-            .create(IRInterstitialVersionEnum.values().first { it.version == remoteConfigDTO.adVersion })
-
-    init {
+    constructor(adsInstance: IRAds,
+                remoteConfigDTO: RemoteConfigDTO? = null){
+        this.adsInstance = adsInstance
+        irInterstitial = IRInterstitialFactory(adsInstance, remoteConfigDTO).create(IRInterstitialVersionEnum.values().first())
         irInterstitial.requestNewInterstitial()
     }
 
+    constructor(adsInstance: IRAds,
+                remoteConfigDTO: RemoteConfigDTO? = null,
+                irInterstitialVersionEnum: IRInterstitialVersionEnum = IRInterstitialVersionEnum.INTERSTITIAL_AD){
+        this.adsInstance = adsInstance
+        irInterstitial = IRInterstitialFactory(adsInstance, remoteConfigDTO).create(irInterstitialVersionEnum)
+        irInterstitial.requestNewInterstitial()
+
+    }
+
     fun showInterstitial(){
-        showInterstitial(true, false)
+        showInterstitial(finish = true, force = false)
     }
 
     fun showInterstitial(finish: Boolean){
@@ -39,7 +48,7 @@ open class IRInterstitialService(val adsInstance: IRAds,
     }
 
     fun forceShowInterstitial(){
-        showInterstitial(true, true)
+        showInterstitial(finish = true, force = true)
     }
 
     fun showInterstitial(finish: Boolean, force: Boolean) {
@@ -57,13 +66,24 @@ open class IRInterstitialService(val adsInstance: IRAds,
             override fun onAdClosed() {
                 finish(adsInstance.activity, finish)
             }
+        })
+    }
 
-            override fun onAdLoaded() {
-                super.onAdLoaded()
+    fun forceShowExpensiveInterstitial(){
+        if (MainPreference.isPremium(adsInstance.activity.applicationContext)){
+            finish(adsInstance.activity, true)
+            return
+        }
+
+        irInterstitial.load(true, object : AdListener() {
+            override fun onAdFailedToLoad(p0: Int) {
+                forceShowInterstitial()
             }
-          })
 
-
+            override fun onAdClosed() {
+                finish(adsInstance.activity, true)
+            }
+        })
     }
 
     fun finish(activity: Activity, finish: Boolean){
@@ -95,11 +115,6 @@ open class IRInterstitialService(val adsInstance: IRAds,
             override fun onAdClosed() {
                 finishWithIntent(finishAll, intent)
             }
-
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-
-            }
         })
 
 
@@ -126,8 +141,7 @@ open class IRInterstitialService(val adsInstance: IRAds,
         showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, true)
     }
 
-    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity)
-    {
+    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity) {
         showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, false)
     }
 
@@ -145,10 +159,6 @@ open class IRInterstitialService(val adsInstance: IRAds,
             }
             override fun onAdClosed() {
                 replaceFragment(fragment,  containerViewId, fragmentActivity)
-            }
-
-            override fun onAdLoaded() {
-                super.onAdLoaded()
             }
         })
 

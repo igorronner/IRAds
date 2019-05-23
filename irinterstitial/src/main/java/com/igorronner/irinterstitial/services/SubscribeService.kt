@@ -3,6 +3,8 @@ package com.igorronner.irinterstitial.services
 import android.app.Activity
 import android.util.Log
 import com.android.billingclient.api.*
+import com.igorronner.irinterstitial.extensions.toIRPurchaseList
+import com.igorronner.irinterstitial.extensions.toIRSkuDetailsList
 import com.igorronner.irinterstitial.init.IRAds
 
 
@@ -41,7 +43,7 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
                     productsListListener?.let {
                         productsListListener ->
                         billingClient.querySkuDetailsAsync(params.build()) { _, skuDetailsList ->
-                            productsListListener.onProductList(skuDetailsList)
+                            productsListListener.onProductList(skuDetailsList.toIRSkuDetailsList())
                         }
                     }
 
@@ -73,7 +75,7 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
         when (responseCode){
             BillingClient.BillingResponse.OK -> {
                 purchases?.let {
-                    productPurchasedListListener?.onProductsPurchasedList(it)
+                    productPurchasedListListener?.onProductsPurchasedList(it.toIRPurchaseList())
                 }
             }
             BillingClient.BillingResponse.USER_CANCELED -> {

@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.constraint.ConstraintLayout
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/purchase"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -24,6 +24,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="Buy Premium"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,11 +37,11 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
                 android:text="Interstitial Before Intent"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/purchase"  />
+                app:layout_constraintTop_toBottomOf="@+id/purchase" />
 
             <Button
                 android:id="@+id/button2"
@@ -52,6 +53,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="Interstitial Before Fragment"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button1" />
@@ -67,40 +69,28 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="Just show Ad"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button2" />
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Subscribers"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button3" />
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/button3"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/button3">
 
                 <TextView
                     android:id="@+id/label"
-                    android:text="Small Ad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="16dp"/>
+                    android:padding="16dp"
+                    android:text="Small Ad" />
 
-                <include layout="@layout/ad_small_unified"/>
+                <include layout="@layout/ad_small_unified" />
 
             </LinearLayout>
 

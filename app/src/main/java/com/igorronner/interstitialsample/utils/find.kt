@@ -1,7 +1,7 @@
 package com.igorronner.interstitialsample.utils
 
-import com.android.billingclient.api.SkuDetails
+import com.igorronner.irinterstitial.dto.IRSkuDetails
 
-fun List<SkuDetails>.findBySku(sku:String): SkuDetails? {
+fun List<IRSkuDetails>.findBySku(sku:String): IRSkuDetails? {
     return this.firstOrNull { it.sku == sku }
 }

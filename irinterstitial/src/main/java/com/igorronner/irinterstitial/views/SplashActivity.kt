@@ -25,8 +25,12 @@ class SplashActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
         adsInstance = IRAds.newInstance(this)
-        adsInstance.forceShowInterstitial()
+        if (ConfigUtil.EXPENSIVE_INTERSTITIAL_ID.isNullOrBlank()){
+            adsInstance.forceShowInterstitial()
+            return
+        }
 
+        adsInstance.forceShowExpensiveInterstitial()
 
     }
 

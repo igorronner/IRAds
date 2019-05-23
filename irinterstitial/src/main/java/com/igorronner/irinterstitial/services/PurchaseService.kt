@@ -6,6 +6,7 @@ import android.util.Log
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType
 import com.igorronner.irinterstitial.R
+import com.igorronner.irinterstitial.extensions.toIRSkuDetailsList
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
@@ -28,7 +29,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
 
     private lateinit var billingClient: BillingClient
 
-    fun startBilling() {
+    private fun startBilling() {
         billingClient = BillingClient.newBuilder(activity).setListener(this).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
@@ -40,22 +41,22 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
                         val skuList = ArrayList<String>()
                         skuList.add(ConfigUtil.PRODUCT_SKU)
                         val params = SkuDetailsParams.newBuilder()
-                        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+                        params.setSkusList(skuList).setType(SkuType.INAPP)
 
-                        billingClient.querySkuDetailsAsync(params.build()) { responseCode, skuDetailsList ->
-                            Log.d("billingClient", "querySkuDetailsAsync ")
-                            Log.d("billingClient", "responseCode $responseCode")
-                            productsListListener.onProductList(skuDetailsList)
-                            skuDetailsList.forEach { skuDetails: SkuDetails? ->
-                                Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
-                                Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
-                                Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
-                                Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
+                        billingClient.querySkuDetailsAsync(params.build(), object : SkuDetailsResponseListener {
+                            override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
+                                Log.d("billingClient", "querySkuDetailsAsync ")
+                                Log.d("billingClient", "responseCode $responseCode")
+                                skuDetailsList?.toIRSkuDetailsList()?.let { productsListListener.onProductList(it) }
+                                skuDetailsList?.forEach { skuDetails: SkuDetails? ->
+                                    Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
+                                    Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
+                                    Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
+                                    Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
 
+                                }
                             }
-
-                        }
-
+                        })
                     }
                 }
             }
@@ -124,8 +125,9 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
     fun purchase(){
         val flowParams = BillingFlowParams.newBuilder()
                 .setSku(ConfigUtil.PRODUCT_SKU)
-                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                .setType(SkuType.INAPP) // SkuType.SUB for subscription
                 .build()
         billingClient.launchBillingFlow(activity, flowParams)
     }
+
 }

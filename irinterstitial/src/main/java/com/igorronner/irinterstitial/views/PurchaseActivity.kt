@@ -9,16 +9,17 @@ import com.android.billingclient.api.BillingClient.SkuType
 import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
+import com.igorronner.irinterstitial.services.ProductPurchasedListener
 
-open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
+open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, ProductPurchasedListener {
 
     private lateinit var billingClient: BillingClient
-
-    var productPurchasedListener: ProductPurchasedListener? = null
 
     override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
         handlePurchasesResult(responseCode, purchases)
     }
+
+    override fun onProductsPurchased() = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +34,20 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
                     val params = SkuDetailsParams.newBuilder()
                             .setSkusList(skuList)
-                            .setType(BillingClient.SkuType.INAPP)
+                            .setType(SkuType.INAPP)
 
-                    billingClient.querySkuDetailsAsync(params.build()) { responseCode, skuDetailsList ->
-                        Log.d("billingClient", "querySkuDetailsAsync ")
-                        Log.d("billingClient", "responseCode $responseCode")
-                        skuDetailsList?.forEach { skuDetails: SkuDetails? ->
-                            Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
-                            Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
-                            Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
-                            Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
+                    billingClient.querySkuDetailsAsync(params.build(), object : SkuDetailsResponseListener {
+                        override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
+                            Log.d("billingClient", "querySkuDetailsAsync ")
+                            Log.d("billingClient", "responseCode $responseCode")
+                            skuDetailsList?.forEach { skuDetails: SkuDetails? ->
+                                Log.d("billingClient", "skuDetailsList " + skuDetails?.description)
+                                Log.d("billingClient", "skuDetailsList " + skuDetails?.title)
+                                Log.d("billingClient", "skuDetailsList " + skuDetails?.price)
+                                Log.d("billingClient", "skuDetailsList " + skuDetails?.sku)
+                            }
                         }
-                    }
+                    })
                 }
             }
 
@@ -92,7 +95,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
                     MainPreference.setPremium(this)
-                    productPurchasedListener?.onProductPurchased()
+                    onProductsPurchased()
                     Log.d("billingClient", "onProductPurchased ")
                 }
             }
@@ -108,13 +111,9 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener {
     fun purchase(){
         val flowParams = BillingFlowParams.newBuilder()
                 .setSku(ConfigUtil.PRODUCT_SKU)
-                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                .setType(SkuType.INAPP) // SkuType.SUB for subscription
                 .build()
         billingClient.launchBillingFlow(this@PurchaseActivity, flowParams)
-    }
-
-    interface ProductPurchasedListener {
-        fun onProductPurchased()
     }
 
 }

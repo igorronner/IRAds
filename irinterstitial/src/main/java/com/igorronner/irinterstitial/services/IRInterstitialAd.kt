@@ -1,6 +1,7 @@
 package com.igorronner.irinterstitial.services
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -10,10 +11,9 @@ import com.igorronner.irinterstitial.utils.SingletonHolder
 
 class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
 
-    val mInterstitialAd = IRInterstitialAd.getInstance(adsInstance.activity.applicationContext)
+    val mInterstitialAd = getInstance(adsInstance.activity.applicationContext)
 
     companion object : SingletonHolder<InterstitialAd, Context>(::InterstitialAd)
-
 
     init {
         if (mInterstitialAd.adUnitId.isNullOrBlank()) {
@@ -26,6 +26,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
         if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
             mInterstitialAd.show()
             AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 1")
+            Log.d(IRInterstitialAd::class.java.simpleName, "SHOW IRInterstitial")
         } else if (!force)
             adListener.onAdFailedToLoad(0)
 
@@ -44,8 +45,10 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
 
             override fun onAdLoaded() {
                 adListener.onAdLoaded()
-                if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity))
+                if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
                     mInterstitialAd.show()
+                    Log.d(IRInterstitialAd::class.java.simpleName, "SHOW IRInterstitial")
+                }
             }
         }
     }
@@ -54,5 +57,6 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
         val adRequest = AdRequest.Builder()
                 .build()
         mInterstitialAd.loadAd(adRequest)
+        Log.d(IRInterstitialAd::class.java.simpleName, "SHOW IRInterstitial")
     }
 }

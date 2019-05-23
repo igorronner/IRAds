@@ -4,13 +4,14 @@ import com.igorronner.irinterstitial.dto.RemoteConfigDTO
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum
 import com.igorronner.irinterstitial.init.IRAds
 
-class IRInterstitialFactory(private val adsInstance: IRAds, private val remoteConfigDTO: RemoteConfigDTO) {
+class IRInterstitialFactory(private val adsInstance: IRAds, private val remoteConfigDTO: RemoteConfigDTO?) {
 
-
-    fun create(interstitialVersionEnum: IRInterstitialVersionEnum):IRInterstitial{
-        return if (interstitialVersionEnum == IRInterstitialVersionEnum.PUBLISHER_INTERSTITIAL)
-            IRPublisherInterstitial(adsInstance, remoteConfigDTO)
-        else
-            IRInterstitialAd(adsInstance)
+    fun create(
+            interstitialVersionEnum: IRInterstitialVersionEnum?
+    ) = when (interstitialVersionEnum) {
+        IRInterstitialVersionEnum.PUBLISHER_INTERSTITIAL -> IRPublisherInterstitial(adsInstance, remoteConfigDTO)
+        IRInterstitialVersionEnum.EXPENSIVE_INTERSTITIAL -> IRExpensiveInterstitialAd(adsInstance)
+        else -> IRInterstitialAd(adsInstance)
     }
+
 }

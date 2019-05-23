@@ -10,4 +10,10 @@
         android:id="@+id/cardView"
         layout="@layout/card_ad_medium"/>
 
+    <Button
+        android:id="@+id/purchase"
+        android:text="PRO"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </FrameLayout>

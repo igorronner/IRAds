@@ -4,23 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.android.billingclient.api.SkuDetails
 import com.igorronner.interstitialsample.R
+import com.igorronner.irinterstitial.dto.IRSkuDetails
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.services.*
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
+class MainActivity : AppCompatActivity(),
+        ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
 
     private lateinit var adsInstance:IRAds
-    private lateinit var purchaseService: PurchaseService;
+    private lateinit var purchaseService: PurchaseService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         adsInstance = IRAds.newInstance(this)
+        purchaseService = PurchaseService(this)
         adsInstance.openSplashScreen()
+
 
         button1.setOnClickListener {
             adsInstance.showInterstitialBeforeIntent(Intent(this, AnotherActivity::class.java))
@@ -34,25 +37,8 @@ class MainActivity : AppCompatActivity(), ProductsListListener, ProductPurchased
             adsInstance.showInterstitial(false)
         }
 
-        button4.setOnClickListener {
-            startActivity(Intent(this, SubscribesActivity::class.java))
-        }
-
-        purchaseService = PurchaseService(this)
-        purchaseService.productsListListener = this
-        purchaseService.productPurchasedListener = this
-        purchaseService.purchaseErrorListener = this
-        purchaseService.purchaseCanceledListener = this
-        if (!IRAds.isPremium(this)){
-            progressBar.visibility = View.VISIBLE
-            contentLayout.visibility = View.GONE
-            purchase.visibility = View.VISIBLE
-        }
         adsInstance.loadNativeAd(true)
-    }
 
-    override fun onStop() {
-        super.onStop()
     }
 
     override fun onResume() {
@@ -68,7 +54,7 @@ class MainActivity : AppCompatActivity(), ProductsListListener, ProductPurchased
         refreshScreen()
     }
 
-    override fun onProductList(list: MutableList<SkuDetails>) {
+    override fun onProductList(list: List<IRSkuDetails>) {
         progressBar.visibility = View.GONE
         contentLayout.visibility = View.VISIBLE
         if (list.isNotEmpty()) {
@@ -80,12 +66,9 @@ class MainActivity : AppCompatActivity(), ProductsListListener, ProductPurchased
         }
     }
 
-    override fun onError(responseCode: Int) {
+    override fun onError(responseCode: Int) {}
 
-    }
-
-    override fun onCanceled() {
-    }
+    override fun onCanceled() {}
 
     private fun refreshScreen(){
         purchase.visibility = View.GONE

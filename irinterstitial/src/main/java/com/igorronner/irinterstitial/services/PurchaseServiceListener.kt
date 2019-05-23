@@ -1,18 +1,18 @@
 package com.igorronner.irinterstitial.services
 
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.SkuDetails
+import com.igorronner.irinterstitial.dto.IRPurchase
+import com.igorronner.irinterstitial.dto.IRSkuDetails
 
 interface ProductPurchasedListener{
     fun onProductsPurchased()
 }
 
 interface ProductPurchasedListListener{
-    fun onProductsPurchasedList(list: MutableList<Purchase>)
+    fun onProductsPurchasedList(list: List<IRPurchase>)
 }
 
 interface ProductsListListener{
-    fun onProductList(list: MutableList<SkuDetails>)
+    fun onProductList(list: List<IRSkuDetails>)
 }
 
 interface PurchaseErrorListener{

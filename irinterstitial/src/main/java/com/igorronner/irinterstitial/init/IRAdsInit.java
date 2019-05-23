@@ -17,6 +17,7 @@ public class IRAdsInit {
         ConfigUtil.LOGO = builder.logo;
         ConfigUtil.APP_ID = builder.appId;
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
+        ConfigUtil.EXPENSIVE_INTERSTITIAL_ID = builder.expensiveInterstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
@@ -32,6 +33,7 @@ public class IRAdsInit {
         private IRAdsInit IRAdsInit;
         private String appId;
         private String interstitialId;
+        private String expensiveInterstitialId;
         private String nativeAdId;
         private String publisherInterstitialId;
         private String productSku;
@@ -51,6 +53,11 @@ public class IRAdsInit {
 
         public Builder setInterstitialId(String interstitialId) {
             this.interstitialId = interstitialId;
+            return this;
+        }
+
+        public Builder setExpensiveInterstitialId(String expensiveInterstitialId){
+            this.expensiveInterstitialId = expensiveInterstitialId;
             return this;
         }
 

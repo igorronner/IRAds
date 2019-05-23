@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.views.PurchaseActivity
 import kotlinx.android.synthetic.main.activity_another.*
 import kotlinx.android.synthetic.main.card_ad_medium.*
 
-class AnotherActivity : AppCompatActivity() {
+class AnotherActivity : PurchaseActivity() {
 
     private lateinit var adsInstance: IRAds
 
@@ -18,6 +19,8 @@ class AnotherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_another)
         adsInstance = IRAds.newInstance(this)
         adsInstance.loadNativeAd(cardView as ViewGroup?, true, adViewNative as UnifiedNativeAdView)
+
+        purchase.setOnClickListener { showDialogPremium() }
     }
 
     override fun onBackPressed() {
@@ -25,4 +28,7 @@ class AnotherActivity : AppCompatActivity() {
         adsInstance.showInterstitial()
     }
 
+    override fun onProductsPurchased() {
+        //TODO Refresh View
+    }
 }

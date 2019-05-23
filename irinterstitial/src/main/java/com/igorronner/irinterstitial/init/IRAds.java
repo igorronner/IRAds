@@ -14,6 +14,7 @@ import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
+import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 import com.igorronner.irinterstitial.services.IRInterstitialService;
 import com.igorronner.irinterstitial.services.ManagerNativeAd;
@@ -57,9 +58,14 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         this.managerNativeAd = managerNativeAd;
     }
 
+    public void forceShowExpensiveInterstitial(){
+        new IRInterstitialService(IRAds.this, null, IRInterstitialVersionEnum.EXPENSIVE_INTERSTITIAL).forceShowExpensiveInterstitial();
+    }
+
     public void forceShowInterstitial(){
         forceShowInterstitial(true);
     }
+
     public void forceShowInterstitial(final Boolean finish){
         if (remoteConfigDTO != null){
             new IRInterstitialService(IRAds.this, remoteConfigDTO).forceShowInterstitial(finish);
@@ -97,6 +103,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     public void forceShowInterstitialBeforeIntent(final Intent intent){
         forceShowInterstitialBeforeIntent(intent, false);
     }
+
     public void forceShowInterstitialBeforeIntent(final Intent intent, final boolean finishAll){
         if (remoteConfigDTO != null){
             new IRInterstitialService(IRAds.this, remoteConfigDTO).forceShowInterstitialBeforeIntent(intent, finishAll);
