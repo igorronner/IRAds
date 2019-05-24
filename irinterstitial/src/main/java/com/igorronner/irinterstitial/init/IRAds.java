@@ -43,7 +43,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         IRAds irAds = new IRAds();
         irAds.setActivity(activity);
         irAds.loadRemoteConfig(irAds);
-        ManagerNativeAd managerNativeAd = ManagerNativeAd.getInstance(activity)
+        ManagerNativeAd managerNativeAd = new ManagerNativeAd(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
                 .setExpensiveAdmobAdUnitId(ConfigUtil.EXPENSIVE_NATIVE_AD_ID);
         irAds.setManagerNativeAd(managerNativeAd);
@@ -207,30 +207,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public void loadRemoteConfig(RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener ){
         RemoteConfigService.getInstance(activity).loadRemoteConfig(serviceListener);
-    }
-
-    @Deprecated
-    public static void loadCardAdView(Activity activity, View cardView, NativeAppInstallAdView nativeAppInstallAdView){
-        ManagerNativeAd.getInstance(activity)
-                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
-                .setShowProgress(false)
-                .loadAppInstallAdView(cardView, nativeAppInstallAdView);
-    }
-
-    @Deprecated
-    public static void loadNativeAd(Activity activity, boolean showProgress){
-        ManagerNativeAd.getInstance(activity)
-                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
-                .setShowProgress(showProgress)
-                .loadAppInstallAdView((NativeAppInstallAdView) activity.findViewById(R.id.adViewNative));
-    }
-
-    @Deprecated
-    public static void loadNativeAd(Activity activity, boolean showProgress, NativeAppInstallAdView nativeAppInstallAdView){
-        ManagerNativeAd.getInstance(activity)
-                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
-                .setShowProgress(showProgress)
-                .loadAppInstallAdView(nativeAppInstallAdView);
     }
 
     public void loadNativeAd(boolean showProgress, UnifiedNativeAdView unifiedNativeAdView){

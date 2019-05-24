@@ -36,7 +36,6 @@ import java.util.List;
 
 public class ManagerNativeAd {
 
-    private static ManagerNativeAd instance;
     private Context context;
     private String admobAdUnitId;
     private String expensiveAdmobAdUnitId;
@@ -45,18 +44,11 @@ public class ManagerNativeAd {
     @Deprecated
     private ProgressBar progressBar;
 
-    public static ManagerNativeAd getInstance(Context context) {
-        if (instance == null){
-            instance = new ManagerNativeAd();
-        }
-        instance.setShowProgress(false);
-        instance.setContext(context);
-        return instance;
+    public ManagerNativeAd(Context context){
+        setShowProgress(false);
+        setContext(context);
     }
 
-    private ManagerNativeAd(){
-
-    }
 
     public ManagerNativeAd setAdmobAdUnitId(String admobAdUnitId) {
         this.admobAdUnitId = admobAdUnitId;
@@ -102,10 +94,9 @@ public class ManagerNativeAd {
             RelativeLayout rl = new RelativeLayout(context);
             rl.setGravity(Gravity.CENTER);
             rl.addView(progressBar);
-
             adView.addView(rl, params);
         }
-
+        progressBar.setVisibility(View.VISIBLE);
         VideoOptions videoOptions = new VideoOptions.Builder()
                 .setStartMuted(true)
                 .build();
@@ -121,32 +112,32 @@ public class ManagerNativeAd {
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        final String event = "Mostrou UnifiedNativeAd: " + unifiedNativeAdType;
-                        Log.d(ManagerNativeAd.class.getSimpleName(), event);
-                        new AnalyticsService(context).logEvent(event);
-                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
-
                         progressBar.setVisibility(View.GONE);
-                        setAdmobAdUnitId(null);
-                        setExpensiveAdmobAdUnitId(null);
-
+                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
                         if (adCard != null) {
                             adCard.removeAllViews();
                             adCard.addView(adView);
                         }
+                        final String event = "Mostrou UnifiedNativeAd: " + unifiedNativeAdType;
+                        Log.d(ManagerNativeAd.class.getSimpleName(), event);
+                        new AnalyticsService(context).logEvent(event);
                     }
                 })
                 .withAdListener(new AdListener() {
                     @Override
                     public void onAdFailedToLoad(int errorCode) {
+                        progressBar.setVisibility(View.GONE);
+                        if (expensive){
+                            setExpensiveAdmobAdUnitId(null);
+                            loadNativeAd(adCard, adView, false);
+                        } else{
+                            setAdmobAdUnitId(null);
+                            adView.setVisibility(View.INVISIBLE);
+                        }
+
                         final String event = "Falhou UnifiedNativeAd: " + unifiedNativeAdType;
                         Log.d(ManagerNativeAd.class.getSimpleName(), event);
                         new AnalyticsService(context).logEvent(event);
-                        adView.setVisibility(View.INVISIBLE);
-                        setAdmobAdUnitId(null);
-                        setExpensiveAdmobAdUnitId(null);
-                        if (expensive)
-                            loadNativeAd(adCard, adView, false);
                     }
                 });
 

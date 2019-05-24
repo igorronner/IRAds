@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity(),
             adsInstance.showInterstitial(false)
         }
 
+        button4.setOnClickListener {
+            adsInstance.loadNativeAd(true)
+        }
+
         adsInstance.loadNativeAd(true)
 
     }
