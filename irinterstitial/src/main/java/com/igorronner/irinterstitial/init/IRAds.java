@@ -43,8 +43,10 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         IRAds irAds = new IRAds();
         irAds.setActivity(activity);
         irAds.loadRemoteConfig(irAds);
-        irAds.setManagerNativeAd(ManagerNativeAd.getInstance(activity)
-                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID));
+        ManagerNativeAd managerNativeAd = ManagerNativeAd.getInstance(activity)
+                .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
+                .setExpensiveAdmobAdUnitId(ConfigUtil.EXPENSIVE_NATIVE_AD_ID);
+        irAds.setManagerNativeAd(managerNativeAd);
         return irAds;
     }
 
@@ -54,7 +56,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     }
 
 
-    public void setManagerNativeAd(ManagerNativeAd managerNativeAd) {
+    private void setManagerNativeAd(ManagerNativeAd managerNativeAd) {
         this.managerNativeAd = managerNativeAd;
     }
 

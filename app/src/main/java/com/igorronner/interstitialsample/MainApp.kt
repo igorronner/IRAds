@@ -13,6 +13,7 @@ class MainApp : Application() {
                 .setInterstitialId("ca-app-pub-3940256099942544/1033173712")
                 .setExpensiveInterstitialId("ca-app-pub-3940256099942544/1033173712")
                 .setLogo(R.mipmap.ic_launcher)
+                .setExpensiveNativeAdId("ca-app-pub-3940256099942544/2247696110")
                 .setNativeAdId("ca-app-pub-3940256099942544/2247696110")
                 .setAppPrefix("lib_")
                 .setPublisherInterstitialId("/6499/example/interstitial")
