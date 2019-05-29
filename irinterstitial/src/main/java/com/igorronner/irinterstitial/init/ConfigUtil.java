@@ -6,8 +6,9 @@ public class ConfigUtil {
 
     public static @DrawableRes int  LOGO = 0;
     public static String APP_ID = "";
-    public static String INTERSTITIAL_ID = null;
-    public static String EXPENSIVE_INTERSTITIAL_ID = null;
+    public static String INTERSTITIAL_ID = "";
+    public static String EXPENSIVE_INTERSTITIAL_ID = "";
+    @Deprecated
     public static String PUBLISHER_INTERSTITIAL_ID = null;
     public static String NATIVE_AD_ID = null;
     public static String EXPENSIVE_NATIVE_AD_ID = null;

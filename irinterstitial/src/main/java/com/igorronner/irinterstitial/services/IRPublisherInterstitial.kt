@@ -12,7 +12,8 @@ import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.utils.SingletonHolder
 
 
-class IRPublisherInterstitial(val adsInstance: IRAds, remoteConfigDTO: RemoteConfigDTO?) : IRInterstitial {
+@Deprecated("User IRInterstitialAd instead")
+class IRPublisherInterstitial(val adsInstance: IRAds) : IRInterstitial {
 
     val mPublisherInterstitialAd = getInstance(adsInstance.activity.applicationContext)
 
@@ -20,10 +21,7 @@ class IRPublisherInterstitial(val adsInstance: IRAds, remoteConfigDTO: RemoteCon
 
     init {
         if (mPublisherInterstitialAd.adUnitId.isNullOrBlank()) {
-            if(!remoteConfigDTO?.publisherInterstitialId.isNullOrBlank())
-                mPublisherInterstitialAd.adUnitId = remoteConfigDTO?.publisherInterstitialId
-            else
-                mPublisherInterstitialAd.adUnitId = ConfigUtil.PUBLISHER_INTERSTITIAL_ID
+            mPublisherInterstitialAd.adUnitId = ConfigUtil.PUBLISHER_INTERSTITIAL_ID
         }
     }
 

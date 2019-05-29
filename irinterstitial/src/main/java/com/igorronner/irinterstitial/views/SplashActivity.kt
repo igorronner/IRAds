@@ -25,13 +25,8 @@ class SplashActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
         adsInstance = IRAds.newInstance(this)
-        if (ConfigUtil.EXPENSIVE_INTERSTITIAL_ID.isNullOrBlank()){
-            adsInstance.forceShowInterstitial()
-            return
-        }
 
-        adsInstance.forceShowExpensiveInterstitial()
-
+        adsInstance.forceShowInterstitial()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

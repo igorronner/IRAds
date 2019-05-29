@@ -50,9 +50,10 @@ public class RemoteConfigService {
             instance.mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
             FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings
                     .Builder()
-                    .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                    .setFetchTimeoutInSeconds(3)
+                    .setMinimumFetchIntervalInSeconds(cacheExpiration())
                     .build();
-            instance.mFirebaseRemoteConfig.setConfigSettings(configSettings);
+            instance.mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
             instance.mFirebaseRemoteConfig.setDefaults(R.xml.default_values);
         }
 
@@ -74,7 +75,7 @@ public class RemoteConfigService {
                     @Override
                     public void onSuccess(Void aVoid) {
                         RemoteConfigDTO remoteConfigDTO = new RemoteConfigDTO();
-                        mFirebaseRemoteConfig.activateFetched();
+                        mFirebaseRemoteConfig.activate();
                         remoteConfigDTO.setShowSplash( mFirebaseRemoteConfig.getBoolean(SHOW_SPLASH) && !MainPreference.isPremium(context));
                         remoteConfigDTO.setAdVersion(mFirebaseRemoteConfig.getLong(AD_VERSION));
                         remoteConfigDTO.setFinishWithInterstitial(mFirebaseRemoteConfig.getBoolean(FINISH_WITH_INTERSTITIAL));
@@ -108,9 +109,9 @@ public class RemoteConfigService {
         });
     }
 
-    private long cacheExpiration(){
+    private static long cacheExpiration(){
         long cacheExpiration = 7200; // 1 hour in seconds.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+        if (BuildConfig.DEBUG) {
             cacheExpiration = 0;
         }
 

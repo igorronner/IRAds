@@ -13,7 +13,9 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
 
     val mInterstitialAd = getInstance(adsInstance.activity.applicationContext)
 
-    companion object : SingletonHolder<InterstitialAd, Context>(::InterstitialAd)
+    companion object : SingletonHolder<InterstitialAd, Context>(::InterstitialAd){
+        const val tag = "DefaultInterstitial"
+    }
 
     init {
         if (mInterstitialAd.adUnitId.isNullOrBlank()) {
@@ -25,8 +27,9 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
 
         if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
             mInterstitialAd.show()
-            AnalyticsService(adsInstance.activity).logEvent("SHOWN_AD_VERSION 1")
-            Log.d(IRInterstitialAd::class.java.simpleName, "SHOW IRInterstitial")
+            val event = "Mostrou DefaultInterstitial"
+            AnalyticsService(adsInstance.activity).logEvent(event)
+            Log.d(tag, event)
         } else if (!force)
             adListener.onAdFailedToLoad(0)
 
@@ -35,28 +38,39 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
             override fun onAdFailedToLoad(p0: Int) {
                 if (force && !adsInstance.isStopped)
                     adListener.onAdFailedToLoad(p0)
+                val event = "Falhou DefaultInterstitial"
+                AnalyticsService(adsInstance.activity).logEvent(event)
+                Log.d(tag, event)
             }
 
             override fun onAdClosed() {
                 adListener.onAdClosed()
                 adsInstance.onStop()
-                requestNewInterstitial()
+                val event = "Fechou DefaultInterstitial"
+                AnalyticsService(adsInstance.activity).logEvent(event)
+                Log.d(tag, event)
             }
 
             override fun onAdLoaded() {
                 adListener.onAdLoaded()
                 if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
                     mInterstitialAd.show()
-                    Log.d(IRInterstitialAd::class.java.simpleName, "SHOW IRInterstitial")
+                    val event = "Mostrou DefaultInterstitial"
+                    AnalyticsService(adsInstance.activity).logEvent(event)
+                    Log.d(tag, event)
                 }
             }
         }
     }
 
     override fun requestNewInterstitial() {
+        if (mInterstitialAd.adUnitId.isNullOrBlank())
+            return
         val adRequest = AdRequest.Builder()
                 .build()
         mInterstitialAd.loadAd(adRequest)
-        Log.d(IRInterstitialAd::class.java.simpleName, "SHOW IRInterstitial")
+        val event = "requestNewInterstitial DefaultInterstitial"
+        AnalyticsService(adsInstance.activity).logEvent(event)
+        Log.d(tag, event)
     }
 }

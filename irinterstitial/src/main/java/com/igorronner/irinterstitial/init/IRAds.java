@@ -7,14 +7,11 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.ads.formats.NativeAppInstallAdView;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
-import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 import com.igorronner.irinterstitial.services.IRInterstitialService;
 import com.igorronner.irinterstitial.services.ManagerNativeAd;
@@ -60,27 +57,13 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         this.managerNativeAd = managerNativeAd;
     }
 
-    public void forceShowExpensiveInterstitial(){
-        new IRInterstitialService(IRAds.this, null, IRInterstitialVersionEnum.EXPENSIVE_INTERSTITIAL).forceShowExpensiveInterstitial();
-    }
 
     public void forceShowInterstitial(){
         forceShowInterstitial(true);
     }
 
     public void forceShowInterstitial(final Boolean finish){
-        if (remoteConfigDTO != null){
-            new IRInterstitialService(IRAds.this, remoteConfigDTO).forceShowInterstitial(finish);
-            return;
-        }
-
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                new IRInterstitialService(IRAds.this, result).forceShowInterstitial(finish );
-            }
-        });
+        new IRInterstitialService(IRAds.this).forceShowInterstitial(finish);
     }
 
     public void showInterstitial(){
@@ -88,18 +71,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     }
 
     public void showInterstitial(final boolean finish) {
-        if (remoteConfigDTO != null){
-            new IRInterstitialService(IRAds.this, remoteConfigDTO).showInterstitial(finish);
-            return;
-        }
-
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                new IRInterstitialService(IRAds.this, result).showInterstitial( finish);
-            }
-        });
+        new IRInterstitialService(IRAds.this).showInterstitial(finish);
     }
 
     public void forceShowInterstitialBeforeIntent(final Intent intent){
@@ -107,33 +79,11 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     }
 
     public void forceShowInterstitialBeforeIntent(final Intent intent, final boolean finishAll){
-        if (remoteConfigDTO != null){
-            new IRInterstitialService(IRAds.this, remoteConfigDTO).forceShowInterstitialBeforeIntent(intent, finishAll);
-            return;
-        }
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                new IRInterstitialService(IRAds.this, result).forceShowInterstitialBeforeIntent(intent, finishAll);
-            }
-        });
+        new IRInterstitialService(IRAds.this).forceShowInterstitialBeforeIntent(intent, finishAll);
     }
 
     public void showInterstitialBeforeIntent(final Intent intent, final boolean finishAll){
-        if (remoteConfigDTO != null){
-            new IRInterstitialService(IRAds.this, remoteConfigDTO).showInterstitialBeforeIntent(intent, finishAll);
-            return;
-        }
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                new IRInterstitialService(IRAds.this, result).showInterstitialBeforeIntent(intent, finishAll);
-            }
-        });
-
-
+        new IRInterstitialService(IRAds.this).showInterstitialBeforeIntent(intent, finishAll);
     }
 
 
@@ -141,38 +91,15 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         showInterstitialBeforeIntent(intent, false);
     }
 
-
     public void forceShowInterstitialBeforeIntent(final Fragment fragment, final @IdRes int containerViewId,
                                                   final FragmentActivity fragmentActivity){
-        if (remoteConfigDTO != null){
-            new IRInterstitialService(IRAds.this, remoteConfigDTO).forceShowInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity);
-            return;
-        }
-
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                new IRInterstitialService(IRAds.this, result).forceShowInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity);
-            }
-        });
+        new IRInterstitialService(IRAds.this).forceShowInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity);
     }
 
     public void showInterstitialBeforeFragment(final Fragment fragment, final @IdRes int containerViewId,
                                                final FragmentActivity fragmentActivity){
+        new IRInterstitialService(IRAds.this).showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity);
 
-        if (remoteConfigDTO != null){
-            new IRInterstitialService(IRAds.this, remoteConfigDTO).showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity);
-            return;
-        }
-
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                new IRInterstitialService(IRAds.this, result).showInterstitialBeforeFragment(fragment,  containerViewId, fragmentActivity);
-            }
-        });
     }
 
     public void openSplashScreen(){
@@ -181,6 +108,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     }
 
+    @Deprecated
     public void showInterstitialOnFinish(){
         if (remoteConfigDTO != null){
             if (remoteConfigDTO.getFinishWithInterstitial())
@@ -201,8 +129,9 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         });
     }
 
+    @Deprecated
     public void showInterstitial(RemoteConfigDTO result) {
-        new IRInterstitialService(IRAds.this, result).showInterstitial();
+        new IRInterstitialService(IRAds.this).showInterstitial();
     }
 
     public void loadRemoteConfig(RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener ){
@@ -242,7 +171,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public void onResume(){
         state = RESUMED;
-
     }
 
     public boolean isStopped(){

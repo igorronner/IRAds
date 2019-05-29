@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        adsInstance.showInterstitialOnFinish()
+        adsInstance.showInterstitial()
     }
 
     override fun onProductsPurchased() {

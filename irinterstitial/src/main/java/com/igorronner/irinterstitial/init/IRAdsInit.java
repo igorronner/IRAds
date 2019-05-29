@@ -20,7 +20,6 @@ public class IRAdsInit {
         ConfigUtil.EXPENSIVE_INTERSTITIAL_ID = builder.expensiveInterstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
-        ConfigUtil.PUBLISHER_INTERSTITIAL_ID = builder.publisherInterstitialId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
@@ -37,6 +36,7 @@ public class IRAdsInit {
         private String expensiveInterstitialId;
         private String nativeAdId;
         private String expensiveNativeAdId;
+        @Deprecated
         private String publisherInterstitialId;
         private String productSku;
         // Prefix for concat keys on remote config...
@@ -73,6 +73,7 @@ public class IRAdsInit {
             return this;
         }
 
+        @Deprecated
         public Builder setPublisherInterstitialId(String publisherInterstitialId) {
             this.publisherInterstitialId = publisherInterstitialId;
             return this;
