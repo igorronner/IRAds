@@ -17,8 +17,9 @@ class MainApp : Application() {
                 //With error
                 .setExpensiveInterstitialId("ca-app-pub")
                 .setLogo(R.mipmap.ic_launcher)
-                .setExpensiveNativeAdId("ca-app-pub-3940256099942544/2247696110")
+//                .setExpensiveNativeAdId("ca-app-pub-3940256099942544/2247696110")
                 .setNativeAdId("ca-app-pub-3940256099942544/2247696110")
+                .setBannerAdId("/6499/example/banner")
                 .setAppPrefix("lib_")
                 .enablePurchace("premium")
                 .setTester(BuildConfig.DEBUG)

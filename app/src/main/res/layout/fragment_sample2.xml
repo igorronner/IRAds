@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:gravity="center"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="Large Ad"
         android:padding="16dp"/>
 
@@ -21,6 +21,25 @@
     <include
         android:id="@+id/adLargeUnified"
         layout="@layout/ad_large_unified"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Large Ad"
+        android:padding="16dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <include
+        layout="@layout/ad_medium_unified"/>
 
     <View
         android:layout_width="match_parent"

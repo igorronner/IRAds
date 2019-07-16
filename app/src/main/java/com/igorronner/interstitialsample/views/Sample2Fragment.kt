@@ -28,6 +28,10 @@ class Sample2Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adsInstance.loadNativeAd(true, adLargeUnified as UnifiedNativeAdView)
+        adsInstance.loadNativeOrBannerAd(
+                null,
+                view.findViewById(R.id.adViewNative),
+                true)
     }
 
 }
