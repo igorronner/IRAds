@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.igorronner.irinterstitial">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -7,12 +8,19 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application>
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
-        <activity android:name=".views.SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:value="true" />
+
+        <activity
+            android:name=".views.SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
     </application>
 
 </manifest>
