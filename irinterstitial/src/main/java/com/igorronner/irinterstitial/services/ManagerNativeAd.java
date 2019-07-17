@@ -172,21 +172,28 @@ public class ManagerNativeAd {
             return;
         }
 
-        if (progressBar == null && showProgress) {
-            progressBar = new ProgressBar(
-                    context, null, android.R.attr.progressBarStyleSmall);
-            progressBar.setIndeterminate(true);
+        final ProgressBar progressBar = new ProgressBar(
+                context, null, android.R.attr.progressBarStyleSmall);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.GONE);
+
+        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        final RelativeLayout relativeLayout = new RelativeLayout(context);
+        relativeLayout.setGravity(Gravity.CENTER);
+        relativeLayout.addView(progressBar);
+        relativeLayout.setTag("ProgressContainer");
+
+        if (adView.findViewWithTag("ProgressContainer") != null) {
+            adView.removeView(adView.findViewWithTag("ProgressContainer"));
+        }
+
+        adView.addView(relativeLayout, params);
+
+        if (showProgress) {
             progressBar.setVisibility(View.VISIBLE);
-
-            final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-
-            final RelativeLayout relativeLayout = new RelativeLayout(context);
-            relativeLayout.setGravity(Gravity.CENTER);
-            relativeLayout.addView(progressBar);
-
-            adView.addView(relativeLayout, params);
         }
 
         final VideoOptions videoOptions = new VideoOptions.Builder()
@@ -197,66 +204,68 @@ public class ManagerNativeAd {
                 .setVideoOptions(videoOptions)
                 .build();
 
+        final AdListener adListener = new AdListener() {
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                final PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
+                        .addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")
+                        .build();
+
+                final PublisherAdView adViewBanner = new PublisherAdView(context);
+                adViewBanner.setAdSizes(adSize);
+                adViewBanner.setAdUnitId(bannerAdmobAdUnitId);
+                adViewBanner.loadAd(adRequest);
+                adViewBanner.setTag("PublisherAdView");
+
+                if (parent != null && parent.findViewWithTag("PublisherAdView") != null) {
+                    parent.removeView(parent.findViewWithTag("PublisherAdView"));
+                }
+
+                if (parent != null) {
+                    parent.addView(adViewBanner);
+                }
+
+                adViewBanner.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+                        progressBar.setVisibility(View.GONE);
+
+                        showEvent("Mostrou Banner: Normal");
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int i) {
+                        super.onAdFailedToLoad(i);
+                        progressBar.setVisibility(View.GONE);
+                        adView.setVisibility(View.GONE);
+
+                        if (parent != null) {
+                            parent.removeView(adViewBanner);
+                        }
+
+                        showEvent("Falhou Banner: Normal " + i);
+                    }
+                });
+
+                showEvent("Falhou UnifiedNativeAd: EXPENSIVE");
+            }
+        };
+
         final AdLoader.Builder builder = new AdLoader.Builder(context, expensiveAdmobAdUnitId)
                 .withNativeAdOptions(adOptions)
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
+                        progressBar.setVisibility(View.GONE);
 
                         populateUnifiedNativeAdView(unifiedNativeAd, adView);
+
                         showEvent("Mostrou UnifiedNativeAd: EXPENSIVE");
                     }
                 })
-                .withAdListener(new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(int errorCode) {
-                        final PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
-                                .addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")
-                                .build();
-
-                        final PublisherAdView adViewBanner = new PublisherAdView(context);
-                        adViewBanner.setAdSizes(adSize);
-                        adViewBanner.setAdUnitId(bannerAdmobAdUnitId);
-                        adViewBanner.loadAd(adRequest);
-
-                        if (parent != null) {
-                            parent.addView(adViewBanner);
-                        }
-
-                        adViewBanner.setAdListener(new AdListener() {
-                            @Override
-                            public void onAdLoaded() {
-                                super.onAdLoaded();
-                                if (progressBar != null) {
-                                    progressBar.setVisibility(View.GONE);
-                                }
-
-                                showEvent("Mostrou Banner: Normal");
-                            }
-
-                            @Override
-                            public void onAdFailedToLoad(int i) {
-                                super.onAdFailedToLoad(i);
-                                if (progressBar != null) {
-                                    progressBar.setVisibility(View.GONE);
-                                }
-
-                                adView.setVisibility(View.GONE);
-
-                                if (parent != null) {
-                                    parent.removeView(adViewBanner);
-                                }
-
-                                showEvent("Falhou Banner: Normal " + i);
-                            }
-                        });
-
-                        showEvent("Falhou UnifiedNativeAd: EXPENSIVE");
-                    }
-                });
+                .withAdListener(adListener);
 
         final AdRequest adRequest = new AdRequest.Builder()
                 .build();
