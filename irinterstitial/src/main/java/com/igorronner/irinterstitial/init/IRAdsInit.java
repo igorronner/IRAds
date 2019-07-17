@@ -24,6 +24,7 @@ public class IRAdsInit {
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
         ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
+        ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
 
         if (builder.appPrefix != null) {
             ConfigUtil.APP_PREFIX = builder.appPrefix;
@@ -40,6 +41,7 @@ public class IRAdsInit {
         private String nativeAdId;
         private String expensiveNativeAdId;
         private String bannerAdId;
+        private String rewardedVideoId;
 
         @Deprecated
         private String publisherInterstitialId;
@@ -79,6 +81,11 @@ public class IRAdsInit {
 
         public Builder setBannerAdId(String bannerAdId) {
             this.bannerAdId = bannerAdId;
+            return this;
+        }
+
+        public Builder setRewardedVideoId(String rewardedVideoId) {
+            this.rewardedVideoId = rewardedVideoId;
             return this;
         }
 

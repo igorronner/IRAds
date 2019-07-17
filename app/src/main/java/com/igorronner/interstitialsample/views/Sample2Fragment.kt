@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 import kotlinx.android.synthetic.main.fragment_sample2.*
