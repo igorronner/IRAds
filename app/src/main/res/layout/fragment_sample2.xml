@@ -51,8 +51,15 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
 
-    <include
-        layout="@layout/ad_medium_unified"/>
+    <FrameLayout
+        android:id="@+id/adViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/ad_medium_unified"/>
+
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"

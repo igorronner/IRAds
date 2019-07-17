@@ -172,13 +172,11 @@ public class ManagerNativeAd {
             return;
         }
 
-        final ProgressBar progress = new ProgressBar(
-                context, null, android.R.attr.progressBarStyleSmall);
-        progress.setVisibility(View.GONE);
-
-        if (showProgress) {
-            progress.setIndeterminate(true);
-            progress.setVisibility(View.VISIBLE);
+        if (progressBar == null && showProgress) {
+            progressBar = new ProgressBar(
+                    context, null, android.R.attr.progressBarStyleSmall);
+            progressBar.setIndeterminate(true);
+            progressBar.setVisibility(View.VISIBLE);
 
             final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -186,7 +184,7 @@ public class ManagerNativeAd {
 
             final RelativeLayout relativeLayout = new RelativeLayout(context);
             relativeLayout.setGravity(Gravity.CENTER);
-            relativeLayout.addView(progress);
+            relativeLayout.addView(progressBar);
 
             adView.addView(relativeLayout, params);
         }
@@ -204,25 +202,17 @@ public class ManagerNativeAd {
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        progress.setVisibility(View.GONE);
-
-                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
-
-                        if (parent != null) {
-                            parent.removeAllViews();
-                            parent.addView(adView);
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
                         }
 
+                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
                         showEvent("Mostrou UnifiedNativeAd: EXPENSIVE");
                     }
                 })
                 .withAdListener(new AdListener() {
                     @Override
                     public void onAdFailedToLoad(int errorCode) {
-                        if (parent != null) {
-                            parent.removeAllViews();
-                        }
-
                         final PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
                                 .addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")
                                 .build();
@@ -230,28 +220,34 @@ public class ManagerNativeAd {
                         final PublisherAdView adViewBanner = new PublisherAdView(context);
                         adViewBanner.setAdSizes(adSize);
                         adViewBanner.setAdUnitId(bannerAdmobAdUnitId);
+                        adViewBanner.loadAd(adRequest);
 
                         if (parent != null) {
                             parent.addView(adViewBanner);
-                            parent.addView(progress);
                         }
 
-                        adViewBanner.loadAd(adRequest);
                         adViewBanner.setAdListener(new AdListener() {
                             @Override
                             public void onAdLoaded() {
                                 super.onAdLoaded();
-                                progress.setVisibility(View.GONE);
+                                if (progressBar != null) {
+                                    progressBar.setVisibility(View.GONE);
+                                }
+
                                 showEvent("Mostrou Banner: Normal");
                             }
 
                             @Override
                             public void onAdFailedToLoad(int i) {
                                 super.onAdFailedToLoad(i);
-                                progress.setVisibility(View.GONE);
+                                if (progressBar != null) {
+                                    progressBar.setVisibility(View.GONE);
+                                }
+
+                                adView.setVisibility(View.GONE);
 
                                 if (parent != null) {
-                                    parent.removeAllViews();
+                                    parent.removeView(adViewBanner);
                                 }
 
                                 showEvent("Falhou Banner: Normal " + i);

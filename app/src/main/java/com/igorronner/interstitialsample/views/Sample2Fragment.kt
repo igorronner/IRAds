@@ -40,9 +40,9 @@ class Sample2Fragment : Fragment() {
         rbSmall.performClick()
     }
 
-    private fun loadNativeOrBanner(size: AdSize) {
+    private fun loadNativeOrBanner(size: AdSize, progress: Boolean = true) {
         adsInstance.loadNativeOrBannerAd(
-                null, view?.findViewById(R.id.adViewNative), size, true)
+                view?.findViewById(R.id.adViewContainer), view?.findViewById(R.id.adViewNative), size, progress)
     }
 
 }
