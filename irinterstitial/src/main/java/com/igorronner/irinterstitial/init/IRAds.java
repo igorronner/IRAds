@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
-import com.google.android.gms.ads.reward.RewardItem;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
 import com.igorronner.irinterstitial.preferences.MainPreference;
@@ -23,8 +22,6 @@ import com.igorronner.irinterstitial.services.IRRewardedVideoAdService;
 import com.igorronner.irinterstitial.services.ManagerNativeAd;
 import com.igorronner.irinterstitial.services.RemoteConfigService;
 import com.igorronner.irinterstitial.views.SplashActivity;
-
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDTO> {
@@ -151,15 +148,15 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public void openDialogRewardedVideo(Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle("Dias premium")
-                .setMessage("Assista ao vídeo até o final para ganhar dias premium.")
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.text_title_dias_premium)
+                .setMessage(R.string.text_message_assisa_ao_video)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setPositiveButton("Assistir", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.text_assistir, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         showRewardedVideo();
@@ -193,7 +190,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
                         Toast.makeText(
                                 activity,
-                                "Nenhum vídeo disponível, tente novamente mais tarde.",
+                                R.string.text_message_nenhum_video_encontrado,
                                 Toast.LENGTH_LONG
                         ).show();
                     }
