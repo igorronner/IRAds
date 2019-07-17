@@ -219,24 +219,29 @@ public class ManagerNativeAd {
                 .withAdListener(new AdListener() {
                     @Override
                     public void onAdFailedToLoad(int errorCode) {
+                        if (parent != null) {
+                            parent.removeAllViews();
+                        }
+
                         final PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
+                                .addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")
                                 .build();
 
                         final PublisherAdView adViewBanner = new PublisherAdView(context);
                         adViewBanner.setAdSizes(adSize);
                         adViewBanner.setAdUnitId(bannerAdmobAdUnitId);
+
+                        if (parent != null) {
+                            parent.addView(adViewBanner);
+                            parent.addView(progress);
+                        }
+
                         adViewBanner.loadAd(adRequest);
                         adViewBanner.setAdListener(new AdListener() {
                             @Override
                             public void onAdLoaded() {
                                 super.onAdLoaded();
                                 progress.setVisibility(View.GONE);
-
-                                if (parent != null) {
-                                    parent.removeAllViews();
-                                    parent.addView(adViewBanner);
-                                }
-
                                 showEvent("Mostrou Banner: Normal");
                             }
 
@@ -244,7 +249,12 @@ public class ManagerNativeAd {
                             public void onAdFailedToLoad(int i) {
                                 super.onAdFailedToLoad(i);
                                 progress.setVisibility(View.GONE);
-                                showEvent("Falhou Banner: Normal");
+
+                                if (parent != null) {
+                                    parent.removeAllViews();
+                                }
+
+                                showEvent("Falhou Banner: Normal " + i);
                             }
                         });
 
