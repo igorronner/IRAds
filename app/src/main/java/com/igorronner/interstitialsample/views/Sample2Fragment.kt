@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.ads.formats.UnifiedNativeAdView
+import com.google.android.gms.ads.AdSize
 import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 import kotlinx.android.synthetic.main.fragment_sample2.*
@@ -27,7 +27,21 @@ class Sample2Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adsInstance.loadNativeAd(true, adLargeUnified as UnifiedNativeAdView)
+
+        radioGrupo.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rbSmall -> loadNativeOrBanner(AdSize.BANNER)
+                R.id.rbMedium -> loadNativeOrBanner(AdSize.MEDIUM_RECTANGLE)
+                R.id.rbLarge -> loadNativeOrBanner(AdSize.LARGE_BANNER)
+            }
+        }
+
+        rbSmall.performClick()
+    }
+
+    private fun loadNativeOrBanner(size: AdSize, progress: Boolean = true) {
+        adsInstance.loadNativeOrBannerAd(
+                view?.findViewById(R.id.adViewContainer), view?.findViewById(R.id.adViewNative), size, progress)
     }
 
 }

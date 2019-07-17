@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity(),
             adsInstance.loadNativeAd(true)
         }
 
+        button5.setOnClickListener {
+            adsInstance.openDialogRewardedVideo(this)
+        }
+
         adsInstance.loadNativeAd(true)
 
     }

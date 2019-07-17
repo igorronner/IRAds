@@ -4,13 +4,46 @@
     android:layout_width="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:gravity="center"
     android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/radioGrupo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small"/>
+
+        <RadioButton
+            android:id="@+id/rbMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"/>
+
+        <RadioButton
+            android:id="@+id/rbLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large"/>
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Large Ad"
+        android:layout_gravity="center_horizontal"
+        android:text="Native or Banner AD"
         android:padding="16dp"/>
 
     <View
@@ -18,9 +51,15 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
 
-    <include
-        android:id="@+id/adLargeUnified"
-        layout="@layout/ad_large_unified"/>
+    <FrameLayout
+        android:id="@+id/adViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/ad_medium_unified"/>
+
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"

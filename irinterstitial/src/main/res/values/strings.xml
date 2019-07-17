@@ -8,4 +8,8 @@
 
     <string name="premium">Premium</string>
     <string name="ad_attribution">Ad</string>
+    <string name="text_message_nenhum_video_encontrado">Nenhum vídeo disponível, tente novamente mais tarde.</string>
+    <string name="text_assistir">Assistir</string>
+    <string name="text_title_dias_premium">Dias premium</string>
+    <string name="text_message_assisa_ao_video">Assista ao vídeo até o final para ganhar dias premium.</string>
 </resources>

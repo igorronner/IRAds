@@ -23,8 +23,12 @@ public class IRAdsInit {
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
-        if (builder.appPrefix!=null)
+        ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
+        ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
+
+        if (builder.appPrefix != null) {
             ConfigUtil.APP_PREFIX = builder.appPrefix;
+        }
     }
 
     public static class Builder {
@@ -36,6 +40,9 @@ public class IRAdsInit {
         private String expensiveInterstitialId;
         private String nativeAdId;
         private String expensiveNativeAdId;
+        private String bannerAdId;
+        private String rewardedVideoId;
+
         @Deprecated
         private String publisherInterstitialId;
         private String productSku;
@@ -45,8 +52,7 @@ public class IRAdsInit {
         private boolean tester;
         private boolean enableCheckMobills;
 
-        public Builder() {
-        }
+        public Builder() { }
 
         public Builder setLogo(@DrawableRes int logo) {
             this.logo = logo;
@@ -58,7 +64,7 @@ public class IRAdsInit {
             return this;
         }
 
-        public Builder setExpensiveInterstitialId(String expensiveInterstitialId){
+        public Builder setExpensiveInterstitialId(String expensiveInterstitialId) {
             this.expensiveInterstitialId = expensiveInterstitialId;
             return this;
         }
@@ -73,23 +79,33 @@ public class IRAdsInit {
             return this;
         }
 
+        public Builder setBannerAdId(String bannerAdId) {
+            this.bannerAdId = bannerAdId;
+            return this;
+        }
+
+        public Builder setRewardedVideoId(String rewardedVideoId) {
+            this.rewardedVideoId = rewardedVideoId;
+            return this;
+        }
+
         @Deprecated
         public Builder setPublisherInterstitialId(String publisherInterstitialId) {
             this.publisherInterstitialId = publisherInterstitialId;
             return this;
         }
 
-        public Builder enablePurchace(String productSku){
+        public Builder enablePurchace(String productSku) {
             this.productSku = productSku;
             return this;
         }
 
-        public Builder setAppPrefix(String appPrefix){
+        public Builder setAppPrefix(String appPrefix) {
             this.appPrefix = appPrefix;
             return this;
         }
 
-        public Builder setAppId(String appId){
+        public Builder setAppId(String appId) {
             this.appId = appId;
             return this;
         }
@@ -99,7 +115,7 @@ public class IRAdsInit {
             return this;
         }
 
-        public Builder enableCheckMobills(boolean enableCheckMobills){
+        public Builder enableCheckMobills(boolean enableCheckMobills) {
             this.enableCheckMobills = enableCheckMobills;
             return this;
         }
@@ -107,13 +123,12 @@ public class IRAdsInit {
         public IRAdsInit build(Context context) {
             this.IRAdsInit = new IRAdsInit(this);
 
-            if (ConfigUtil.APP_ID !=null && context !=null)
+            if (ConfigUtil.APP_ID != null && context != null)
                 MobileAds.initialize(context, ConfigUtil.APP_ID);
 
             return this.IRAdsInit;
         }
 
     }
-
 
 }

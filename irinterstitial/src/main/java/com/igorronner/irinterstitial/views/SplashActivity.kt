@@ -12,20 +12,22 @@ import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
 
+    private lateinit var adsInstance: IRAds
 
-    private lateinit var adsInstance:IRAds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        if (ConfigUtil.LOGO > 0)
+
+        if (ConfigUtil.LOGO > 0) {
             logo.setImageResource(ConfigUtil.LOGO)
-        else
+        } else {
             logo.visibility = View.GONE
+        }
 
         FirebaseApp.initializeApp(this)
-        adsInstance = IRAds.newInstance(this)
 
+        adsInstance = IRAds.newInstance(this)
         adsInstance.forceShowInterstitial()
     }
 
@@ -34,18 +36,16 @@ class SplashActivity : AppCompatActivity() {
             finish()
             true
         } else super.onKeyDown(keyCode, event)
-
     }
-
 
     override fun onStop() {
         super.onStop()
         adsInstance.onStop()
     }
 
-
     override fun onResume() {
         super.onResume()
         adsInstance.onResume()
     }
+
 }
