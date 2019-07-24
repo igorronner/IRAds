@@ -1,6 +1,6 @@
 package com.igorronner.irinterstitial.services
 
-import android.app.Activity
+import android.content.Context
 import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -13,17 +13,17 @@ import com.igorronner.irinterstitial.preferences.MainPreference
 import com.igorronner.irinterstitial.utils.AbstractRewardedVideoAdListener
 
 class IRRewardedVideoAd(
-        private val activity: Activity
+        private val context: Context
 ) : IRRewardedVideo {
 
-    private val rewardedVideoAd: RewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity)
+    private val rewardedVideoAd: RewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context)
 
     override fun load(force: Boolean, adListener: RewardedVideoAdListener) {
-        if (IRAds.isPremium(activity)) {
+        if (IRAds.isPremium(context)) {
             return
         }
 
-        rewardedVideoAd.rewardedVideoAdListener = object : AbstractRewardedVideoAdListener(activity) {
+        rewardedVideoAd.rewardedVideoAdListener = object : AbstractRewardedVideoAdListener(context) {
             override fun onRewardedVideoAdClosed() {
                 super.onRewardedVideoAdClosed()
                 adListener.onRewardedVideoAdClosed()
@@ -57,7 +57,7 @@ class IRRewardedVideoAd(
                 super.onRewarded(reward)
                 adListener.onRewarded(reward)
 
-                if (reward != null) MainPreference.setDaysPremium(activity, reward.amount)
+                if (reward != null) MainPreference.setDaysPremium(context, reward.amount)
             }
 
             override fun onRewardedVideoStarted() {
@@ -83,6 +83,10 @@ class IRRewardedVideoAd(
             return
         }
 
+        if (rewardedVideoAd.isLoaded) {
+            return
+        }
+
         val adRequest = AdRequest.Builder()
                 .build()
 
@@ -91,7 +95,7 @@ class IRRewardedVideoAd(
     }
 
     private fun sendEvent(event: String) {
-        AnalyticsService(activity).logEvent(event)
+        AnalyticsService(context).logEvent(event)
         Log.d(this::class.java.simpleName, event)
     }
 

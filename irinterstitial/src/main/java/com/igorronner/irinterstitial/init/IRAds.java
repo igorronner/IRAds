@@ -9,7 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdSize;
@@ -21,6 +24,8 @@ import com.igorronner.irinterstitial.services.IRInterstitialService;
 import com.igorronner.irinterstitial.services.IRRewardedVideoAdService;
 import com.igorronner.irinterstitial.services.ManagerNativeAd;
 import com.igorronner.irinterstitial.services.RemoteConfigService;
+import com.igorronner.irinterstitial.utils.ContextKt;
+import com.igorronner.irinterstitial.utils.OnLoadListener;
 import com.igorronner.irinterstitial.views.SplashActivity;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -50,6 +55,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         final IRAds irAds = new IRAds(activity);
         irAds.loadRemoteConfig(irAds);
         irAds.setManagerNativeAd(manager);
+        irAds.requestRewardedVideoAd(activity);
 
         return irAds;
     }
@@ -146,38 +152,34 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         new IRInterstitialService(IRAds.this).showInterstitial();
     }
 
-    public void openDialogRewardedVideo(Context context) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle(R.string.text_title_dias_premium)
-                .setMessage(R.string.text_message_assisa_ao_video)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton(R.string.text_assistir, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        showRewardedVideo();
-                    }
-                });
-
-        final AlertDialog alertDialog = builder.create();
-
-        try {
-            alertDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void showRewardedVideo() {
+    public void showRewardedVideo(final OnLoadListener listener) {
         new IRRewardedVideoAdService(activity).showRewardedVideo(
                 new IRRewardedVideoAdService.OnRewardedVideoListener() {
                     @Override
+                    public void onRewardedVideoAdOpened() {
+                        if (activity.isFinishing()) {
+                            return;
+                        }
+
+                        listener.onLoadFinished();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdLoaded() {
+//                        if (activity.isFinishing()) {
+//                            return;
+//                        }
+//
+//                        listener.onLoadFinished();
+                    }
+
+                    @Override
                     public void onRewardedVideoAdClosed(boolean earned) {
-                        if (earned && !activity.isFinishing()) {
+                        if (activity.isFinishing()) {
+                            return;
+                        }
+
+                        if (earned) {
                             activity.recreate();
                         }
                     }
@@ -187,6 +189,8 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
                         if (activity.isFinishing()) {
                             return;
                         }
+
+                        listener.onLoadFinished();
 
                         Toast.makeText(
                                 activity,
@@ -205,6 +209,76 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         if (!isPremium(activity)) {
             activity.startActivity(new Intent(activity, SplashActivity.class));
         }
+    }
+
+    public void openDialogRewardedVideo(Context context) {
+        // ALERT PROGRESS
+        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        final int padding = (int) ContextKt.convertDpToPixel(context, 24);
+        final ProgressBar progressBar = new ProgressBar(context);
+        progressBar.setIndeterminate(true);
+        progressBar.setLayoutParams(params);
+        progressBar.setPadding(padding, padding, padding, padding);
+
+        final AlertDialog alertDialogProgress = new AlertDialog.Builder(context)
+                .setView(progressBar)
+                .setCancelable(false)
+                .create();
+        // ALERT PROGRESS
+
+        // ALERT MESSAGE
+        final AlertDialog alertDialogMessage = new AlertDialog.Builder(context)
+                .setTitle(R.string.text_title_dias_premium)
+                .setMessage(R.string.text_message_assisa_ao_video)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.text_assistir, null)
+                .create();
+
+        alertDialogMessage.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog)
+                        .getButton(DialogInterface.BUTTON_POSITIVE)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(final View v) {
+                                try {
+                                    alertDialogMessage.dismiss();
+                                    alertDialogProgress.show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                showRewardedVideo(new OnLoadListener() {
+                                    @Override
+                                    public void onLoadFinished() {
+                                        try {
+                                            alertDialogProgress.dismiss();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+            }
+        });
+
+        try {
+            alertDialogMessage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // ALERT MESSAGE
     }
 
     public void loadRemoteConfig(RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener) {
@@ -239,6 +313,10 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     public void loadNativeOrBannerAd(
             ViewGroup parent, UnifiedNativeAdView adView, AdSize adSize, boolean progress) {
         managerNativeAd.setShowProgress(progress).loadNativeOrBannerAd(parent, adView, adSize);
+    }
+
+    public void requestRewardedVideoAd(Context context) {
+        new IRRewardedVideoAdService(context).requestRewardedVideo();
     }
 
     public void onStop() {
