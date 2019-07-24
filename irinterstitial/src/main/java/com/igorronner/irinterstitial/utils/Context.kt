@@ -2,6 +2,9 @@ package com.igorronner.irinterstitial.utils
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.DisplayMetrics
+
+
 
 
 
@@ -13,4 +16,8 @@ fun Context.appIsInstalled(packageName:String):Boolean{
         false
     }
 
+}
+
+fun Context.convertDpToPixel(dp: Float): Float {
+    return dp * (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
 }
