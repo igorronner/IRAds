@@ -85,13 +85,30 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         new IRInterstitialService(IRAds.this).forceShowInterstitial(finish);
     }
 
+    public void forceShowExpensiveInterstitial(final Boolean finish) {
+        new IRInterstitialService(IRAds.this).forceShowExpensiveInterstitial(finish);
+    }
+
+    public void forceShowExpensiveInterstitial() {
+        forceShowExpensiveInterstitial(true);
+    }
+
     public void forceShowInterstitialBeforeIntent(final Intent intent) {
-        forceShowInterstitialBeforeIntent(intent, false);
+        forceShowExpensiveInterstitialBeforeIntent(intent, false);
     }
 
     public void forceShowInterstitialBeforeIntent(final Intent intent, final boolean finishAll) {
         new IRInterstitialService(IRAds.this)
                 .forceShowInterstitialBeforeIntent(intent, finishAll);
+    }
+
+    public void forceShowExpensiveInterstitialBeforeIntent(final Intent intent) {
+        forceShowInterstitialBeforeIntent(intent, false);
+    }
+
+    public void forceShowExpensiveInterstitialBeforeIntent(final Intent intent, final boolean finishAll) {
+        new IRInterstitialService(IRAds.this)
+                .showExpensiveInterstitialBeforeIntent(intent, finishAll, true);
     }
 
     public void forceShowInterstitialBeforeIntent(
@@ -120,6 +137,14 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public void showInterstitialBeforeIntent(final Intent intent, final boolean finishAll) {
         new IRInterstitialService(IRAds.this).showInterstitialBeforeIntent(intent, finishAll);
+    }
+
+    public void showExpensiveInterstitialBeforeIntent(final Intent intent, final boolean finishAll) {
+        new IRInterstitialService(IRAds.this).showExpensiveInterstitialBeforeIntent(intent, finishAll);
+    }
+
+    public void showExpensiveInterstitialBeforeIntent(final Intent intent) {
+        new IRInterstitialService(IRAds.this).showExpensiveInterstitialBeforeIntent(intent, false);
     }
 
     public void showInterstitialBeforeIntent(final Intent intent) {
@@ -297,12 +322,28 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         managerNativeAd.setShowProgress(false).loadNativeAd(cardView, unifiedNativeAdView);
     }
 
+    public void loadExpensiveNativeAd(ViewGroup cardView, UnifiedNativeAdView unifiedNativeAdView){
+        managerNativeAd.setShowProgress(false).loadExpensiveNativeAd(cardView, unifiedNativeAdView);
+    }
+
+    public void loadExpensiveNativeAd(ViewGroup cardView, boolean showProgress, UnifiedNativeAdView unifiedNativeAdView){
+        managerNativeAd.setShowProgress(showProgress).loadExpensiveNativeAd(cardView, unifiedNativeAdView);
+    }
+
     public void loadNativeAd() {
         loadNativeAd(false, (UnifiedNativeAdView) activity.findViewById(R.id.adViewNative));
     }
 
     public void loadNativeAd(boolean showProgress) {
         loadNativeAd(showProgress, (UnifiedNativeAdView) activity.findViewById(R.id.adViewNative));
+    }
+
+    public void loadExpensiveNativeAd(boolean showProgress, UnifiedNativeAdView unifiedNativeAdView) {
+        managerNativeAd.setShowProgress(showProgress).loadExpensiveNativeAd(null, unifiedNativeAdView);
+    }
+
+    public void loadExpensiveNativeAd(boolean showProgress) {
+        loadExpensiveNativeAd(showProgress, (UnifiedNativeAdView) activity.findViewById(R.id.adViewNative));
     }
 
     public void loadNativeOrBannerAd(
