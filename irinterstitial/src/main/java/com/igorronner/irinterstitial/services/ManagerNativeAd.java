@@ -79,6 +79,73 @@ public class ManagerNativeAd {
         loadNativeAd(adCard, adView, true);
     }
 
+    public void loadExpensiveNativeAd(final ViewGroup adCard, final UnifiedNativeAdView adView) {
+        if (MainPreference.isPremium(context)) {
+            adView.setVisibility(View.GONE);
+            if (adCard != null) {
+                adCard.setVisibility(View.GONE);
+            }
+            return;
+        }
+
+        final ProgressBar progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
+        if (showProgress) {
+            progressBar.setIndeterminate(true);
+            progressBar.setVisibility(View.VISIBLE);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+
+            RelativeLayout rl = new RelativeLayout(context);
+            rl.setGravity(Gravity.CENTER);
+            rl.addView(progressBar);
+            adView.addView(rl, params);
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        VideoOptions videoOptions = new VideoOptions.Builder()
+                .setStartMuted(true)
+                .build();
+
+        NativeAdOptions adOptions = new NativeAdOptions.Builder()
+                .setVideoOptions(videoOptions)
+                .build();
+
+
+        final String unifiedNativeAdType = "EXPENSIVE";
+        AdLoader.Builder builder = new AdLoader.Builder(context, expensiveAdmobAdUnitId)
+                .withNativeAdOptions(adOptions)
+                .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                    @Override
+                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        progressBar.setVisibility(View.GONE);
+                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
+                        if (adCard != null) {
+                            adCard.removeAllViews();
+                            adCard.addView(adView);
+                        }
+                        final String event = "Mostrou UnifiedNativeAd: " + unifiedNativeAdType;
+                        Log.d(ManagerNativeAd.class.getSimpleName(), event);
+                        new AnalyticsService(context).logEvent(event);
+                    }
+                })
+                .withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+                        progressBar.setVisibility(View.GONE);
+                        adView.setVisibility(View.GONE);
+                        if(adCard != null){
+                            adCard.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+        AdLoader adLoader = builder.build();
+        adLoader.loadAd(new AdRequest.Builder().build());
+    }
+
+
+
     private void loadNativeAd(final ViewGroup adCard, final UnifiedNativeAdView adView, final boolean expensive) {
         if (MainPreference.isPremium(context)) {
             adView.setVisibility(View.GONE);

@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentTransaction
+import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum.*
@@ -185,10 +186,12 @@ open class IRInterstitialService {
         irInterstitial.load(force, object : AdListener() {
 
             override fun onAdFailedToLoad(p0: Int) {
-                showDefaultInterstitialBeforeIntent(intent, finishAll, force)
+                Log.d("R_EXP_INTERS", "showExpensiveInterstitialBeforeIntentonAdFailedToLoad")
+                finishWithIntent(finishAll, intent)
             }
 
             override fun onAdClosed() {
+                Log.d("R_EXP_INTERS", "showExpensiveInterstitialBeforeIntentonAdClosed")
                 finishWithIntent(finishAll, intent)
                 requestNewInterstitial(EXPENSIVE_INTERSTITIAL)
             }
@@ -220,6 +223,8 @@ open class IRInterstitialService {
         })
     }
 
+
+
     fun showExpensiveInterstitial(
             finish: Boolean,
             force: Boolean
@@ -243,8 +248,34 @@ open class IRInterstitialService {
                 requestNewInterstitial(EXPENSIVE_INTERSTITIAL)
             }
         })
-
     }
+
+    fun showOnlyExpensiveInterstitial(
+            finish: Boolean,
+            force: Boolean
+    ){
+        if (MainPreference.isPremium(adsInstance.activity.applicationContext)){
+            finish(adsInstance.activity, true)
+            return
+        }
+
+        if (irInterstitial !is IRExpensiveInterstitialAd)
+            irInterstitial  = requestNewInterstitial(EXPENSIVE_INTERSTITIAL)
+
+        irInterstitial.load(force, object : AdListener() {
+
+            override fun onAdFailedToLoad(p0: Int) {
+                finish(adsInstance.activity, finish)
+            }
+
+            override fun onAdClosed() {
+                finish(adsInstance.activity, finish)
+                requestNewInterstitial(EXPENSIVE_INTERSTITIAL)
+            }
+        })
+    }
+
+
 
     fun showDefaultInterstitial(){
         showDefaultInterstitial(finish = true, force = false)
@@ -265,6 +296,10 @@ open class IRInterstitialService {
         showInterstitial(finish, true)
     }
 
+    fun forceShowExpensiveInterstitial(finish: Boolean){
+        showOnlyExpensiveInterstitial(finish, true)
+    }
+
     fun forceShowInterstitial(){
         showInterstitial(finish = true, force = true)
     }
@@ -279,6 +314,10 @@ open class IRInterstitialService {
         showInterstitialBeforeIntent(intent, finish, true)
     }
 
+    fun forceShowExpensiveInterstitialBeforeIntent(intent: Intent, finish: Boolean){
+        showInterstitialBeforeIntent(intent, finish, true)
+    }
+
     fun forceShowInterstitialBeforeIntent(intent: Intent){
         showInterstitialBeforeIntent(intent, finishAll = true, force = true)
     }
@@ -289,8 +328,12 @@ open class IRInterstitialService {
         showInterstitialBeforeIntent(intent, finishAll, false)
     }
 
+    fun showExpensiveInterstitialBeforeIntent(intent: Intent, finishAll: Boolean){
+        showExpensiveInterstitialBeforeIntent(intent, finishAll, false)
+    }
+
     fun showInterstitialBeforeIntent(intent: Intent) {
-        showInterstitialBeforeIntent(intent, false, false)
+        showInterstitialBeforeIntent(intent, finishAll = false, force = false)
     }
 
 
@@ -298,7 +341,7 @@ open class IRInterstitialService {
         if (finishAll)
             ActivityCompat.finishAffinity(adsInstance.activity)
 
-       adsInstance.activity.startActivity(intent)
+        adsInstance.activity.startActivity(intent)
 
     }
 
