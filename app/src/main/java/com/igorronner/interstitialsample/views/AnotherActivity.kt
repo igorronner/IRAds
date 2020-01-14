@@ -18,7 +18,6 @@ class AnotherActivity : PurchaseActivity() {
         adsInstance.loadNativeOrBannerAd(
                 findViewById(R.id.adViewContainer),
                 findViewById(R.id.adViewNative),
-                AdSize.LARGE_BANNER,
                 true)
 
         purchase.setOnClickListener { showDialogPremium() }

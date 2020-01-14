@@ -1,7 +1,7 @@
 package com.igorronner.irinterstitial.init;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.google.android.gms.ads.MobileAds;
 

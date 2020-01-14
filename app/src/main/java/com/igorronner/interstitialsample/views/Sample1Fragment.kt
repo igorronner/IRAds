@@ -1,7 +1,7 @@
 package com.igorronner.interstitialsample.views
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
 import kotlinx.android.synthetic.main.fragment_sample.*
 
-class Sample1Fragment : Fragment() {
+class Sample1Fragment : androidx.fragment.app.Fragment() {
 
     private lateinit var adsInstance: IRAds
 

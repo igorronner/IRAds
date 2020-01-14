@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.IdRes;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.IdRes;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -22,6 +22,7 @@ import com.igorronner.irinterstitial.dto.RemoteConfigDTO;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 import com.igorronner.irinterstitial.services.IRInterstitialService;
 import com.igorronner.irinterstitial.services.IRRewardedVideoAdService;
+import com.igorronner.irinterstitial.services.ManagerAdaptiveBannerAd;
 import com.igorronner.irinterstitial.services.ManagerNativeAd;
 import com.igorronner.irinterstitial.services.RemoteConfigService;
 import com.igorronner.irinterstitial.utils.ContextKt;
@@ -37,6 +38,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     private Activity activity;
     private RemoteConfigDTO remoteConfigDTO;
     private ManagerNativeAd managerNativeAd;
+    private ManagerAdaptiveBannerAd managerAdaptiveBannerAd;
     private int state = 0;
 
     private IRAds() {
@@ -51,12 +53,14 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
                 .setExpensiveAdmobAdUnitId(ConfigUtil.EXPENSIVE_NATIVE_AD_ID)
                 .setBannerAdmobAdUnitId(ConfigUtil.BANNER_AD_ID);
+        final ManagerAdaptiveBannerAd bannerManager = new ManagerAdaptiveBannerAd();
+        bannerManager.setBannerAdMobAdUnitId(ConfigUtil.BANNER_AD_ID);
 
         final IRAds irAds = new IRAds(activity);
         irAds.loadRemoteConfig(irAds);
         irAds.setManagerNativeAd(manager);
         irAds.requestRewardedVideoAd(activity);
-
+        irAds.setManagerAdaptiveBannerAd(bannerManager);
         return irAds;
     }
 
@@ -75,6 +79,10 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     private void setManagerNativeAd(ManagerNativeAd managerNativeAd) {
         this.managerNativeAd = managerNativeAd;
+    }
+
+    private void setManagerAdaptiveBannerAd(ManagerAdaptiveBannerAd managerAdaptiveBannerAd){
+        this.managerAdaptiveBannerAd = managerAdaptiveBannerAd;
     }
 
     public void forceShowInterstitial() {
@@ -133,6 +141,10 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public void showInterstitial(final boolean finish) {
         new IRInterstitialService(IRAds.this).showInterstitial(finish);
+    }
+
+    public void showExpensiveInterstitial(final boolean finish) {
+        new IRInterstitialService(IRAds.this).showExpensiveInterstitial(finish, false);
     }
 
     public void showInterstitialBeforeIntent(final Intent intent, final boolean finishAll) {
@@ -346,6 +358,14 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         loadExpensiveNativeAd(showProgress, (UnifiedNativeAdView) activity.findViewById(R.id.adViewNative));
     }
 
+    public void requestRewardedVideoAd(Context context) {
+        new IRRewardedVideoAdService(context).requestRewardedVideo();
+    }
+
+    public void loadAdaptiveBanner(ViewGroup viewGroup, Activity activity){
+        managerAdaptiveBannerAd.loadAdaptiveBanner(viewGroup, activity);
+    }
+
     public void loadNativeOrBannerAd(
             ViewGroup parent, UnifiedNativeAdView adView, boolean progress) {
         loadNativeOrBannerAd(parent, adView, AdSize.MEDIUM_RECTANGLE, progress);
@@ -354,10 +374,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
     public void loadNativeOrBannerAd(
             ViewGroup parent, UnifiedNativeAdView adView, AdSize adSize, boolean progress) {
         managerNativeAd.setShowProgress(progress).loadNativeOrBannerAd(parent, adView, adSize);
-    }
-
-    public void requestRewardedVideoAd(Context context) {
-        new IRRewardedVideoAdService(context).requestRewardedVideo();
     }
 
     public void onStop() {

@@ -1,11 +1,11 @@
 package com.igorronner.interstitialsample.adapters
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.igorronner.interstitialsample.pojo.ProductSku
 import kotlinx.android.synthetic.main.product_sku_item.view.*
 
-class ProductSkuHolder(v:View) : RecyclerView.ViewHolder(v){
+class ProductSkuHolder(v:View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(v){
     private var view:View = v
     private lateinit var donate: ProductSku
 
