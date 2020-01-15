@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".views.AnotherActivity">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/adViewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
 
         <include layout="@layout/ad_large_unified"/>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/purchase"

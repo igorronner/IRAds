@@ -1,7 +1,7 @@
 package com.igorronner.irinterstitial.services
 
 import android.app.Activity
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.util.Log
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType

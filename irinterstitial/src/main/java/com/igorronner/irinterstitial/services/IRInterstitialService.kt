@@ -2,11 +2,11 @@ package com.igorronner.irinterstitial.services
 
 import android.app.Activity
 import android.content.Intent
-import android.support.annotation.IdRes
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentTransaction
+import androidx.annotation.IdRes
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum
@@ -70,9 +70,9 @@ open class IRInterstitialService {
     }
 
     fun showInterstitialBeforeFragment(
-            fragment: Fragment,
+            fragment: androidx.fragment.app.Fragment,
             @IdRes containerViewId:Int,
-            fragmentActivity: FragmentActivity,
+            fragmentActivity: androidx.fragment.app.FragmentActivity,
             force: Boolean
     ) {
         val activity = adsInstance.activity
@@ -89,9 +89,9 @@ open class IRInterstitialService {
     }
 
     private fun showDefaultInterstitialBeforeFragment(
-            fragment: Fragment,
+            fragment: androidx.fragment.app.Fragment,
             containerViewId: Int,
-            fragmentActivity: FragmentActivity,
+            fragmentActivity: androidx.fragment.app.FragmentActivity,
             force: Boolean
     ) {
         val activity = adsInstance.activity
@@ -117,9 +117,9 @@ open class IRInterstitialService {
 
 
     private fun showExpensiveInterstitialBeforeFragment(
-            fragment: Fragment,
+            fragment: androidx.fragment.app.Fragment,
             containerViewId: Int,
-            fragmentActivity: FragmentActivity,
+            fragmentActivity: androidx.fragment.app.FragmentActivity,
             force: Boolean
     ) {
         val activity = adsInstance.activity
@@ -345,19 +345,19 @@ open class IRInterstitialService {
 
     }
 
-    fun forceShowInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity){
+    fun forceShowInterstitialBeforeFragment(fragment: androidx.fragment.app.Fragment, @IdRes  containerViewId:Int, fragmentActivity: androidx.fragment.app.FragmentActivity){
         showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, true)
     }
 
-    fun showInterstitialBeforeFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity) {
+    fun showInterstitialBeforeFragment(fragment: androidx.fragment.app.Fragment, @IdRes  containerViewId:Int, fragmentActivity: androidx.fragment.app.FragmentActivity) {
         showInterstitialBeforeFragment(fragment, containerViewId, fragmentActivity, false)
     }
 
-    fun replaceFragment(fragment: Fragment, @IdRes  containerViewId:Int, fragmentActivity: FragmentActivity){
+    fun replaceFragment(fragment: androidx.fragment.app.Fragment, @IdRes  containerViewId:Int, fragmentActivity: androidx.fragment.app.FragmentActivity){
         val fragmentTransaction = fragmentActivity.supportFragmentManager
                 .beginTransaction()
         fragmentTransaction.replace(containerViewId, fragment)
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        fragmentTransaction.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         fragmentTransaction.commitAllowingStateLoss()
     }
 

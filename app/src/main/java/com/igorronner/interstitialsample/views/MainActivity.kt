@@ -2,14 +2,13 @@ package com.igorronner.interstitialsample.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.dto.IRSkuDetails
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.services.*
 import kotlinx.android.synthetic.main.activity_main.*
-
 class MainActivity : AppCompatActivity(),
         ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
 
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         adsInstance.loadNativeAd(true)
-
+        adsInstance.loadAdaptiveBanner(banner_ad, this)
     }
 
     override fun onResume() {

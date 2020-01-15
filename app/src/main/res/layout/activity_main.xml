@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.MainActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
@@ -93,6 +94,7 @@
                 app:layout_constraintTop_toBottomOf="@id/button4"/>
 
             <LinearLayout
+                android:id="@+id/ad_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -112,7 +114,16 @@
 
             </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+            <FrameLayout
+                android:id="@+id/banner_ad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ad_small"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
             android:visibility="gone"
@@ -130,6 +141,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-    </android.support.constraint.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </ScrollView>

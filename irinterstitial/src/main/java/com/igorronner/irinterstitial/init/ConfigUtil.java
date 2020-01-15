@@ -1,6 +1,6 @@
 package com.igorronner.irinterstitial.init;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 public class ConfigUtil {
     @DrawableRes
