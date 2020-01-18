@@ -52,6 +52,7 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         final ManagerNativeAd manager = new ManagerNativeAd(activity)
                 .setAdmobAdUnitId(ConfigUtil.NATIVE_AD_ID)
                 .setExpensiveAdmobAdUnitId(ConfigUtil.EXPENSIVE_NATIVE_AD_ID)
+                .setMidAdmobAdUnitId(ConfigUtil.MID_NATIVE_AD_ID)
                 .setBannerAdmobAdUnitId(ConfigUtil.BANNER_AD_ID);
         final ManagerAdaptiveBannerAd bannerManager = new ManagerAdaptiveBannerAd();
         bannerManager.setBannerAdMobAdUnitId(ConfigUtil.BANNER_AD_ID);

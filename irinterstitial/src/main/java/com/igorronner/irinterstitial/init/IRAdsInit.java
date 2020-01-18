@@ -17,8 +17,10 @@ public class IRAdsInit {
         ConfigUtil.LOGO = builder.logo;
         ConfigUtil.APP_ID = builder.appId;
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
+        ConfigUtil.MID_INTERSTITIAL_ID = builder.midInterstitialId;
         ConfigUtil.EXPENSIVE_INTERSTITIAL_ID = builder.expensiveInterstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
+        ConfigUtil.MID_NATIVE_AD_ID = builder.midNativeAdId;
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.TESTER = builder.tester;
@@ -37,8 +39,10 @@ public class IRAdsInit {
         private IRAdsInit IRAdsInit;
         private String appId;
         private String interstitialId;
+        private String midInterstitialId;
         private String expensiveInterstitialId;
         private String nativeAdId;
+        private String midNativeAdId;
         private String expensiveNativeAdId;
         private String bannerAdId;
         private String rewardedVideoId;
@@ -69,6 +73,11 @@ public class IRAdsInit {
             return this;
         }
 
+        public Builder setMidInterstitialId(String midInterstitialId){
+            this.midInterstitialId = midInterstitialId;
+            return this;
+        }
+
         public Builder setNativeAdId(String nativeAdId) {
             this.nativeAdId = nativeAdId;
             return this;
@@ -76,6 +85,17 @@ public class IRAdsInit {
 
         public Builder setExpensiveNativeAdId(String expensiveNativeAdId) {
             this.expensiveNativeAdId = expensiveNativeAdId;
+            return this;
+        }
+
+        public Builder setMidNativeAdId(String midNativeAdId){
+            this.midInterstitialId = midNativeAdId;
+            return this;
+        }
+
+        public Builder setTwoFloorNativeAd(String expensiveInterstitialId, String midNativeAdId){
+            this.expensiveNativeAdId = expensiveInterstitialId;
+            this.midNativeAdId = midNativeAdId;
             return this;
         }
 

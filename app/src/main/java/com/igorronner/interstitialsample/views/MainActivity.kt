@@ -9,7 +9,7 @@ import com.igorronner.irinterstitial.dto.IRSkuDetails
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.services.*
 import kotlinx.android.synthetic.main.activity_main.*
-class MainActivity : AppCompatActivity(),
+class  MainActivity : AppCompatActivity(),
         ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
 
     private lateinit var adsInstance:IRAds
