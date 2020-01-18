@@ -58,6 +58,9 @@ public class MainPreference {
     }
 
     public static boolean isPremium(Context context) {
+        if(isPremiumMobills(context)){
+            return true;
+        }
         if (ConfigUtil.TESTER) {
             return false;
         }
@@ -66,11 +69,7 @@ public class MainPreference {
             return true;
         }
 
-        if (hasPremiumDays(context)) {
-            return true;
-        }
-
-        return isPremiumMobills(context);
+        return hasPremiumDays(context);
     }
 
     public static boolean isPremiumMobills(Context context) {
