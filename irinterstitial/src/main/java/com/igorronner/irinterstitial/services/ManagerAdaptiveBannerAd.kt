@@ -15,7 +15,7 @@ class ManagerAdaptiveBannerAd {
 
     var adMobAdUnitId: String = ""
     var expensiveAdMobAdUnitId: String = ""
-    var bannerAdMobAdUnitId: String = ""
+    var bannerAdMobAdUnitId: String? = ""
 
     private fun getAdSize(activity: Activity): AdSize? {
         return getAdSize(activity, activity.windowManager)
