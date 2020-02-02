@@ -25,6 +25,45 @@ class IRMidFloorInterstitialAd(
         const val tag = "IRAds"
     }
 
+    override fun load(force: Boolean, adListener: IRInterstitialListener) {
+        if (midFloorInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
+            midFloorInterstitialAd.show()
+            val event = "Mostrou_IRMidFloorInterstitialAd"
+            AnalyticsService(adsInstance.activity).logEvent(event)
+            Log.d(tag, event)
+        } else if (!force)
+            adListener.onNotLoaded()
+
+        midFloorInterstitialAd.adListener = object : AdListener() {
+
+            override fun onAdFailedToLoad(p0: Int) {
+                val event = "Falhou_IRMidFloorInterstitialAd"
+                AnalyticsService(adsInstance.activity).logEvent(event)
+                Log.d(tag, event)
+
+                if (force && !adsInstance.isStopped) {
+                    adListener.onFailed()
+                }
+            }
+
+            override fun onAdClosed() {
+                val event = "Fechou_IRMidFloorInterstitialAd"
+                AnalyticsService(adsInstance.activity).logEvent(event)
+                Log.d(tag, event)
+                adListener.onAdClosed()
+                adsInstance.onStop()
+            }
+
+            override fun onAdLoaded() {
+                if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
+                    val event = "Mostrou_IRMidFloorInterstitialAd"
+                    AnalyticsService(adsInstance.activity).logEvent(event)
+                    Log.d(tag, event)
+                    midFloorInterstitialAd.show()
+                }
+            }
+        }
+    }
     override fun load(force: Boolean, adListener: AdListener) {
         if (midFloorInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
             midFloorInterstitialAd.show()

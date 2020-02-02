@@ -23,6 +23,45 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
         }
     }
 
+    override fun load(force: Boolean, adListener: IRInterstitialListener) {
+        if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
+            mInterstitialAd.show()
+            val event = "Mostrou DefaultInterstitial"
+            AnalyticsService(adsInstance.activity).logEvent(event)
+            Log.d(tag, event)
+        } else if (!force)
+            adListener.onNotLoaded()
+
+        mInterstitialAd.adListener = object : AdListener() {
+
+            override fun onAdFailedToLoad(p0: Int) {
+                if (force && !adsInstance.isStopped)
+                    adListener.onFailed()
+                val event = "Falhou DefaultInterstitial"
+                AnalyticsService(adsInstance.activity).logEvent(event)
+                Log.d(tag, event)
+            }
+
+            override fun onAdClosed() {
+                adListener.onAdClosed()
+                adsInstance.onStop()
+                val event = "Fechou DefaultInterstitial"
+                AnalyticsService(adsInstance.activity).logEvent(event)
+                Log.d(tag, event)
+            }
+
+            override fun onAdLoaded() {
+                if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
+                    mInterstitialAd.show()
+                    val event = "Mostrou DefaultInterstitial"
+                    AnalyticsService(adsInstance.activity).logEvent(event)
+                    Log.d(tag, event)
+                }
+            }
+        }
+    }
+
+
     override fun load(force:Boolean, adListener: AdListener) {
 
         if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {

@@ -93,9 +93,15 @@ public class IRAdsInit {
             return this;
         }
 
-        public Builder setTwoFloorNativeAd(String expensiveInterstitialId, String midNativeAdId){
-            this.expensiveNativeAdId = expensiveInterstitialId;
+        public Builder setTwoFloorsNativeAd(String expensiveNativeAdId, String midNativeAdId){
+            this.expensiveNativeAdId = expensiveNativeAdId;
             this.midNativeAdId = midNativeAdId;
+            return this;
+        }
+
+        public Builder setTwoFloorsInterstitial(String expensiveInterstitialId, String midInterstitialId) {
+            this.expensiveInterstitialId = expensiveInterstitialId;
+            this.midInterstitialId = midInterstitialId;
             return this;
         }
 

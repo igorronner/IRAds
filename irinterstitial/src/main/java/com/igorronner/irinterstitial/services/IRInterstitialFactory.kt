@@ -9,6 +9,7 @@ class IRInterstitialFactory(private val adsInstance: IRAds) {
             interstitialVersionEnum: IRInterstitialVersionEnum?
     ) = when (interstitialVersionEnum) {
         IRInterstitialVersionEnum.EXPENSIVE_INTERSTITIAL -> IRExpensiveInterstitialAd(adsInstance)
+        IRInterstitialVersionEnum.MID_FLOOR_INTERSTITIAL -> IRMidFloorInterstitialAd(adsInstance)
         else -> IRInterstitialAd(adsInstance)
     }
 

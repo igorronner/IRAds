@@ -31,7 +31,7 @@ dependencies {
     implementation 'com.android.billingclient:billing:1.1'
 
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.google.firebase:firebase-config:17.0.0'
     implementation 'com.google.firebase:firebase-ads:18.3.0'
 

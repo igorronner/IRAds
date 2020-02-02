@@ -25,6 +25,10 @@ class IRPublisherInterstitial(val adsInstance: IRAds) : IRInterstitial {
         }
     }
 
+    override fun load(force: Boolean, adListener: IRInterstitialListener) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun load(force:Boolean, adListener: AdListener) {
         if (mPublisherInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
             mPublisherInterstitialAd.show()
