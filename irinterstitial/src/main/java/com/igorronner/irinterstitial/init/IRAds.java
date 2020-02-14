@@ -30,13 +30,12 @@ import com.igorronner.irinterstitial.utils.OnLoadListener;
 import com.igorronner.irinterstitial.views.SplashActivity;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDTO> {
+public class IRAds {
 
     private static final int STOPPED = 910;
     private static final int RESUMED = 967;
 
     private Activity activity;
-    private RemoteConfigDTO remoteConfigDTO;
     private ManagerNativeAd managerNativeAd;
     private ManagerAdaptiveBannerAd managerAdaptiveBannerAd;
     private int state = 0;
@@ -58,7 +57,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
         bannerManager.setBannerAdMobAdUnitId(ConfigUtil.BANNER_AD_ID);
 
         final IRAds irAds = new IRAds(activity);
-        irAds.loadRemoteConfig(irAds);
         irAds.setManagerNativeAd(manager);
         irAds.requestRewardedVideoAd(activity);
         irAds.setManagerAdaptiveBannerAd(bannerManager);
@@ -67,11 +65,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public static boolean isPremium(Context context) {
         return MainPreference.isPremium(context);
-    }
-
-    @Override
-    public void onComplete(RemoteConfigDTO result) {
-        this.remoteConfigDTO = result;
     }
 
     public Activity getActivity() {
@@ -162,32 +155,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
 
     public void showInterstitialBeforeIntent(final Intent intent) {
         showInterstitialBeforeIntent(intent, false);
-    }
-
-    @Deprecated
-    public void showInterstitialOnFinish() {
-        if (remoteConfigDTO != null) {
-            if (remoteConfigDTO.getFinishWithInterstitial())
-                showInterstitial(remoteConfigDTO);
-            else
-                ActivityCompat.finishAffinity(activity);
-            return;
-        }
-        loadRemoteConfig(new RemoteConfigService.ServiceListener<RemoteConfigDTO>() {
-            @Override
-            public void onComplete(RemoteConfigDTO result) {
-                remoteConfigDTO = result;
-                if (result.getFinishWithInterstitial())
-                    showInterstitial(result);
-                else
-                    ActivityCompat.finishAffinity(activity);
-            }
-        });
-    }
-
-    @Deprecated
-    public void showInterstitial(RemoteConfigDTO result) {
-        new IRInterstitialService(IRAds.this).showInterstitial();
     }
 
     public void showRewardedVideo(final OnLoadListener listener) {
@@ -317,10 +284,6 @@ public class IRAds implements RemoteConfigService.ServiceListener<RemoteConfigDT
             e.printStackTrace();
         }
         // ALERT MESSAGE
-    }
-
-    public void loadRemoteConfig(RemoteConfigService.ServiceListener<RemoteConfigDTO> serviceListener) {
-        RemoteConfigService.getInstance(activity).loadRemoteConfig(serviceListener);
     }
 
     public void loadNativeAd(boolean showProgress, UnifiedNativeAdView unifiedNativeAdView) {
