@@ -2,9 +2,11 @@ package com.igorronner.interstitialsample
 
 import android.app.Application
 import com.igorronner.irinterstitial.init.IRAdsInit
+import com.igorronner.irinterstitial.init.IRBanner
 
 @Suppress("unused")
 class MainApp : Application() {
+
 
     override fun onCreate() {
         super.onCreate()
@@ -25,6 +27,10 @@ class MainApp : Application() {
                 .setTester(BuildConfig.DEBUG)
                 .enableCheckMobills(false)
                 .build(this)
+
+        IRBanner.initialize(this)
     }
+
+
 
 }

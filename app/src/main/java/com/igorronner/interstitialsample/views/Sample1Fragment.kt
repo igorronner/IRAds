@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.init.IRBanner
 import kotlinx.android.synthetic.main.fragment_sample.*
 
 class Sample1Fragment : androidx.fragment.app.Fragment() {
@@ -27,9 +28,12 @@ class Sample1Fragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adsInstance.loadNativeAd(true, adSmallUnified as UnifiedNativeAdView)
-        adsInstance.loadNativeAd(true, adMediumUnified as UnifiedNativeAdView)
-        adsInstance.loadNativeAd(true, adLargeUnified as UnifiedNativeAdView)
+        IRBanner.loadNativeAd(showProgress = true, unifiedNativeAdView = adSmallUnified as UnifiedNativeAdView)
+        IRBanner.loadNativeAd(showProgress = true, unifiedNativeAdView = adMediumUnified as UnifiedNativeAdView)
+        IRBanner.loadNativeAd(showProgress = true, unifiedNativeAdView = adLargeUnified as UnifiedNativeAdView)
+//        adsInstance.loadNativeAd(true, adSmallUnified as UnifiedNativeAdView)
+//        adsInstance.loadNativeAd(true, adMediumUnified as UnifiedNativeAdView)
+//        adsInstance.loadNativeAd(true, adLargeUnified as UnifiedNativeAdView)
     }
 
 }

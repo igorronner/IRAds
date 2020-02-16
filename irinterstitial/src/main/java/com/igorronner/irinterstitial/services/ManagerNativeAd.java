@@ -53,6 +53,8 @@ public class ManagerNativeAd {
     private String expensiveAdmobAdUnitId;
     private String bannerAdmobAdUnitId;
     private boolean showProgress;
+    private UnifiedNativeAd unifiedNativeAdCached;
+    private UnifiedNativeAd unifiedNativeAdExpensiveCached;
 
     public ManagerNativeAd(Context context) {
         this.context = context;
@@ -103,6 +105,13 @@ public class ManagerNativeAd {
             return;
         }
 
+        if (unifiedNativeAdExpensiveCached != null){
+            populateUnifiedNativeAdView(unifiedNativeAdExpensiveCached, adView);
+            unifiedNativeAdExpensiveCached = null;
+            loadAd(getAdmobAdUnitId(HIGH_FLOOR));
+            return;
+        }
+
         final ProgressBar progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
         if (showProgress) {
             progressBar.setIndeterminate(true);
@@ -133,6 +142,7 @@ public class ManagerNativeAd {
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        unifiedNativeAdExpensiveCached = unifiedNativeAd;
                         progressBar.setVisibility(View.GONE);
                         populateUnifiedNativeAdView(unifiedNativeAd, adView);
                         if (adCard != null) {
@@ -168,6 +178,13 @@ public class ManagerNativeAd {
             if (adCard != null) {
                 adCard.setVisibility(View.GONE);
             }
+            return;
+        }
+
+        if (unifiedNativeAdCached != null){
+            populateUnifiedNativeAdView(unifiedNativeAdCached, adView);
+            unifiedNativeAdCached = null;
+            loadAd(getAdmobAdUnitId(HIGH_FLOOR));
             return;
         }
 
@@ -235,6 +252,7 @@ public class ManagerNativeAd {
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        unifiedNativeAdCached = unifiedNativeAd;
                         progressBar.setVisibility(View.GONE);
                         populateUnifiedNativeAdView(unifiedNativeAd, adView);
                         if (adCard != null) {
@@ -267,6 +285,60 @@ public class ManagerNativeAd {
         adLoader.loadAd(new AdRequest.Builder().build());
     }
 
+    private String getAdmobAdUnitId(FloorEnum floorEnum){
+        String adUnitId = "";
+
+        if (floorEnum == HIGH_FLOOR) {
+            if (isIdValid(expensiveAdmobAdUnitId)) {
+                adUnitId = expensiveAdmobAdUnitId;
+            } else {
+                return getAdmobAdUnitId(MID_FLOOR);
+            }
+        }
+
+        if (floorEnum == MID_FLOOR) {
+            if (isIdValid(midAdmobAdUnitId)) {
+                adUnitId = midAdmobAdUnitId;
+            } else {
+                return getAdmobAdUnitId(NO_FLOOR);
+            }
+        }
+
+        if (floorEnum == NO_FLOOR && isIdValid(admobAdUnitId)) {
+            adUnitId = admobAdUnitId;
+        }
+
+        return adUnitId;
+    }
+
+    private void loadAd(String adUnitId){
+        VideoOptions videoOptions = new VideoOptions.Builder()
+                .setStartMuted(true)
+                .build();
+
+        NativeAdOptions adOptions = new NativeAdOptions.Builder()
+                .setVideoOptions(videoOptions)
+                .build();
+
+        AdLoader.Builder builder = new AdLoader.Builder(context, adUnitId)
+                .withNativeAdOptions(adOptions)
+                .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                    @Override
+                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        unifiedNativeAdCached = unifiedNativeAd;
+                    }
+                })
+                .withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+
+                    }
+                });
+
+        AdLoader adLoader = builder.build();
+        adLoader.loadAd(new AdRequest.Builder().build());
+    }
+
     /**
      * Método responsável por pedir um NativeAd caso contrário, não existir naquele momento
      * requisita um BannerAd no local
@@ -285,6 +357,13 @@ public class ManagerNativeAd {
             if (parent != null) {
                 parent.setVisibility(View.GONE);
             }
+            return;
+        }
+
+        if (unifiedNativeAdCached != null){
+            populateUnifiedNativeAdView(unifiedNativeAdCached, adView);
+            unifiedNativeAdCached = null;
+            loadAd(getAdmobAdUnitId(HIGH_FLOOR));
             return;
         }
 
@@ -348,7 +427,7 @@ public class ManagerNativeAd {
                         super.onAdLoaded();
                         progressBar.setVisibility(View.GONE);
 
-                        showEvent("Mostrou Banner: Normal");
+                        showEvent("Mostrou_Banner_Normal");
                     }
 
                     @Override
@@ -356,16 +435,12 @@ public class ManagerNativeAd {
                         super.onAdFailedToLoad(i);
                         progressBar.setVisibility(View.GONE);
                         adView.setVisibility(View.GONE);
-
                         if (parent != null) {
                             parent.removeView(adViewBanner);
                         }
-
-                        showEvent("Falhou Banner: Normal " + i);
                     }
                 });
 
-                showEvent("Falhou UnifiedNativeAd: EXPENSIVE");
             }
         };
 
@@ -374,11 +449,10 @@ public class ManagerNativeAd {
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        unifiedNativeAdCached = unifiedNativeAd;
                         progressBar.setVisibility(View.GONE);
 
                         populateUnifiedNativeAdView(unifiedNativeAd, adView);
-
-                        showEvent("Mostrou UnifiedNativeAd: EXPENSIVE");
                     }
                 })
                 .withAdListener(adListener);
@@ -390,7 +464,7 @@ public class ManagerNativeAd {
         adLoader.loadAd(adRequest);
     }
 
-    private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
+    public void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
         // Set the media view. Media content will be automatically populated in the media view once
         // adView.setNativeAd() is called.
         ConstraintLayout contentLayout = adView.findViewById(R.id.adViewNativeContent);

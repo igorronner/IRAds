@@ -516,6 +516,7 @@ open class IRInterstitialService {
 
     ){
         log("replaceFragment()")
+
         val fragmentTransaction = fragmentActivity.supportFragmentManager
                 .beginTransaction()
         fragmentTransaction.replace(containerViewId, fragment)
