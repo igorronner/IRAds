@@ -25,7 +25,7 @@ object IRBanner {
 
     @JvmOverloads fun loadNativeAd(
             activity: Activity,
-            showProgress: Boolean = false
+            showProgress: Boolean = true
     ) {
         loadNativeAd(
                 showProgress = showProgress,
@@ -35,7 +35,7 @@ object IRBanner {
 
     @JvmOverloads fun loadNativeAd(
             unifiedNativeAdView: UnifiedNativeAdView,
-            showProgress: Boolean = false,
+            showProgress: Boolean = true,
             cardView: ViewGroup? = null
     ) {
         managerNativeAd
@@ -45,7 +45,7 @@ object IRBanner {
 
     @JvmOverloads fun loadExpensiveNativeAd(
             unifiedNativeAdView: UnifiedNativeAdView,
-            showProgress: Boolean = false,
+            showProgress: Boolean = true,
             cardView: ViewGroup? = null
     ) {
         managerNativeAd
@@ -55,7 +55,7 @@ object IRBanner {
 
     @JvmOverloads fun loadExpensiveNativeAd(
             activity: Activity,
-            showProgress: Boolean = false
+            showProgress: Boolean = true
     ) {
         loadExpensiveNativeAd(
                 showProgress = showProgress,
