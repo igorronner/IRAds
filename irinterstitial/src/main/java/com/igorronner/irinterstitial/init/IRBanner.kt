@@ -23,24 +23,44 @@ object IRBanner {
         this.managerNativeAd = managerNativeAd
     }
 
-    @JvmOverloads
-    fun loadNativeAd(activity: Activity, showProgress: Boolean = false) {
-        loadNativeAd(showProgress = showProgress, unifiedNativeAdView = activity.findViewById(R.id.adViewNative) as UnifiedNativeAdView)
+    @JvmOverloads fun loadNativeAd(
+            activity: Activity,
+            showProgress: Boolean = false
+    ) {
+        loadNativeAd(
+                showProgress = showProgress,
+                unifiedNativeAdView = activity.findViewById(R.id.adViewNative) as UnifiedNativeAdView
+        )
     }
 
-    @JvmOverloads
-    fun loadNativeAd(cardView: ViewGroup? = null, showProgress: Boolean = false, unifiedNativeAdView: UnifiedNativeAdView?) {
-        managerNativeAd.setShowProgress(showProgress).loadNativeAd(cardView, unifiedNativeAdView)
+    @JvmOverloads fun loadNativeAd(
+            unifiedNativeAdView: UnifiedNativeAdView,
+            cardView: ViewGroup? = null,
+            showProgress: Boolean = false
+    ) {
+        managerNativeAd
+                .setShowProgress(showProgress)
+                .loadNativeAd(cardView, unifiedNativeAdView)
     }
 
-    @JvmOverloads
-    fun loadExpensiveNativeAd(cardView: ViewGroup? = null, showProgress: Boolean = false, unifiedNativeAdView: UnifiedNativeAdView?) {
-        managerNativeAd.setShowProgress(showProgress).loadExpensiveNativeAd(cardView, unifiedNativeAdView)
+    @JvmOverloads fun loadExpensiveNativeAd(
+            unifiedNativeAdView: UnifiedNativeAdView,
+            cardView: ViewGroup? = null,
+            showProgress: Boolean = false
+    ) {
+        managerNativeAd
+                .setShowProgress(showProgress)
+                .loadExpensiveNativeAd(cardView, unifiedNativeAdView)
     }
 
-    @JvmOverloads
-    fun loadExpensiveNativeAd(activity: Activity, showProgress: Boolean = false) {
-        loadExpensiveNativeAd(showProgress = showProgress, unifiedNativeAdView = activity.findViewById(R.id.adViewNative) as UnifiedNativeAdView)
+    @JvmOverloads fun loadExpensiveNativeAd(
+            activity: Activity,
+            showProgress: Boolean = false
+    ) {
+        loadExpensiveNativeAd(
+                showProgress = showProgress,
+                unifiedNativeAdView = activity.findViewById(R.id.adViewNative) as UnifiedNativeAdView
+        )
     }
 
 
