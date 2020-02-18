@@ -108,7 +108,7 @@ public class ManagerNativeAd {
         if (unifiedNativeAdExpensiveCached != null){
             populateUnifiedNativeAdView(unifiedNativeAdExpensiveCached, adView);
             unifiedNativeAdExpensiveCached = null;
-            loadAd(getAdmobAdUnitId(HIGH_FLOOR));
+            loadAd(HIGH_FLOOR);
             return;
         }
 
@@ -172,7 +172,9 @@ public class ManagerNativeAd {
     private void loadNativeAd(
             final ViewGroup adCard,
             final UnifiedNativeAdView adView,
-            final FloorEnum floorEnum) {
+            final FloorEnum floorEnum
+    ) {
+
         if (MainPreference.isPremium(context)) {
             adView.setVisibility(View.GONE);
             if (adCard != null) {
@@ -184,7 +186,7 @@ public class ManagerNativeAd {
         if (unifiedNativeAdCached != null){
             populateUnifiedNativeAdView(unifiedNativeAdCached, adView);
             unifiedNativeAdCached = null;
-            loadAd(getAdmobAdUnitId(HIGH_FLOOR));
+            loadAd(HIGH_FLOOR);
             return;
         }
 
@@ -285,14 +287,15 @@ public class ManagerNativeAd {
         adLoader.loadAd(new AdRequest.Builder().build());
     }
 
-    private String getAdmobAdUnitId(FloorEnum floorEnum){
+    private void loadAd(final FloorEnum floorEnum){
+
         String adUnitId = "";
 
         if (floorEnum == HIGH_FLOOR) {
             if (isIdValid(expensiveAdmobAdUnitId)) {
                 adUnitId = expensiveAdmobAdUnitId;
             } else {
-                return getAdmobAdUnitId(MID_FLOOR);
+                loadAd(MID_FLOOR);
             }
         }
 
@@ -300,7 +303,7 @@ public class ManagerNativeAd {
             if (isIdValid(midAdmobAdUnitId)) {
                 adUnitId = midAdmobAdUnitId;
             } else {
-                return getAdmobAdUnitId(NO_FLOOR);
+                loadAd(NO_FLOOR);
             }
         }
 
@@ -308,10 +311,9 @@ public class ManagerNativeAd {
             adUnitId = admobAdUnitId;
         }
 
-        return adUnitId;
-    }
+        if (adUnitId.isEmpty())
+            showEvent("erro_ad_unit_id_vazio");
 
-    private void loadAd(String adUnitId){
         VideoOptions videoOptions = new VideoOptions.Builder()
                 .setStartMuted(true)
                 .build();
@@ -325,13 +327,20 @@ public class ManagerNativeAd {
                 .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        if (floorEnum == HIGH_FLOOR)
+                            unifiedNativeAdExpensiveCached = unifiedNativeAd;
+
                         unifiedNativeAdCached = unifiedNativeAd;
                     }
                 })
                 .withAdListener(new AdListener() {
                     @Override
                     public void onAdFailedToLoad(int errorCode) {
-
+                        if (floorEnum == HIGH_FLOOR && isIdValid(expensiveAdmobAdUnitId)) {
+                            loadAd(MID_FLOOR);
+                        } else if (floorEnum == MID_FLOOR && isIdValid(midAdmobAdUnitId)) {
+                            loadAd(NO_FLOOR);
+                        }
                     }
                 });
 
@@ -363,7 +372,7 @@ public class ManagerNativeAd {
         if (unifiedNativeAdCached != null){
             populateUnifiedNativeAdView(unifiedNativeAdCached, adView);
             unifiedNativeAdCached = null;
-            loadAd(getAdmobAdUnitId(HIGH_FLOOR));
+            loadAd(HIGH_FLOOR);
             return;
         }
 
