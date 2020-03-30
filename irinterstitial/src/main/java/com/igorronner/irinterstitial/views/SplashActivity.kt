@@ -14,7 +14,6 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var adsInstance: IRAds
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
