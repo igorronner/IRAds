@@ -24,6 +24,7 @@ public class IRAdsInit {
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.TESTER = builder.tester;
+        ConfigUtil.AD_ENABLED = builder.adEnabled;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
         ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
         ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
@@ -54,6 +55,7 @@ public class IRAdsInit {
         private String appPrefix;
 
         private boolean tester;
+        private boolean adEnabled = true;
         private boolean enableCheckMobills;
 
         public Builder() { }
@@ -138,6 +140,11 @@ public class IRAdsInit {
 
         public Builder setTester(boolean tester) {
             this.tester = tester;
+            return this;
+        }
+
+        public Builder setAdEnabled(boolean adEnabled) {
+            this.adEnabled = adEnabled;
             return this;
         }
 

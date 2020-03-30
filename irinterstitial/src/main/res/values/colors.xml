@@ -3,4 +3,5 @@
     <color name="black_65">#a6000000</color>
     <color name="black_87">#de000000</color>
     <color name="vermelho_500">#F44336</color>
+    <color name="ad_text_color">#000000</color>
 </resources>

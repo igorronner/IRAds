@@ -25,6 +25,7 @@ class MainApp : Application() {
                 .setAppPrefix("lib_")
                 .enablePurchace("premium")
                 .setTester(BuildConfig.DEBUG)
+//                .setAdEnabled(false)
                 .enableCheckMobills(false)
                 .build(this)
 
