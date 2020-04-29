@@ -15,6 +15,9 @@ public class MainPreference {
     private static final String FIRST_LAUNCH_DATE = "first_launch_date";
     private static final String PREFS_PREMIUM = "prefs_premium";
 
+
+    private static final String PREFS_WAS_REWARDED = "was_rewarded";
+
     private static final String PREFS_PREMIUM_DAYS = "PREFS_PREMIUM_DAYS";
     private static final String PREFS_PREMIUM_DAYS_START = "PREFS_PREMIUM_DAYS_START";
     private static final String PREFS_PREMIUM_DAYS_END = "PREFS_PREMIUM_DAYS_END";
@@ -32,6 +35,13 @@ public class MainPreference {
                 .putLong(FIRST_LAUNCH_DATE, firstLaunchDate)
                 .apply();
     }
+
+    public static void setWasRewarded(Context context, boolean wasRewarded) {
+        getPreferencesEditor(context)
+                .putBoolean(PREFS_WAS_REWARDED, wasRewarded)
+                .apply();
+    }
+
 
     public static void setPremium(Context context) {
         getPreferencesEditor(context)
@@ -84,6 +94,9 @@ public class MainPreference {
         return ConfigUtil.ENABLE_CHECK_MOBILLS && hasMobills;
     }
 
+    public static boolean wasRewarded(Context context) {
+        return  getPreferences(context).getBoolean(PREFS_WAS_REWARDED, false);
+    }
     public static boolean hasPremiumDays(Context context) {
         final SharedPreferences preferences = getPreferences(context);
         final int premiumDays = preferences.getInt(PREFS_PREMIUM_DAYS, 0);

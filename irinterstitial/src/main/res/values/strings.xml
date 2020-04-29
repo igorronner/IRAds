@@ -12,4 +12,9 @@
     <string name="text_assistir">Assistir</string>
     <string name="text_title_dias_premium">Dias premium</string>
     <string name="text_message_assisa_ao_video">Assista ao vídeo até o final para ganhar dias premium.</string>
+
+
+    <string name="text_title_funcionalidade_bloqueada">Funcionalidade Bloqueada</string>
+    <string name="text_message_assisa_ao_video_desbloquear">Assista ao vídeo até o final para poder usar essa funcionalidade novamente.</string>
+
 </resources>

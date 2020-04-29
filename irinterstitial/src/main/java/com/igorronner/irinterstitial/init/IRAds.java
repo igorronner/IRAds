@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.preferences.MainPreference;
 import com.igorronner.irinterstitial.services.IRInterstitialService;
@@ -155,7 +156,10 @@ public class IRAds {
         showInterstitialBeforeIntent(intent, false);
     }
 
-    public void showRewardedVideo(final OnLoadListener listener) {
+    public void showRewardedBeforeIntent(final Intent intent){
+        showRewardedBeforeIntent(intent, null);
+    }
+    public void showRewardedBeforeIntent(final Intent intent, final OnLoadListener listener){
         new IRRewardedVideoAdService(activity).showRewardedVideo(
                 new IRRewardedVideoAdService.OnRewardedVideoListener() {
                     @Override
@@ -169,11 +173,47 @@ public class IRAds {
 
                     @Override
                     public void onRewardedVideoAdLoaded() {
-//                        if (activity.isFinishing()) {
-//                            return;
-//                        }
-//
-//                        listener.onLoadFinished();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdClosed(boolean earned) {
+                        if (activity.isFinishing()) {
+                            return;
+                        }
+
+                        if (earned) {
+                            activity.startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdFailedToLoad() {
+                        showInterstitialBeforeIntent(intent);
+                        if (activity.isFinishing()) {
+                            return;
+                        }
+                        listener.onLoadFinished();
+
+                    }
+                });
+    }
+
+    public void showRewardedThenBecomePremium(
+            final OnLoadListener listener
+    ) {
+        new IRRewardedVideoAdService(activity).showRewardedVideo(
+                new IRRewardedVideoAdService.OnRewardedVideoListener() {
+                    @Override
+                    public void onRewardedVideoAdOpened() {
+                        if (activity.isFinishing()) {
+                            return;
+                        }
+
+                        listener.onLoadFinished();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdLoaded() {
                     }
 
                     @Override
@@ -204,7 +244,7 @@ public class IRAds {
                 });
     }
 
-    public void showRewardedVideo(IRRewardedVideoAdService.OnRewardedVideoListener listener) {
+    public void showRewardedThenBecomePremium(IRRewardedVideoAdService.OnRewardedVideoListener listener) {
         new IRRewardedVideoAdService(activity).showRewardedVideo(listener);
     }
 
@@ -261,7 +301,77 @@ public class IRAds {
                                     e.printStackTrace();
                                 }
 
-                                showRewardedVideo(new OnLoadListener() {
+                                showRewardedThenBecomePremium(new OnLoadListener() {
+                                    @Override
+                                    public void onLoadFinished() {
+                                        try {
+                                            alertDialogProgress.dismiss();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+            }
+        });
+
+        try {
+            alertDialogMessage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // ALERT MESSAGE
+    }
+
+    public void openDialogRewardedThenIntent(Context context, final Intent intent) {
+        // ALERT PROGRESS
+        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        final int padding = (int) ContextKt.convertDpToPixel(context, 24);
+        final ProgressBar progressBar = new ProgressBar(context);
+        progressBar.setIndeterminate(true);
+        progressBar.setLayoutParams(params);
+        progressBar.setPadding(padding, padding, padding, padding);
+
+        final AlertDialog alertDialogProgress = new MaterialAlertDialogBuilder(context)
+                .setView(progressBar)
+                .setCancelable(false)
+                .create();
+        // ALERT PROGRESS
+
+        // ALERT MESSAGE
+        final AlertDialog alertDialogMessage = new MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.text_title_funcionalidade_bloqueada)
+                .setMessage(R.string.text_message_assisa_ao_video_desbloquear)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.text_assistir, null)
+                .create();
+
+        alertDialogMessage.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog)
+                        .getButton(DialogInterface.BUTTON_POSITIVE)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(final View v) {
+                                try {
+                                    alertDialogMessage.dismiss();
+                                    alertDialogProgress.show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                showRewardedBeforeIntent(intent, new OnLoadListener() {
                                     @Override
                                     public void onLoadFinished() {
                                         try {
