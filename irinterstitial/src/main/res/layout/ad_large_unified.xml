@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/adViewNative"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="50dp"
+        tools:visibility="visible"
         android:visibility="invisible">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -26,6 +28,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginStart="8dp"
+            tools:srcCompat="@drawable/ic_launcher_round"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
@@ -42,7 +45,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:textColor="@color/black_87"
+            android:textColor="@color/ad_text_color"
+            tools:text="Mobills - Controle Financeiro"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +60,9 @@
             android:gravity="bottom"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:textColor="@color/ad_text_color"
+            android:alpha="0.53"
+            tools:text="O melhor Gerenciador Financeiro"
             app:layout_constraintStart_toStartOf="@id/ad_headline"
             app:layout_constraintEnd_toEndOf="@+id/ad_headline"
             app:layout_constraintTop_toBottomOf="@id/ad_headline" />
@@ -68,6 +75,7 @@
             android:isIndicator="true"
             android:numStars="5"
             android:stepSize="0.5"
+            tools:rating="4.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@+id/ad_headline"
             app:layout_constraintTop_toBottomOf="@+id/ad_advertiser" />
@@ -84,9 +92,12 @@
             android:id="@+id/ad_body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            tools:text="Aqui vai o corpo da propaganda"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:textColor="@color/ad_text_color"
+            android:alpha="0.67"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ad_app_icon"
@@ -98,11 +109,12 @@
             android:layout_height="175dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            tools:background="@color/black_65"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ad_body" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/ad_call_to_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,11 +122,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="?attr/colorPrimary"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
+            app:backgroundTint="?attr/colorPrimary"
+            tools:text="Baixar Agora"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ad_media"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -124,6 +133,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            tools:text="Play Store"
+            android:textColor="@color/ad_text_color"
+            android:alpha="0.67"
             android:layout_marginEnd="4dp"
             android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/ad_call_to_action"

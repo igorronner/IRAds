@@ -17,11 +17,14 @@ public class IRAdsInit {
         ConfigUtil.LOGO = builder.logo;
         ConfigUtil.APP_ID = builder.appId;
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
+        ConfigUtil.MID_INTERSTITIAL_ID = builder.midInterstitialId;
         ConfigUtil.EXPENSIVE_INTERSTITIAL_ID = builder.expensiveInterstitialId;
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
+        ConfigUtil.MID_NATIVE_AD_ID = builder.midNativeAdId;
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.TESTER = builder.tester;
+        ConfigUtil.AD_ENABLED = builder.adEnabled;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
         ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
         ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
@@ -37,8 +40,10 @@ public class IRAdsInit {
         private IRAdsInit IRAdsInit;
         private String appId;
         private String interstitialId;
+        private String midInterstitialId;
         private String expensiveInterstitialId;
         private String nativeAdId;
+        private String midNativeAdId;
         private String expensiveNativeAdId;
         private String bannerAdId;
         private String rewardedVideoId;
@@ -50,6 +55,7 @@ public class IRAdsInit {
         private String appPrefix;
 
         private boolean tester;
+        private boolean adEnabled = true;
         private boolean enableCheckMobills;
 
         public Builder() { }
@@ -69,6 +75,11 @@ public class IRAdsInit {
             return this;
         }
 
+        public Builder setMidInterstitialId(String midInterstitialId){
+            this.midInterstitialId = midInterstitialId;
+            return this;
+        }
+
         public Builder setNativeAdId(String nativeAdId) {
             this.nativeAdId = nativeAdId;
             return this;
@@ -76,6 +87,23 @@ public class IRAdsInit {
 
         public Builder setExpensiveNativeAdId(String expensiveNativeAdId) {
             this.expensiveNativeAdId = expensiveNativeAdId;
+            return this;
+        }
+
+        public Builder setMidNativeAdId(String midNativeAdId){
+            this.midInterstitialId = midNativeAdId;
+            return this;
+        }
+
+        public Builder setTwoFloorsNativeAd(String expensiveNativeAdId, String midNativeAdId){
+            this.expensiveNativeAdId = expensiveNativeAdId;
+            this.midNativeAdId = midNativeAdId;
+            return this;
+        }
+
+        public Builder setTwoFloorsInterstitial(String expensiveInterstitialId, String midInterstitialId) {
+            this.expensiveInterstitialId = expensiveInterstitialId;
+            this.midInterstitialId = midInterstitialId;
             return this;
         }
 
@@ -112,6 +140,11 @@ public class IRAdsInit {
 
         public Builder setTester(boolean tester) {
             this.tester = tester;
+            return this;
+        }
+
+        public Builder setAdEnabled(boolean adEnabled) {
+            this.adEnabled = adEnabled;
             return this;
         }
 

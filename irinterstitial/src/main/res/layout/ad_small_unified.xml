@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/adViewNative"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="50dp"
+        tools:visibility="visible"
         android:visibility="invisible">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -19,20 +21,19 @@
             android:layout_height="wrap_content"
             style="@style/AppTheme.AdAttribution"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ad_app_icon"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            tools:srcCompat="@drawable/ic_launcher_round"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ad_headline"
-            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,17 +42,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:textColor="@color/black_87"
+            android:textColor="@color/ad_text_color"
+            tools:text="Mobills - Controle Financeiro dfdsfdsf sdfdsfdsfs dvdsfdsf sdfdsfsdfs dsf"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/ad_advertiser"
+            android:singleLine="false"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintEnd_toStartOf="@+id/ad_call_to_action"
             app:layout_constraintStart_toEndOf="@id/ad_app_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ad_advertiser"
@@ -60,24 +62,26 @@
             android:gravity="bottom"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:textColor="@color/ad_text_color"
+            android:alpha="0.53"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@+id/ad_call_to_action"
+            tools:text="O melhor Gerenciador Financeiro esfdsfsdfdsfdsfsdfs sfd dsf"
             app:layout_constraintStart_toStartOf="@id/ad_headline"
-            app:layout_constraintEnd_toEndOf="@+id/ad_headline"
-            app:layout_constraintBottom_toTopOf="@id/ad_stars"
             app:layout_constraintTop_toBottomOf="@id/ad_headline" />
 
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/ad_stars"
-            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
             android:isIndicator="true"
             android:numStars="5"
             android:stepSize="0.5"
-            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/ratingBarStyleSmall"
+            app:layout_constraintStart_toStartOf="@+id/ad_headline"
             app:layout_constraintEnd_toStartOf="@id/ad_store"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="@+id/ad_headline"
             app:layout_constraintTop_toBottomOf="@+id/ad_advertiser" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -107,22 +111,56 @@
             app:layout_constraintStart_toEndOf="@id/ad_store"
             app:layout_constraintTop_toBottomOf="@+id/ad_advertiser" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/ad_call_to_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="?attr/colorPrimary"
-            android:textColor="@android:color/white"
+            app:backgroundTint="?attr/colorPrimary"
+            tools:text="Baixar Agora"
             android:textSize="12sp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ad_headline"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/brBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierAllowsGoneWidgets="true"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="ad_call_to_action,ad_store,ad_price,ad_stars,ad_app_icon"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ad_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"
+            android:textSize="12sp"
+            android:textColor="@color/ad_text_color"
+            android:alpha="0.67"
+            tools:text="Aqui vai o corpo da propaganda"
+            app:layout_constraintTop_toTopOf="@id/brBody"
+            app:layout_constraintEnd_toEndOf="@id/ad_call_to_action"
+            app:layout_constraintBottom_toTopOf="@id/ad_media"
+            app:layout_constraintStart_toStartOf="@+id/ad_app_icon"/>
+
+        <com.google.android.gms.ads.formats.MediaView
+            android:id="@+id/ad_media"
+            android:layout_width="250dp"
+            android:layout_height="175dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ad_body"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

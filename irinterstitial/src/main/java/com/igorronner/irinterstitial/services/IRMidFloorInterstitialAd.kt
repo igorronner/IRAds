@@ -9,107 +9,113 @@ import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.utils.SingletonHolder
 
-class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
+class IRMidFloorInterstitialAd(
+        val adsInstance: IRAds
+) : IRInterstitial{
 
-    val mInterstitialAd = getInstance(adsInstance.activity.applicationContext)
-
-    companion object : SingletonHolder<InterstitialAd, Context>(::InterstitialAd){
-        const val tag = "DefaultInterstitial"
-    }
+    val midFloorInterstitialAd = getInstance(adsInstance.activity.applicationContext)
 
     init {
-        if (mInterstitialAd.adUnitId.isNullOrBlank()) {
-            mInterstitialAd.adUnitId = ConfigUtil.INTERSTITIAL_ID
+        if (midFloorInterstitialAd.adUnitId.isNullOrBlank()) {
+            midFloorInterstitialAd.adUnitId = ConfigUtil.MID_INTERSTITIAL_ID
         }
     }
 
+    companion object : SingletonHolder<InterstitialAd, Context>(::InterstitialAd){
+        const val tag = "IRAds"
+    }
+
     override fun load(force: Boolean, adListener: IRInterstitialListener) {
-        if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
-            mInterstitialAd.show()
-            val event = "Mostrou DefaultInterstitial"
+        if (midFloorInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
+            midFloorInterstitialAd.show()
+            val event = "Mostrou_IRMidFloorInterstitialAd"
             AnalyticsService(adsInstance.activity).logEvent(event)
             Log.d(tag, event)
         } else if (!force)
             adListener.onNotLoaded()
 
-        mInterstitialAd.adListener = object : AdListener() {
+        midFloorInterstitialAd.adListener = object : AdListener() {
 
             override fun onAdFailedToLoad(p0: Int) {
-                if (force && !adsInstance.isStopped)
-                    adListener.onFailed()
-                val event = "Falhou DefaultInterstitial"
+                val event = "Falhou_IRMidFloorInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
                 Log.d(tag, event)
+
+                if (force && !adsInstance.isStopped) {
+                    adListener.onFailed()
+                }
             }
 
             override fun onAdClosed() {
-                adListener.onAdClosed()
-                adsInstance.onStop()
-                val event = "Fechou DefaultInterstitial"
+                val event = "Fechou_IRMidFloorInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
                 Log.d(tag, event)
+                adListener.onAdClosed()
+                adsInstance.onStop()
             }
 
             override fun onAdLoaded() {
                 if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
-                    mInterstitialAd.show()
-                    val event = "Mostrou DefaultInterstitial"
+                    val event = "Mostrou_IRMidFloorInterstitialAd"
                     AnalyticsService(adsInstance.activity).logEvent(event)
                     Log.d(tag, event)
+                    midFloorInterstitialAd.show()
                 }
             }
         }
     }
-
-
-    override fun load(force:Boolean, adListener: AdListener) {
-
-        if (mInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
-            mInterstitialAd.show()
-            val event = "Mostrou DefaultInterstitial"
+    override fun load(force: Boolean, adListener: AdListener) {
+        if (midFloorInterstitialAd.isLoaded && !IRAds.isPremium(adsInstance.activity)) {
+            midFloorInterstitialAd.show()
+            val event = "Mostrou_IRMidFloorInterstitialAd"
             AnalyticsService(adsInstance.activity).logEvent(event)
             Log.d(tag, event)
         } else if (!force)
             adListener.onAdFailedToLoad(0)
 
-        mInterstitialAd.adListener = object : AdListener() {
+        midFloorInterstitialAd.adListener = object : AdListener() {
 
             override fun onAdFailedToLoad(p0: Int) {
-                if (force && !adsInstance.isStopped)
-                    adListener.onAdFailedToLoad(p0)
-                val event = "Falhou DefaultInterstitial"
+                val event = "Falhou_IRMidFloorInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
                 Log.d(tag, event)
+
+                if (force && !adsInstance.isStopped) {
+                    adListener.onAdFailedToLoad(p0)
+                }
             }
 
             override fun onAdClosed() {
-                adListener.onAdClosed()
-                adsInstance.onStop()
-                val event = "Fechou DefaultInterstitial"
+                val event = "Fechou_IRMidFloorInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
                 Log.d(tag, event)
+                adListener.onAdClosed()
+                adsInstance.onStop()
             }
 
             override fun onAdLoaded() {
                 adListener.onAdLoaded()
                 if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
-                    mInterstitialAd.show()
-                    val event = "Mostrou DefaultInterstitial"
+                    val event = "Mostrou_IRMidFloorInterstitialAd"
                     AnalyticsService(adsInstance.activity).logEvent(event)
                     Log.d(tag, event)
+                    midFloorInterstitialAd.show()
                 }
             }
         }
     }
 
     override fun requestNewInterstitial() {
-        if (mInterstitialAd.adUnitId.isNullOrBlank())
+        if (midFloorInterstitialAd.adUnitId.isNullOrBlank())
             return
+
         val adRequest = AdRequest.Builder()
                 .build()
-        mInterstitialAd.loadAd(adRequest)
-        val event = "requestNewInterstitial DefaultInterstitial"
+        midFloorInterstitialAd.loadAd(adRequest)
+        val event = "requestNew_IRMidFloorInterstitialAd"
         AnalyticsService(adsInstance.activity).logEvent(event)
         Log.d(tag, event)
     }
+
 }
+

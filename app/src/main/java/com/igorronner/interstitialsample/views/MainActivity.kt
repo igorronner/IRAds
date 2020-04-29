@@ -7,9 +7,10 @@ import android.view.View
 import com.igorronner.interstitialsample.R
 import com.igorronner.irinterstitial.dto.IRSkuDetails
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.init.IRBanner
 import com.igorronner.irinterstitial.services.*
 import kotlinx.android.synthetic.main.activity_main.*
-class MainActivity : AppCompatActivity(),
+class  MainActivity : AppCompatActivity(),
         ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
 
     private lateinit var adsInstance:IRAds
@@ -37,14 +38,14 @@ class MainActivity : AppCompatActivity(),
         }
 
         button4.setOnClickListener {
-            adsInstance.loadNativeAd(true)
+            IRBanner.loadNativeAd(this, showProgress = true)
         }
 
         button5.setOnClickListener {
             adsInstance.openDialogRewardedVideo(this)
         }
 
-        adsInstance.loadNativeAd(true)
+        IRBanner.loadNativeAd(this, showProgress = true)
         adsInstance.loadAdaptiveBanner(banner_ad, this)
     }
 
@@ -79,6 +80,6 @@ class MainActivity : AppCompatActivity(),
 
     private fun refreshScreen(){
         purchase.visibility = View.GONE
-        adsInstance.loadNativeAd(true)
+        IRBanner.loadNativeAd(this, showProgress = true)
     }
 }

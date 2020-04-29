@@ -58,6 +58,7 @@ public class MainPreference {
     }
 
     public static boolean isPremium(Context context) {
+
         if (ConfigUtil.TESTER) {
             return false;
         }
@@ -70,7 +71,11 @@ public class MainPreference {
             return true;
         }
 
-        return isPremiumMobills(context);
+        if (isPremiumMobills(context)){
+            return true;
+        }
+
+        return !ConfigUtil.AD_ENABLED;
     }
 
     public static boolean isPremiumMobills(Context context) {
