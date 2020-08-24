@@ -1,7 +1,6 @@
 package com.igorronner.irinterstitial.services;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,33 +11,26 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.google.android.gms.ads.formats.MediaView;
-import com.google.android.gms.ads.formats.NativeAd;
 import com.google.android.gms.ads.formats.NativeAdOptions;
-import com.google.android.gms.ads.formats.NativeAppInstallAd;
-import com.google.android.gms.ads.formats.NativeAppInstallAdView;
-import com.google.android.gms.ads.formats.NativeContentAd;
-import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.igorronner.irinterstitial.R;
 import com.igorronner.irinterstitial.enums.FloorEnum;
 import com.igorronner.irinterstitial.preferences.MainPreference;
+import com.igorronner.irinterstitial.utils.Logger;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import static com.igorronner.irinterstitial.enums.FloorEnum.HIGH_FLOOR;
 import static com.igorronner.irinterstitial.enums.FloorEnum.MID_FLOOR;
@@ -150,7 +142,7 @@ public class ManagerNativeAd {
                             adCard.addView(adView);
                         }
                         final String event = "Mostrou UnifiedNativeAd: " + unifiedNativeAdType;
-                        Log.d(ManagerNativeAd.class.getSimpleName(), event);
+                        Logger.INSTANCE.log(event);
                         new AnalyticsService(context).logEvent(event);
                     }
                 })
@@ -261,7 +253,7 @@ public class ManagerNativeAd {
                             adCard.removeAllViews();
                             adCard.addView(adView);
                         }
-                        Log.d(ManagerNativeAd.class.getSimpleName(), eventSuccess);
+                        Logger.INSTANCE.log(eventSuccess);
                         new AnalyticsService(context).logEvent(eventSuccess);
                     }
                 })
@@ -278,7 +270,7 @@ public class ManagerNativeAd {
                             adView.setVisibility(View.INVISIBLE);
                         }
 
-                        Log.d(ManagerNativeAd.class.getSimpleName(), eventFailed);
+                        Logger.INSTANCE.logError(eventFailed);
                         new AnalyticsService(context).logEvent(eventFailed);
                     }
                 });
@@ -583,7 +575,7 @@ public class ManagerNativeAd {
     }
 
     private void showEvent(String message) {
-        Log.d(ManagerNativeAd.class.getSimpleName(), message);
+        Logger.INSTANCE.log(message);
         new AnalyticsService(context).logEvent(message);
     }
 

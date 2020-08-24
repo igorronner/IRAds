@@ -1,12 +1,12 @@
 package com.igorronner.irinterstitial.services
 
 import android.content.Context
-import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.utils.Logger
 import com.igorronner.irinterstitial.utils.SingletonHolder
 
 class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
@@ -28,7 +28,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
             mInterstitialAd.show()
             val event = "Mostrou DefaultInterstitial"
             AnalyticsService(adsInstance.activity).logEvent(event)
-            Log.d(tag, event)
+            Logger.log(tag, event)
         } else if (!force)
             adListener.onNotLoaded()
 
@@ -39,7 +39,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
                     adListener.onFailed()
                 val event = "Falhou DefaultInterstitial"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.logWarning(tag, event)
             }
 
             override fun onAdClosed() {
@@ -47,7 +47,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
                 adsInstance.onStop()
                 val event = "Fechou DefaultInterstitial"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.log(tag, event)
             }
 
             override fun onAdLoaded() {
@@ -55,7 +55,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
                     mInterstitialAd.show()
                     val event = "Mostrou DefaultInterstitial"
                     AnalyticsService(adsInstance.activity).logEvent(event)
-                    Log.d(tag, event)
+                    Logger.log(tag, event)
                 }
             }
         }
@@ -68,7 +68,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
             mInterstitialAd.show()
             val event = "Mostrou DefaultInterstitial"
             AnalyticsService(adsInstance.activity).logEvent(event)
-            Log.d(tag, event)
+            Logger.log(tag, event)
         } else if (!force)
             adListener.onAdFailedToLoad(0)
 
@@ -79,7 +79,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
                     adListener.onAdFailedToLoad(p0)
                 val event = "Falhou DefaultInterstitial"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.logWarning(tag, event)
             }
 
             override fun onAdClosed() {
@@ -87,7 +87,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
                 adsInstance.onStop()
                 val event = "Fechou DefaultInterstitial"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.log(tag, event)
             }
 
             override fun onAdLoaded() {
@@ -96,7 +96,7 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
                     mInterstitialAd.show()
                     val event = "Mostrou DefaultInterstitial"
                     AnalyticsService(adsInstance.activity).logEvent(event)
-                    Log.d(tag, event)
+                    Logger.log(tag, event)
                 }
             }
         }
@@ -110,6 +110,6 @@ class IRInterstitialAd(val adsInstance: IRAds) : IRInterstitial{
         mInterstitialAd.loadAd(adRequest)
         val event = "requestNewInterstitial DefaultInterstitial"
         AnalyticsService(adsInstance.activity).logEvent(event)
-        Log.d(tag, event)
+        Logger.log(tag, event)
     }
 }

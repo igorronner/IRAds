@@ -1,7 +1,6 @@
 package com.igorronner.irinterstitial.services
 
 import android.content.Context
-import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.reward.RewardItem
@@ -11,14 +10,18 @@ import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
 import com.igorronner.irinterstitial.utils.AbstractRewardedVideoAdListener
+import com.igorronner.irinterstitial.utils.Logger
 
 class IRRewardedVideoAd(
         private val context: Context
-) : IRRewardedVideo {
-
+) {
     private val rewardedVideoAd: RewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context)
 
-    override fun load(force: Boolean, adListener: RewardedVideoAdListener) {
+    fun load(
+            force: Boolean,
+            thenBecomePremium: Boolean,
+            adListener: RewardedVideoAdListener
+    ) {
         if (IRAds.isPremium(context)) {
             return
         }
@@ -56,8 +59,10 @@ class IRRewardedVideoAd(
             override fun onRewarded(reward: RewardItem?) {
                 super.onRewarded(reward)
                 adListener.onRewarded(reward)
-
-                if (reward != null) MainPreference.setDaysPremium(context, reward.amount)
+                if (reward != null) {
+                    MainPreference.setWasRewarded(context, true)
+                    if (thenBecomePremium) MainPreference.setDaysPremium(context, reward.amount)
+                }
             }
 
             override fun onRewardedVideoStarted() {
@@ -67,6 +72,7 @@ class IRRewardedVideoAd(
 
             override fun onRewardedVideoAdFailedToLoad(p0: Int) {
                 super.onRewardedVideoAdFailedToLoad(p0)
+                rewardedVideoAd.rewardedVideoAdListener = null
                 adListener.onRewardedVideoAdFailedToLoad(p0)
             }
         }
@@ -78,7 +84,7 @@ class IRRewardedVideoAd(
         }
     }
 
-    override fun requestRewardedVideoAd() {
+    fun requestRewardedVideoAd() {
         if (ConfigUtil.REWARDED_VIDEO_ID.isNullOrBlank()) {
             return
         }
@@ -96,7 +102,7 @@ class IRRewardedVideoAd(
 
     private fun sendEvent(event: String) {
         AnalyticsService(context).logEvent(event)
-        Log.d(this::class.java.simpleName, event)
+        Logger.log(d = event)
     }
 
 }

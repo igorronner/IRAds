@@ -16,7 +16,7 @@
             android:value="true" />
         <activity
             android:name=".views.SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
     </application>
 
 </manifest>

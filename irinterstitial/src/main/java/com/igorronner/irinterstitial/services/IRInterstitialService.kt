@@ -2,19 +2,17 @@ package com.igorronner.irinterstitial.services
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import androidx.annotation.IdRes
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-import android.util.Log
-import com.igorronner.irinterstitial.BuildConfig
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum
 import com.igorronner.irinterstitial.enums.IRInterstitialVersionEnum.*
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
+import com.igorronner.irinterstitial.utils.Logger
 
 
 open class IRInterstitialService {
@@ -558,7 +556,7 @@ open class IRInterstitialService {
     private fun String?.isIdValid() = this?.isNotEmpty() ?: false
 
     private fun log(message: String){
-        if (BuildConfig.DEBUG) Log.d("IRInterstitialService", message)
+        Logger.log("IRInterstitialService", message)
     }
 
 }

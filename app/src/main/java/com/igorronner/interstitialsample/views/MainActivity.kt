@@ -45,6 +45,10 @@ class  MainActivity : AppCompatActivity(),
             adsInstance.openDialogRewardedVideo(this)
         }
 
+        button6.setOnClickListener {
+            adsInstance.openDialogRewardedThenIntent(this, Intent(this, AnotherActivity::class.java))
+        }
+
         IRBanner.loadNativeAd(this, showProgress = true)
         adsInstance.loadAdaptiveBanner(banner_ad, this)
     }
