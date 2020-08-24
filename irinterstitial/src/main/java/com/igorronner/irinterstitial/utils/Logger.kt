@@ -17,26 +17,26 @@ import com.igorronner.irinterstitial.BuildConfig
  *
  */
 object Logger {
-    @JvmOverloads fun log(tag: String? = TAG, d: String) = baseLog(d, LEVEL_DEBUG)
-    @JvmOverloads fun logInfo(tag: String? = TAG, i: String) = baseLog(i, LEVEL_INFO)
-    @JvmOverloads fun logWarning(tag: String? = TAG, w: String) = baseLog(w, LEVEL_WARNING)
-    @JvmOverloads fun logError(tag: String? = TAG, e: String) = baseLog(e, LEVEL_ERROR)
-    @JvmOverloads fun logWTF(tag: String? = TAG, s: String) = baseLog(s, LEVEL_WTF)
+    @JvmOverloads fun log(tag: String? = TAG, d: String) = baseLog(tag?: TAG, d, LEVEL_DEBUG)
+    @JvmOverloads fun logInfo(tag: String? = TAG, i: String) = baseLog(tag?: TAG, i, LEVEL_INFO)
+    @JvmOverloads fun logWarning(tag: String? = TAG, w: String) = baseLog(tag?: TAG, w, LEVEL_WARNING)
+    @JvmOverloads fun logError(tag: String? = TAG, e: String) = baseLog(tag?: TAG, e, LEVEL_ERROR)
+    @JvmOverloads fun logWTF(tag: String? = TAG, s: String) = baseLog(tag?: TAG, s, LEVEL_WTF)
     @JvmOverloads fun logException(tag: String? = TAG, t: Throwable) {
         t.printStackTrace()
-        baseLog(t.message ?: "No message", LEVEL_FATAL)
+        baseLog(tag?: TAG, t.message ?: "No message", LEVEL_FATAL)
     }
 
-    private fun baseLog(message: String, @LogLevel logLevel: String) {
+    private fun baseLog(tag: String, message: String, @LogLevel logLevel: String) {
         if (!BuildConfig.DEBUG) return
 
         when (logLevel) {
-            LEVEL_DEBUG -> Log.d(TAG, message)
-            LEVEL_INFO -> Log.i(TAG, message)
-            LEVEL_WARNING -> Log.w(TAG, message)
-            LEVEL_ERROR -> Log.e(TAG, message)
-            LEVEL_WTF -> Log.wtf(TAG, message)
-            else -> Log.v(TAG, message)
+            LEVEL_DEBUG -> Log.d(tag, message)
+            LEVEL_INFO -> Log.i(tag, message)
+            LEVEL_WARNING -> Log.w(tag, message)
+            LEVEL_ERROR -> Log.e(tag, message)
+            LEVEL_WTF -> Log.wtf(tag, message)
+            else -> Log.v(tag, message)
         }
     }
 
