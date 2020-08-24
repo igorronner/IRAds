@@ -1,11 +1,11 @@
 package com.igorronner.irinterstitial.services
 
 import android.app.Activity
-import android.util.Log
 import com.android.billingclient.api.*
 import com.igorronner.irinterstitial.extensions.toIRPurchaseList
 import com.igorronner.irinterstitial.extensions.toIRSkuDetailsList
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.utils.Logger
 
 
 class SubscribeService(private var activity: Activity) : PurchasesUpdatedListener {
@@ -50,7 +50,7 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
                 }
             }
             override fun onBillingServiceDisconnected() {
-                Log.d("billingClient", "onBillingServiceDisconnected");
+                Logger.logWarning("billingClient", "onBillingServiceDisconnected");
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
             }
@@ -70,7 +70,7 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
 
 
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
-        Log.d("billingClient", "responseCode $responseCode")
+        Logger.log("billingClient", "responseCode $responseCode")
 
         when (responseCode){
             BillingClient.BillingResponse.OK -> {
@@ -83,16 +83,16 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
 
             }
             BillingClient.BillingResponse.ITEM_ALREADY_OWNED -> {
-                Log.d("billingClient", "handlePurchasesResult ITEM_ALREADY_OWNED")
+                Logger.logWarning("billingClient", "handlePurchasesResult ITEM_ALREADY_OWNED")
             }
             BillingClient.BillingResponse.SERVICE_DISCONNECTED -> {
-                Log.d("billingClient", "handlePurchasesResult SERVICE_DISCONNECTED")
+                Logger.logError("billingClient", "handlePurchasesResult SERVICE_DISCONNECTED")
             }
             BillingClient.BillingResponse.SERVICE_UNAVAILABLE -> {
-                Log.d("billingClient", "handlePurchasesResult SERVICE_UNAVAILABLE")
+                Logger.logError("billingClient", "handlePurchasesResult SERVICE_UNAVAILABLE")
             }
             else -> {
-                Log.d("billingClient", "handlePurchasesResult $responseCode")
+                Logger.log("billingClient", "handlePurchasesResult $responseCode")
                 purchaseErrorListener?.onError(responseCode)
             }
 

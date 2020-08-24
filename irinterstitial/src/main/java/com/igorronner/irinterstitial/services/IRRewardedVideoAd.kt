@@ -1,7 +1,6 @@
 package com.igorronner.irinterstitial.services
 
 import android.content.Context
-import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.reward.RewardItem
@@ -11,6 +10,7 @@ import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.preferences.MainPreference
 import com.igorronner.irinterstitial.utils.AbstractRewardedVideoAdListener
+import com.igorronner.irinterstitial.utils.Logger
 
 class IRRewardedVideoAd(
         private val context: Context
@@ -102,7 +102,7 @@ class IRRewardedVideoAd(
 
     private fun sendEvent(event: String) {
         AnalyticsService(context).logEvent(event)
-        Log.d(this::class.java.simpleName, event)
+        Logger.log(d = event)
     }
 
 }
