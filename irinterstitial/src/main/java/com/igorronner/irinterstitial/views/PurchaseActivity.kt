@@ -9,25 +9,35 @@ import com.igorronner.irinterstitial.R
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.preferences.MainPreference
 import com.igorronner.irinterstitial.services.ProductPurchasedListener
+import com.igorronner.irinterstitial.services.ProductsListListener
 import com.igorronner.irinterstitial.utils.Logger
 
-open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, ProductPurchasedListener {
+open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, ProductPurchasedListener, ProductsListListener {
 
     private lateinit var billingClient: BillingClient
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
-        handlePurchasesResult(responseCode, purchases)
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+        handlePurchasesResult(billingResult.responseCode, purchases)
     }
 
     override fun onProductsPurchased() = Unit
 
+    override fun onProductList(list: List<SkuDetails>?) {
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        billingClient = BillingClient.newBuilder(this).setListener(this).build()
+        billingClient = BillingClient.newBuilder(this)
+                .setListener(this)
+                .enablePendingPurchases()
+                .build()
         billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                val billingResponseCode = billingResult.responseCode
+
                 Logger.log("billingClient", "onBillingSetupFinished ")
-                if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                if (billingResponseCode == BillingClient.BillingResponseCode.OK) {
                     Logger.logInfo("billingClient", "BillingClient.BillingResponse.OK ")
                     val skuList = ArrayList<String>()
                     skuList.add(ConfigUtil.PRODUCT_SKU)
@@ -36,18 +46,17 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, Pro
                             .setSkusList(skuList)
                             .setType(SkuType.INAPP)
 
-                    billingClient.querySkuDetailsAsync(params.build(), object : SkuDetailsResponseListener {
-                        override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
-                            Logger.log("billingClient", "querySkuDetailsAsync ")
-                            Logger.log("billingClient", "responseCode $responseCode")
-                            skuDetailsList?.forEach { skuDetails: SkuDetails? ->
-                                Logger.log("billingClient", "skuDetailsList " + skuDetails?.description)
-                                Logger.log("billingClient", "skuDetailsList " + skuDetails?.title)
-                                Logger.log("billingClient", "skuDetailsList " + skuDetails?.price)
-                                Logger.log("billingClient", "skuDetailsList " + skuDetails?.sku)
-                            }
+                    billingClient.querySkuDetailsAsync(params.build()) { result, skuDetailsList ->
+                        val responseCode = result.responseCode
+                        Logger.log("billingClient", "querySkuDetailsAsync ")
+                        Logger.log("billingClient", "responseCode $responseCode")
+                        skuDetailsList?.forEach { skuDetails: SkuDetails? ->
+                            Logger.log("billingClient", "skuDetailsList ${skuDetails?.description}")
+                            Logger.log("billingClient", "skuDetailsList ${skuDetails?.title}")
+                            Logger.log("billingClient", "skuDetailsList ${skuDetails?.price}")
+                            Logger.log("billingClient", "skuDetailsList ${skuDetails?.sku}")
                         }
-                    })
+                    }
                 }
             }
 
@@ -77,11 +86,11 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, Pro
         handlePurchasesResult(responseCode, purchases)
     }
 
-    fun showDialogPremium() {
+    protected fun showDialogPremium(skuDetails: SkuDetails) {
         val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.buy_premium)
                 .setMessage(R.string.message_buy_premium)
-                .setPositiveButton(R.string.purchase) { _, _ -> purchase() }
+                .setPositiveButton(R.string.purchase) { _, _ -> purchase(skuDetails) }
                 .setNegativeButton(R.string.cancel, null)
 
         if (!isFinishing) {
@@ -90,7 +99,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, Pro
     }
 
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?){
-        if (responseCode == BillingClient.BillingResponse.OK && purchases != null) {
+        if (responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             Logger.log("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK")
             for (purchase in purchases) {
                 if(purchase.sku == ConfigUtil.PRODUCT_SKU) {
@@ -99,7 +108,7 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, Pro
                     Logger.log("billingClient", "onProductPurchased ")
                 }
             }
-        } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
+        } else if (responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
             // Handle an error caused by a user cancelling the purchase flow.
             Logger.logInfo("billingClient", "handlePurchasesResult USER_CANCELED")
         } else {
@@ -108,10 +117,9 @@ open class PurchaseActivity : AppCompatActivity(), PurchasesUpdatedListener, Pro
         }
     }
 
-    fun purchase(){
+    protected fun purchase(skuDetails: SkuDetails) {
         val flowParams = BillingFlowParams.newBuilder()
-                .setSku(ConfigUtil.PRODUCT_SKU)
-                .setType(SkuType.INAPP) // SkuType.SUB for subscription
+                .setSkuDetails(skuDetails)
                 .build()
         billingClient.launchBillingFlow(this@PurchaseActivity, flowParams)
     }

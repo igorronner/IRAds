@@ -1,8 +1,9 @@
 package com.igorronner.interstitialsample.views
 
 import android.os.Bundle
-import com.google.android.gms.ads.AdSize
+import com.android.billingclient.api.SkuDetails
 import com.igorronner.interstitialsample.R
+import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.views.PurchaseActivity
 import kotlinx.android.synthetic.main.activity_another.*
@@ -20,12 +21,23 @@ class AnotherActivity : PurchaseActivity() {
                 findViewById(R.id.adViewNative),
                 true)
 
-        purchase.setOnClickListener { showDialogPremium() }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         adsInstance.showInterstitial()
+    }
+
+    override fun onProductList(list: List<SkuDetails>?) {
+        if (!list.isNullOrEmpty()) {
+            list.find {
+                it.sku ==  ConfigUtil.PRODUCT_SKU
+            }?.let { skuDetails ->
+                purchase.setOnClickListener {
+                    showDialogPremium(skuDetails)
+                }
+            }
+        }
     }
 
     override fun onProductsPurchased() {

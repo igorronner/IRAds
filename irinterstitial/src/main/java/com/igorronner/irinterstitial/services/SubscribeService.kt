@@ -3,7 +3,6 @@ package com.igorronner.irinterstitial.services
 import android.app.Activity
 import com.android.billingclient.api.*
 import com.igorronner.irinterstitial.extensions.toIRPurchaseList
-import com.igorronner.irinterstitial.extensions.toIRSkuDetailsList
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.utils.Logger
 
@@ -27,28 +26,34 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
     var productsListListener:ProductsListListener? = null
     var purchaseCanceledListener:PurchaseCanceledListener? = null
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
-        handlePurchasesResult(responseCode, purchases)
+    override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Purchase>?) {
+        handlePurchasesResult(result.responseCode, purchases)
     }
 
     private lateinit var billingClient: BillingClient
 
     private fun startBilling() {
-        billingClient = BillingClient.newBuilder(activity).setListener(this).build()
+        billingClient = BillingClient.newBuilder(activity)
+                .setListener(this)
+                .enablePendingPurchases()
+                .build()
+
         billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
-                if (billingResponseCode == BillingClient.BillingResponse.OK) {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                val billingResponseCode = billingResult.responseCode
+
+                if (billingResponseCode == BillingClient.BillingResponseCode.OK) {
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
                     productsListListener?.let {
                         productsListListener ->
                         billingClient.querySkuDetailsAsync(params.build()) { _, skuDetailsList ->
-                            productsListListener.onProductList(skuDetailsList.toIRSkuDetailsList())
+                            productsListListener.onProductList(skuDetailsList)
                         }
                     }
-
                 }
             }
+
             override fun onBillingServiceDisconnected() {
                 Logger.logWarning("billingClient", "onBillingServiceDisconnected");
                 // Try to restart the connection on the next request to
@@ -73,22 +78,22 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
         Logger.log("billingClient", "responseCode $responseCode")
 
         when (responseCode){
-            BillingClient.BillingResponse.OK -> {
+            BillingClient.BillingResponseCode.OK -> {
                 purchases?.let {
                     productPurchasedListListener?.onProductsPurchasedList(it.toIRPurchaseList())
                 }
             }
-            BillingClient.BillingResponse.USER_CANCELED -> {
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
                 purchaseCanceledListener?.onCanceled()
 
             }
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED -> {
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 Logger.logWarning("billingClient", "handlePurchasesResult ITEM_ALREADY_OWNED")
             }
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED -> {
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> {
                 Logger.logError("billingClient", "handlePurchasesResult SERVICE_DISCONNECTED")
             }
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE -> {
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> {
                 Logger.logError("billingClient", "handlePurchasesResult SERVICE_UNAVAILABLE")
             }
             else -> {
@@ -99,11 +104,9 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
         }
     }
 
-    fun purchase(sku:String){
-
+    fun purchase(skuDetails: SkuDetails) {
         val flowParams = BillingFlowParams.newBuilder()
-                .setSku(sku)
-                .setType(BillingClient.SkuType.SUBS)
+                .setSkuDetails(skuDetails) // Type is already in SkuDetails
                 .build()
         billingClient.launchBillingFlow(activity, flowParams)
     }

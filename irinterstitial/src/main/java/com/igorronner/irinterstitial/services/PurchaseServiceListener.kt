@@ -1,7 +1,7 @@
 package com.igorronner.irinterstitial.services
 
+import com.android.billingclient.api.SkuDetails
 import com.igorronner.irinterstitial.dto.IRPurchase
-import com.igorronner.irinterstitial.dto.IRSkuDetails
 
 interface ProductPurchasedListener{
     fun onProductsPurchased()
@@ -12,7 +12,7 @@ interface ProductPurchasedListListener{
 }
 
 interface ProductsListListener{
-    fun onProductList(list: List<IRSkuDetails>)
+    fun onProductList(list: List<SkuDetails>?)
 }
 
 interface PurchaseErrorListener{
