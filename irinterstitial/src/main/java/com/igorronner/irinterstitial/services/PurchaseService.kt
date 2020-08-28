@@ -46,12 +46,13 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
                 productsListListener?.let { productsListListener ->
                     if (billingResponseCode == BillingClient.BillingResponseCode.OK) {
                         Logger.logInfo("billingClient", "BillingClient.BillingResponse.OK ")
-                        val skuList = ArrayList<String>()
-                        skuList.add(ConfigUtil.PRODUCT_SKU)
-                        val params = SkuDetailsParams.newBuilder()
-                        params.setSkusList(skuList).setType(SkuType.INAPP)
 
-                        billingClient.querySkuDetailsAsync(params.build()) { result, skuDetailsList ->
+                        val purchaseParams = SkuDetailsParams.newBuilder().apply {
+                            setSkusList(listOf(ConfigUtil.PRODUCT_SKU))
+                            setType(SkuType.INAPP)
+                        }
+
+                        billingClient.querySkuDetailsAsync(purchaseParams.build()) { result, skuDetailsList ->
                             Logger.log("billingClient", "querySkuDetailsAsync ")
                             Logger.log("billingClient", "responseCode ${result.responseCode}")
 
@@ -83,9 +84,21 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
             return
 
         Logger.logInfo("billingClient", "billingClient.isInitialized ")
-        val purchasesResult = billingClient.queryPurchases(SkuType.INAPP)
-        val responseCode = purchasesResult.responseCode
-        val purchases = purchasesResult.purchasesList
+        val result = billingClient.queryPurchases(SkuType.INAPP)
+
+        if (supportsSubscriptions()) {
+            val subscriptionsResult = billingClient.queryPurchases(SkuType.SUBS)
+            if (subscriptionsResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                result.purchasesList.addAll(subscriptionsResult.purchasesList)
+            } else {
+                Logger.logError(e = "Got an error response trying to query subscriptions")
+            }
+        } else {
+            Logger.logWarning(w = "Subscriptions are not supported in this device")
+        }
+
+        val responseCode = result.responseCode
+        val purchases = result.purchasesList
         purchases?.forEach { purchase: Purchase? ->
             Logger.log("billingClient", "purchase ${purchase?.sku}")
         }
@@ -121,7 +134,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 Logger.log("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK (or OWNED)")
                 purchases.forEach { purchase ->
-                    if (purchase.sku == ConfigUtil.PRODUCT_SKU) {
+                    if (purchase.sku == ConfigUtil.PRODUCT_SKU || purchase.sku == ConfigUtil.SUBSCRIPTION_SKU) {
                         MainPreference.setPremium(activity)
                         productPurchasedListener?.onProductsPurchased()
                         Logger.log("billingClient", "onProductPurchased ")
@@ -138,6 +151,11 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
                 onError()
             }
         }
+    }
+
+    private fun supportsSubscriptions(): Boolean {
+        val responseCode = billingClient.isFeatureSupported(BillingClient.FeatureType.SUBSCRIPTIONS).responseCode
+        return responseCode == BillingClient.BillingResponseCode.OK
     }
 
     fun purchase(skuDetails: SkuDetails) {

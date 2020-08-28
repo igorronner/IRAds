@@ -23,6 +23,7 @@ public class IRAdsInit {
         ConfigUtil.MID_NATIVE_AD_ID = builder.midNativeAdId;
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
+        ConfigUtil.SUBSCRIPTION_SKU = builder.subscriptionSku;
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.AD_ENABLED = builder.adEnabled;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
@@ -51,6 +52,7 @@ public class IRAdsInit {
         @Deprecated
         private String publisherInterstitialId;
         private String productSku;
+        private String subscriptionSku;
         // Prefix for concat keys on remote config...
         private String appPrefix;
 
@@ -125,6 +127,11 @@ public class IRAdsInit {
 
         public Builder enablePurchace(String productSku) {
             this.productSku = productSku;
+            return this;
+        }
+
+        public Builder enableSubscription(String subscriptionSku) {
+            this.productSku = subscriptionSku;
             return this;
         }
 
