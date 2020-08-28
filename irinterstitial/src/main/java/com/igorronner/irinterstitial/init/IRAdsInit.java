@@ -131,7 +131,7 @@ public class IRAdsInit {
         }
 
         public Builder enableSubscription(String subscriptionSku) {
-            this.productSku = subscriptionSku;
+            this.subscriptionSku = subscriptionSku;
             return this;
         }
 
