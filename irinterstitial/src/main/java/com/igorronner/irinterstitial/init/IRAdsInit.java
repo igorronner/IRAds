@@ -162,8 +162,9 @@ public class IRAdsInit {
             return this;
         }
 
-        public void setLoggingEnabled(boolean loggingEnabled) {
+        public Builder setLoggingEnabled(boolean loggingEnabled) {
             this.loggingEnabled = loggingEnabled;
+            return this;
         }
 
         public IRAdsInit build(Context context) {

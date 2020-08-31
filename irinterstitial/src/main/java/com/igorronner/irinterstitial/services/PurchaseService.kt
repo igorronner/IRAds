@@ -178,24 +178,23 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 Logger.log("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK (or OWNED)")
 
-                val subscription = purchases.find {
-                    it.sku == ConfigUtil.SUBSCRIPTION_SKU
-                }
-                if (subscription == null) {
-                    MainPreference.removePremiumSub(activity)
-                } else {
+                val validSub = purchases.find {
+                    it.sku == ConfigUtil.SUBSCRIPTION_SKU && it.isValidated
+                } != null
+                if (validSub) {
                     MainPreference.setPremiumSub(activity)
+                } else {
+                    MainPreference.removePremiumSub(activity)
                 }
 
-                val inAppPurchase = purchases.find {
+                val validInApp = purchases.find {
                     it.sku == ConfigUtil.PRODUCT_SKU
-                }
-
-                if (inAppPurchase == null) {
+                } != null
+                if (validInApp) {
+                    MainPreference.setPremium(activity)
+                } else {
                     // refund?
                     MainPreference.removePremium(activity)
-                } else {
-                    MainPreference.setPremium(activity)
                 }
 
                 productPurchasedListListener?.onProductsPurchasedList(purchases)
