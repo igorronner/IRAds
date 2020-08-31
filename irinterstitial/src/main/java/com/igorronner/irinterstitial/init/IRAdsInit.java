@@ -26,6 +26,7 @@ public class IRAdsInit {
         ConfigUtil.SUBSCRIPTION_SKU = builder.subscriptionSku;
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.AD_ENABLED = builder.adEnabled;
+        ConfigUtil.LOGGING_ENABLED = builder.loggingEnabled;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
         ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
         ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
@@ -59,6 +60,7 @@ public class IRAdsInit {
         private boolean tester;
         private boolean adEnabled = true;
         private boolean enableCheckMobills;
+        private boolean loggingEnabled = false;
 
         public Builder() { }
 
@@ -158,6 +160,10 @@ public class IRAdsInit {
         public Builder enableCheckMobills(boolean enableCheckMobills) {
             this.enableCheckMobills = enableCheckMobills;
             return this;
+        }
+
+        public void setLoggingEnabled(boolean loggingEnabled) {
+            this.loggingEnabled = loggingEnabled;
         }
 
         public IRAdsInit build(Context context) {

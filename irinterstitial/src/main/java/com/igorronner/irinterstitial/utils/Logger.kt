@@ -2,7 +2,7 @@ package com.igorronner.irinterstitial.utils
 
 import android.util.Log
 import androidx.annotation.StringDef
-import com.igorronner.irinterstitial.BuildConfig
+import com.igorronner.irinterstitial.init.ConfigUtil
 
 /**
  * Takes care of logging to the default logcat stream.
@@ -28,7 +28,7 @@ object Logger {
     }
 
     private fun baseLog(tag: String, message: String, @LogLevel logLevel: String) {
-        if (!BuildConfig.DEBUG) return
+        if (!ConfigUtil.LOGGING_ENABLED) return
 
         when (logLevel) {
             LEVEL_DEBUG -> Log.d(tag, message)
