@@ -80,7 +80,7 @@ class SubscribeService(private var activity: Activity) : PurchasesUpdatedListene
         when (responseCode){
             BillingClient.BillingResponseCode.OK -> {
                 purchases?.let {
-                    productPurchasedListListener?.onProductsPurchasedList(it.toIRPurchaseList())
+                    productPurchasedListListener?.onProductsPurchasedList(it)
                 }
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {

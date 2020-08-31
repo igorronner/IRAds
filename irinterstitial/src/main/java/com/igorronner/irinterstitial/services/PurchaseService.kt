@@ -16,6 +16,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
     var billingClientResponseCode = BILLING_MANAGER_NOT_INITIALIZED
     var purchaseErrorListener: PurchaseErrorListener? = null
     var productPurchasedListener: ProductPurchasedListener? = null
+    var productPurchasedListListener: ProductPurchasedListListener? = null
     var productsListListener: ProductsListListener? = null
     var purchaseCanceledListener: PurchaseCanceledListener? = null
 
@@ -197,6 +198,7 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
                     MainPreference.setPremium(activity)
                 }
 
+                productPurchasedListListener?.onProductsPurchasedList(purchases)
                 purchases.forEach {
                     productPurchasedListener?.onProductsPurchased()
                     Logger.log("billingClient", "onProductPurchased $it")
