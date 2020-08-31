@@ -3,18 +3,23 @@ package com.igorronner.irinterstitial.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 
 import com.igorronner.irinterstitial.init.ConfigUtil;
 import com.igorronner.irinterstitial.utils.ContextKt;
 
 import java.util.Calendar;
 
-@SuppressWarnings("WeakerAccess")
+import androidx.annotation.NonNull;
+
+
 public class MainPreference {
 
     private static final String FIRST_LAUNCH_DATE = "first_launch_date";
     private static final String PREFS_PREMIUM = "prefs_premium";
 
+    // FIXME: Use real crypto or don't rely on preferences for this
+    private static final String PREFS_HAS_PREMIUM_SUB = base64Encode("has_premium_sub");
 
     private static final String PREFS_WAS_REWARDED = "was_rewarded";
 
@@ -49,6 +54,24 @@ public class MainPreference {
                 .apply();
     }
 
+    public static boolean removePremium(Context context) {
+        return getPreferencesEditor(context)
+                .remove(PREFS_PREMIUM)
+                .commit();
+    }
+
+    public static void setPremiumSub(Context context) {
+        getPreferencesEditor(context)
+                .putBoolean(PREFS_HAS_PREMIUM_SUB, true)
+                .apply();
+    }
+
+    public static boolean removePremiumSub(Context context) {
+        return getPreferencesEditor(context)
+                .remove(PREFS_HAS_PREMIUM_SUB)
+                .commit();
+    }
+
     public static void setDaysPremium(Context context, int days) {
         final Calendar starDaysPremium = Calendar.getInstance();
 
@@ -74,6 +97,10 @@ public class MainPreference {
         }
 
         if (getPreferences(context).getBoolean(PREFS_PREMIUM, false)) {
+            return true;
+        }
+
+        if (getPreferences(context).getBoolean(PREFS_HAS_PREMIUM_SUB, false)) {
             return true;
         }
 
@@ -119,4 +146,12 @@ public class MainPreference {
         return hasPremiumDays;
     }
 
+    @NonNull
+    private static String base64Encode(String key) {
+        try {
+            return Base64.encodeToString(key.getBytes(), Base64.NO_PADDING);
+        } catch (Exception e) {
+            return "ZmFpbGVk";
+        }
+    }
 }

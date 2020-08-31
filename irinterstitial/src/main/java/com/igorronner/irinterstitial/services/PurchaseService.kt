@@ -154,6 +154,14 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
         dialog.show()
     }
 
+    fun purchase(skuDetails: SkuDetails) = executeServiceRequest {
+        Logger.log("billingClient", "launching purchase flow for sku '${skuDetails.sku}'")
+        val flowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(skuDetails) // Type is already in SkuDetails
+                .build()
+        billingClient.launchBillingFlow(activity, flowParams)
+    }
+
     private fun handlePurchasesResult(responseCode: Int, purchases: MutableList<Purchase>?) {
         fun onError() {
             // Handle any other error codes.
@@ -168,12 +176,30 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
             BillingClient.BillingResponseCode.OK,
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 Logger.log("billingClient", "handlePurchasesResult BillingClient.BillingResponse.OK (or OWNED)")
-                purchases.forEach { purchase ->
-                    if (purchase.sku == ConfigUtil.PRODUCT_SKU || purchase.sku == ConfigUtil.SUBSCRIPTION_SKU) {
-                        MainPreference.setPremium(activity)
-                        productPurchasedListener?.onProductsPurchased()
-                        Logger.log("billingClient", "onProductPurchased ")
-                    }
+
+                val subscription = purchases.find {
+                    it.sku == ConfigUtil.SUBSCRIPTION_SKU
+                }
+                if (subscription == null) {
+                    MainPreference.removePremiumSub(activity)
+                } else {
+                    MainPreference.setPremiumSub(activity)
+                }
+
+                val inAppPurchase = purchases.find {
+                    it.sku == ConfigUtil.PRODUCT_SKU
+                }
+
+                if (inAppPurchase == null) {
+                    // refund?
+                    MainPreference.removePremium(activity)
+                } else {
+                    MainPreference.setPremium(activity)
+                }
+
+                purchases.forEach {
+                    productPurchasedListener?.onProductsPurchased()
+                    Logger.log("billingClient", "onProductPurchased $it")
                 }
             }
 
@@ -201,12 +227,8 @@ class PurchaseService(var activity: Activity) : PurchasesUpdatedListener {
         }
     }
 
-    fun purchase(skuDetails: SkuDetails) = executeServiceRequest {
-        Logger.log("billingClient", "launching purchase flow for sku '${skuDetails.sku}'")
-        val flowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetails) // Type is already in SkuDetails
-                .build()
-        billingClient.launchBillingFlow(activity, flowParams)
+    private val Purchase.isValidated : Boolean get() {
+        return isAcknowledged && purchaseState == Purchase.PurchaseState.PURCHASED
     }
 
     companion object {
