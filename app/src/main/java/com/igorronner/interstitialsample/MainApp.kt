@@ -24,6 +24,7 @@ class MainApp : Application() {
                 .setRewardedVideoId("ca-app-pub-3940256099942544/5224354917")
                 .setAppPrefix("lib_")
                 .enablePurchace("premium")
+//                .enableSubscription("premium_sub")
                 .setTester(BuildConfig.DEBUG)
 //                .setAdEnabled(false)
                 .enableCheckMobills(false)

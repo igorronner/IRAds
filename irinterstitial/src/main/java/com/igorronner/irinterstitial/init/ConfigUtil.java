@@ -20,8 +20,10 @@ public class ConfigUtil {
     public static String PUBLISHER_INTERSTITIAL_ID = null;
 
     public static String PRODUCT_SKU = null;
+    public static String SUBSCRIPTION_SKU = null;
     public static String APP_PREFIX = "";
     public static boolean TESTER = false;
     public static boolean AD_ENABLED = true;
     public static boolean ENABLE_CHECK_MOBILLS = false;
+    public static boolean LOGGING_ENABLED = false;
 }

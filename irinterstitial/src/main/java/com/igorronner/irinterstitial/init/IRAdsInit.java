@@ -23,8 +23,10 @@ public class IRAdsInit {
         ConfigUtil.MID_NATIVE_AD_ID = builder.midNativeAdId;
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
         ConfigUtil.PRODUCT_SKU = builder.productSku;
+        ConfigUtil.SUBSCRIPTION_SKU = builder.subscriptionSku;
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.AD_ENABLED = builder.adEnabled;
+        ConfigUtil.LOGGING_ENABLED = builder.loggingEnabled;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
         ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
         ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
@@ -51,12 +53,14 @@ public class IRAdsInit {
         @Deprecated
         private String publisherInterstitialId;
         private String productSku;
+        private String subscriptionSku;
         // Prefix for concat keys on remote config...
         private String appPrefix;
 
         private boolean tester;
         private boolean adEnabled = true;
         private boolean enableCheckMobills;
+        private boolean loggingEnabled = false;
 
         public Builder() { }
 
@@ -128,6 +132,11 @@ public class IRAdsInit {
             return this;
         }
 
+        public Builder enableSubscription(String subscriptionSku) {
+            this.subscriptionSku = subscriptionSku;
+            return this;
+        }
+
         public Builder setAppPrefix(String appPrefix) {
             this.appPrefix = appPrefix;
             return this;
@@ -150,6 +159,11 @@ public class IRAdsInit {
 
         public Builder enableCheckMobills(boolean enableCheckMobills) {
             this.enableCheckMobills = enableCheckMobills;
+            return this;
+        }
+
+        public Builder setLoggingEnabled(boolean loggingEnabled) {
+            this.loggingEnabled = loggingEnabled;
             return this;
         }
 

@@ -1,13 +1,12 @@
 package com.igorronner.irinterstitial.services
 
 import android.content.Context
-import android.nfc.Tag
-import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
+import com.igorronner.irinterstitial.utils.Logger
 import com.igorronner.irinterstitial.utils.SingletonHolder
 
 class IRExpensiveInterstitialAd(
@@ -31,7 +30,7 @@ class IRExpensiveInterstitialAd(
             expensiveInterstitialAd.show()
             val event = "Mostrou IRExpensiveInterstitialAd"
             AnalyticsService(adsInstance.activity).logEvent(event)
-            Log.d(tag, event)
+            Logger.log(tag, event)
         } else if (!force)
             adListener.onNotLoaded()
 
@@ -40,7 +39,7 @@ class IRExpensiveInterstitialAd(
             override fun onAdFailedToLoad(p0: Int) {
                 val event = "Falhou IRExpensiveInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.logError(tag, event)
 
                 if (force && !adsInstance.isStopped) {
                     adListener.onFailed()
@@ -50,7 +49,7 @@ class IRExpensiveInterstitialAd(
             override fun onAdClosed() {
                 val event = "Fechou IRExpensiveInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.log(tag, event)
                 adListener.onAdClosed()
                 adsInstance.onStop()
             }
@@ -59,7 +58,7 @@ class IRExpensiveInterstitialAd(
                 if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
                     val event = "Mostrou IRExpensiveInterstitialAd"
                     AnalyticsService(adsInstance.activity).logEvent(event)
-                    Log.d(tag, event)
+                    Logger.log(tag, event)
                     expensiveInterstitialAd.show()
                 }
             }
@@ -71,7 +70,7 @@ class IRExpensiveInterstitialAd(
             expensiveInterstitialAd.show()
             val event = "Mostrou IRExpensiveInterstitialAd"
             AnalyticsService(adsInstance.activity).logEvent(event)
-            Log.d(tag, event)
+            Logger.log(tag, event)
         } else if (!force)
             adListener.onAdFailedToLoad(0)
 
@@ -80,7 +79,7 @@ class IRExpensiveInterstitialAd(
             override fun onAdFailedToLoad(p0: Int) {
                 val event = "Falhou IRExpensiveInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.logError(tag, event)
 
                 if (force && !adsInstance.isStopped) {
                     adListener.onAdFailedToLoad(p0)
@@ -90,7 +89,7 @@ class IRExpensiveInterstitialAd(
             override fun onAdClosed() {
                 val event = "Fechou IRExpensiveInterstitialAd"
                 AnalyticsService(adsInstance.activity).logEvent(event)
-                Log.d(tag, event)
+                Logger.log(tag, event)
                 adListener.onAdClosed()
                 adsInstance.onStop()
             }
@@ -100,7 +99,7 @@ class IRExpensiveInterstitialAd(
                 if (force && !adsInstance.isStopped && !IRAds.isPremium(adsInstance.activity)) {
                     val event = "Mostrou IRExpensiveInterstitialAd"
                     AnalyticsService(adsInstance.activity).logEvent(event)
-                    Log.d(tag, event)
+                    Logger.log(tag, event)
                     expensiveInterstitialAd.show()
                 }
             }
@@ -116,7 +115,7 @@ class IRExpensiveInterstitialAd(
         expensiveInterstitialAd.loadAd(adRequest)
         val event = "requestNewInterstitial IRExpensiveInterstitialAd"
         AnalyticsService(adsInstance.activity).logEvent(event)
-        Log.d(tag, event)
+        Logger.log(tag, event)
     }
 
 }

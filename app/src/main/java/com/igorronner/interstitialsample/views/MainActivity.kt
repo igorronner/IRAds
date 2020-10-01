@@ -2,14 +2,17 @@ package com.igorronner.interstitialsample.views
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.android.billingclient.api.SkuDetails
 import com.igorronner.interstitialsample.R
-import com.igorronner.irinterstitial.dto.IRSkuDetails
+import com.igorronner.irinterstitial.init.ConfigUtil
 import com.igorronner.irinterstitial.init.IRAds
 import com.igorronner.irinterstitial.init.IRBanner
 import com.igorronner.irinterstitial.services.*
+import com.igorronner.irinterstitial.utils.Logger
 import kotlinx.android.synthetic.main.activity_main.*
+
 class  MainActivity : AppCompatActivity(),
         ProductsListListener, ProductPurchasedListener, PurchaseCanceledListener, PurchaseErrorListener {
 
@@ -21,7 +24,9 @@ class  MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         adsInstance = IRAds.newInstance(this)
-        purchaseService = PurchaseService(this)
+        purchaseService = PurchaseService(this).apply {
+            productsListListener = this@MainActivity
+        }
         adsInstance.openSplashScreen()
 
 
@@ -66,14 +71,19 @@ class  MainActivity : AppCompatActivity(),
         refreshScreen()
     }
 
-    override fun onProductList(list: List<IRSkuDetails>) {
+    override fun onProductList(list: List<SkuDetails>?) {
         progressBar.visibility = View.GONE
         contentLayout.visibility = View.VISIBLE
-        if (list.isNotEmpty()) {
-            val skuDetails = list.first()
+        if (!list.isNullOrEmpty()) {
+            // TODO: maybe use list.find { it.sku == ConfigUtil.PRODUCT_SKU }?.let { }
+            val skuDetails = list.first().also {
+                if (it.sku != ConfigUtil.PRODUCT_SKU) {
+                    Logger.logWarning(w = "Listed product SKU (${it.sku}) != ${ConfigUtil.PRODUCT_SKU}")
+                }
+            }
             purchase.text = skuDetails.price
             purchase.setOnClickListener {
-                purchaseService.purchase()
+                purchaseService.purchase(skuDetails)
             }
         }
     }

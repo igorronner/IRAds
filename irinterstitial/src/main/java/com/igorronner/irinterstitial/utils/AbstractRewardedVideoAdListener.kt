@@ -1,7 +1,6 @@
 package com.igorronner.irinterstitial.utils
 
 import android.content.Context
-import android.util.Log
 import com.google.android.gms.ads.reward.RewardItem
 import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import com.igorronner.irinterstitial.services.AnalyticsService
@@ -44,7 +43,7 @@ open class AbstractRewardedVideoAdListener(
 
     private fun showEvent(message: String) {
         AnalyticsService(context).logEvent(message)
-        Log.d("RewardedVideo", message)
+        Logger.log("RewardedVideo", message)
     }
 
 }
