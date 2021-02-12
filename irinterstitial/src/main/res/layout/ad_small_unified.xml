@@ -17,9 +17,9 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ad_Flag"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            style="@style/AppTheme.AdAttribution"
+            style="@style/AppTheme.AdAttribution.Comfortable"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,15 +27,13 @@
             android:id="@+id/ad_app_icon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            tools:srcCompat="@drawable/ic_launcher_round"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
-            app:layout_constraintEnd_toStartOf="@id/ad_headline"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/ad_headline"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/barrierAd"
+            app:layout_constraintTop_toBottomOf="@+id/ad_Flag"
+            tools:srcCompat="@drawable/ic_launcher_round" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ad_headline"
@@ -119,7 +117,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             app:backgroundTint="?attr/colorPrimary"
-            tools:text="Baixar Agora"
+            tools:text="Baixar"
             android:textSize="12sp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
@@ -162,6 +160,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ad_body"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierAd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="right"
+            app:constraint_referenced_ids="ad_Flag"
+            tools:layout_editor_absoluteX="95dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

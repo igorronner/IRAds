@@ -54,6 +54,8 @@ public class IRAds {
                 .setBannerAdmobAdUnitId(ConfigUtil.BANNER_AD_ID);
         final ManagerAdaptiveBannerAd bannerManager = new ManagerAdaptiveBannerAd();
         bannerManager.setBannerAdMobAdUnitId(ConfigUtil.BANNER_AD_ID);
+        bannerManager.setMidBannerAdMobAdUnitId(ConfigUtil.MID_BANNER_AD_ID);
+        bannerManager.setExpensiveBannerAdMobAdUnitId(ConfigUtil.EXPENSIVE_BANNER_AD_ID);
 
         final IRAds irAds = new IRAds(activity);
         irAds.setManagerNativeAd(manager);

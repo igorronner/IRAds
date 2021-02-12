@@ -1,18 +1,30 @@
+
 package com.igorronner.irinterstitial.services
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.igorronner.irinterstitial.BuildConfig
+import com.igorronner.irinterstitial.enums.FloorEnum
 import com.igorronner.irinterstitial.preferences.MainPreference
 
-class ManagerAdaptiveBannerAd {
+internal class ManagerAdaptiveBannerAd {
     var bannerAdMobAdUnitId: String? = ""
+    var midBannerAdMobAdUnitId: String? = ""
+    var expensiveBannerAdMobAdUnitId: String? = ""
+
+    fun loadAdaptiveBanner(container: ViewGroup, activity: Activity) {
+        loadAdaptiveBanner(container, activity, FloorEnum.HIGH_FLOOR)
+    }
 
     private fun getAdSize(activity: Activity): AdSize? {
         return getAdSize(activity, activity.windowManager)
@@ -28,32 +40,83 @@ class ManagerAdaptiveBannerAd {
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidth)
     }
 
-
-    fun loadAdaptiveBanner(container: ViewGroup, activity: Activity){
+    private fun loadAdaptiveBanner(container: ViewGroup, activity: Activity, floorEnum: FloorEnum) {
         if (MainPreference.isPremium(activity)) {
             container.visibility = View.GONE
             return
         }
+
+        if (container.background == null) {
+            // Banner container background should not be transparent
+            container.setBackgroundColor(Color.parseColor("#666666"))
+        }
+        container.removeAllViews()
+
+        var adUnitId: String? = ""
+
+        when (floorEnum) {
+            FloorEnum.HIGH_FLOOR -> {
+                if (expensiveBannerAdMobAdUnitId.isIdValid()) {
+                    adUnitId = expensiveBannerAdMobAdUnitId
+                } else {
+                    loadAdaptiveBanner(container, activity, FloorEnum.MID_FLOOR)
+                    return
+                }
+            }
+
+            FloorEnum.MID_FLOOR -> {
+                if (midBannerAdMobAdUnitId.isIdValid()) {
+                    adUnitId = midBannerAdMobAdUnitId
+                } else {
+                    loadAdaptiveBanner(container, activity, FloorEnum.NO_FLOOR)
+                    return
+                }
+            }
+
+            FloorEnum.NO_FLOOR -> {
+                if (bannerAdMobAdUnitId.isIdValid()) {
+                    adUnitId = bannerAdMobAdUnitId
+                } else {
+                    container.visibility = View.INVISIBLE
+                    return
+                }
+            }
+        }
+
+        loadAd(container, activity, adUnitId, floorEnum)
+    }
+
+    private fun loadAd(container: ViewGroup, activity: Activity, adId: String?, floorEnum: FloorEnum) {
+        if (adId.isNullOrEmpty()) {
+            container.visibility = View.GONE
+            return
+        }
+
         val bannerAd = AdView(activity)
-        bannerAd.adUnitId = bannerAdMobAdUnitId
+        bannerAd.adUnitId = adId
         bannerAd.adSize = getAdSize(activity)
-        val adRequest = AdRequest
-                .Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build()
+        val adRequest = AdRequest.Builder().apply {
+            if (BuildConfig.DEBUG) {
+                addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+            }
+        }.build()
+
+        bannerAd.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                if (floorEnum == FloorEnum.HIGH_FLOOR && expensiveBannerAdMobAdUnitId.isIdValid()) {
+                    loadAdaptiveBanner(container, activity, FloorEnum.MID_FLOOR)
+                } else if (floorEnum == FloorEnum.MID_FLOOR && midBannerAdMobAdUnitId.isIdValid()) {
+                    loadAdaptiveBanner(container, activity, FloorEnum.NO_FLOOR)
+                } else {
+                    container.visibility = View.GONE
+                }
+            }
+        }
         bannerAd.loadAd(adRequest)
         container.addView(bannerAd)
     }
 
-
-
-
-
-
-
-
-
-
-
-
+    private fun String?.isIdValid(): Boolean {
+        return this != null && this.isNotEmpty()
+    }
 }
