@@ -50,6 +50,7 @@ internal class ManagerAdaptiveBannerAd {
             // Banner container background should not be transparent
             container.setBackgroundColor(Color.parseColor("#666666"))
         }
+        container.removeAllViews()
 
         var adUnitId: String? = ""
 
@@ -102,7 +103,6 @@ internal class ManagerAdaptiveBannerAd {
 
         bannerAd.adListener = object : AdListener() {
             override fun onAdFailedToLoad(errorCode: Int) {
-                Toast.makeText(activity, errorCode.toString(), Toast.LENGTH_SHORT).show()
                 if (floorEnum == FloorEnum.HIGH_FLOOR && expensiveBannerAdMobAdUnitId.isIdValid()) {
                     loadAdaptiveBanner(container, activity, FloorEnum.MID_FLOOR)
                 } else if (floorEnum == FloorEnum.MID_FLOOR && midBannerAdMobAdUnitId.isIdValid()) {
