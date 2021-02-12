@@ -16,20 +16,27 @@ public class IRAdsInit {
     private IRAdsInit(final IRAdsInit.Builder builder) {
         ConfigUtil.LOGO = builder.logo;
         ConfigUtil.APP_ID = builder.appId;
+
+        ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
+
         ConfigUtil.INTERSTITIAL_ID = builder.interstitialId;
         ConfigUtil.MID_INTERSTITIAL_ID = builder.midInterstitialId;
         ConfigUtil.EXPENSIVE_INTERSTITIAL_ID = builder.expensiveInterstitialId;
+
         ConfigUtil.NATIVE_AD_ID = builder.nativeAdId;
         ConfigUtil.MID_NATIVE_AD_ID = builder.midNativeAdId;
         ConfigUtil.EXPENSIVE_NATIVE_AD_ID = builder.expensiveNativeAdId;
+
+        ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
+        ConfigUtil.MID_BANNER_AD_ID = builder.midBannerAdId;
+        ConfigUtil.EXPENSIVE_BANNER_AD_ID = builder.expensiveBannerAdId;
+
         ConfigUtil.PRODUCT_SKU = builder.productSku;
         ConfigUtil.SUBSCRIPTION_SKU = builder.subscriptionSku;
         ConfigUtil.TESTER = builder.tester;
         ConfigUtil.AD_ENABLED = builder.adEnabled;
         ConfigUtil.LOGGING_ENABLED = builder.loggingEnabled;
         ConfigUtil.ENABLE_CHECK_MOBILLS = builder.enableCheckMobills;
-        ConfigUtil.BANNER_AD_ID = builder.bannerAdId;
-        ConfigUtil.REWARDED_VIDEO_ID = builder.rewardedVideoId;
 
         if (builder.appPrefix != null) {
             ConfigUtil.APP_PREFIX = builder.appPrefix;
@@ -48,6 +55,8 @@ public class IRAdsInit {
         private String midNativeAdId;
         private String expensiveNativeAdId;
         private String bannerAdId;
+        private String expensiveBannerAdId;
+        private String midBannerAdId;
         private String rewardedVideoId;
 
         @Deprecated
@@ -113,6 +122,12 @@ public class IRAdsInit {
 
         public Builder setBannerAdId(String bannerAdId) {
             this.bannerAdId = bannerAdId;
+            return this;
+        }
+
+        public Builder setTwoFloorsBannerId(String expensiveBannerId, String midBannerId) {
+            this.expensiveBannerAdId = expensiveBannerId;
+            this.midBannerAdId = midBannerId;
             return this;
         }
 
