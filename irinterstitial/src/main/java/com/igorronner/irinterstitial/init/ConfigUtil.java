@@ -14,6 +14,8 @@ public class ConfigUtil {
     public static String MID_NATIVE_AD_ID = null;
     public static String EXPENSIVE_NATIVE_AD_ID = null;
     public static String BANNER_AD_ID = null;
+    public static String MID_BANNER_AD_ID = null;
+    public static String EXPENSIVE_BANNER_AD_ID = null;
     public static String REWARDED_VIDEO_ID = null;
 
     @Deprecated

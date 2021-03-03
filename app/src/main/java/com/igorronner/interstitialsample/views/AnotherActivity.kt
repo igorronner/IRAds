@@ -21,6 +21,7 @@ class AnotherActivity : PurchaseActivity() {
                 findViewById(R.id.adViewNative),
                 true)
 
+        adsInstance.loadAdaptiveBanner(banner_ad, this)
     }
 
     override fun onBackPressed() {
